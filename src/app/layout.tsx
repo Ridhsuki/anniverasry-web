@@ -1,30 +1,15 @@
 // ─────────────────────────────────────────────────────────────
 // Root Layout
 // Foundation layout for the entire anniversary website.
-// Configures fonts, metadata, and viewport settings.
+// Configures Google Fonts, design tokens, metadata, and viewport.
 // ─────────────────────────────────────────────────────────────
 
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 
 import { SITE_METADATA } from "@/constants/site";
+import { fontVariables } from "@/lib/fonts";
 
 import "./globals.css";
-
-// ── Fonts ──────────────────────────────────────────────────────
-// Geist as the system sans-serif base. Swap for custom fonts
-// by adding them to /public/fonts and loading via next/font/local.
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 // ── Metadata ───────────────────────────────────────────────────
 export const metadata: Metadata = {
@@ -50,10 +35,9 @@ export const metadata: Metadata = {
 
 // ── Viewport ────────────────────────────────────────────────────
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#0d0d0d",
   width: "device-width",
   initialScale: 1,
-  // Prevent auto-zoom on input focus (mobile UX)
   maximumScale: 1,
 };
 
@@ -67,9 +51,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${fontVariables} antialiased`}
     >
-      <body className="min-h-dvh overflow-x-hidden antialiased">
+      <body className="min-h-dvh overflow-x-hidden antialiased bg-bg-primary text-text-primary">
         {children}
       </body>
     </html>

@@ -1,0 +1,90 @@
+/* ══════════════════════════════════════════════════════════════
+   TAILWIND v4 THEME EXTENSION
+   Maps design tokens → Tailwind utility classes.
+   Tailwind v4 uses CSS-first config via @theme blocks.
+   ══════════════════════════════════════════════════════════════ */
+
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme {
+  /* ── Colors ─────────────────────────────────────────────── */
+  --color-*: initial;
+
+  /* Background */
+  --color-bg-base:     var(--color-bg-base);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-bg-overlay:  var(--color-bg-overlay);
+  --color-bg-surface:  var(--color-bg-surface);
+  --color-bg-paper:    var(--color-bg-paper);
+  --color-bg-paper-aged: var(--color-bg-paper-aged);
+  --color-bg-warm:     var(--color-bg-warm);
+
+  /* Text */
+  --color-text-primary:          var(--color-text-primary);
+  --color-text-secondary:        var(--color-text-secondary);
+  --color-text-muted:            var(--color-text-muted);
+  --color-text-on-paper:         var(--color-text-on-paper);
+  --color-text-on-paper-muted:   var(--color-text-on-paper-secondary);
+
+  /* Accent */
+  --color-accent-gold:      var(--color-accent-gold);
+  --color-accent-gold-dark: var(--color-accent-gold-dark);
+  --color-accent-rose:      var(--color-accent-rose);
+  --color-accent-rose-dark: var(--color-accent-rose-dark);
+  --color-accent-sage:      var(--color-accent-sage);
+
+  /* Borders */
+  --color-border-subtle:  var(--color-border-subtle);
+  --color-border-default: var(--color-border-default);
+  --color-border-strong:  var(--color-border-strong);
+  --color-border-paper:   var(--color-border-paper);
+
+  /* Raw palette access */
+  --color-cream-50:  var(--primitive-cream-50);
+  --color-cream-100: var(--primitive-cream-100);
+  --color-cream-200: var(--primitive-cream-200);
+  --color-cream-300: var(--primitive-cream-300);
+  --color-gold-100:  var(--primitive-gold-100);
+  --color-gold-200:  var(--primitive-gold-200);
+  --color-gold-300:  var(--primitive-gold-300);
+  --color-gold-400:  var(--primitive-gold-400);
+  --color-rose-300:  var(--primitive-rose-300);
+  --color-rose-400:  var(--primitive-rose-400);
+  --color-sage-300:  var(--primitive-sage-300);
+  --color-night-900: var(--primitive-night-900);
+  --color-night-950: var(--primitive-night-950);
+
+  /* ── Fonts ──────────────────────────────────────────────── */
+  --font-display:     var(--font-display);
+  --font-serif:       var(--font-serif);
+  --font-sans:        var(--font-sans);
+  --font-handwriting: var(--font-handwriting);
+
+  /* ── Font Sizes ─────────────────────────────────────────── */
+  --text-display: var(--text-display);
+
+  /* ── Border Radius ──────────────────────────────────────── */
+  --radius-sm:   var(--radius-sm);
+  --radius-base: var(--radius-base);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --radius-2xl:  var(--radius-2xl);
+  --radius-3xl:  var(--radius-3xl);
+
+  /* ── Animation Durations ────────────────────────────────── */
+  --animate-duration-fast:      var(--duration-fast);
+  --animate-duration-normal:    var(--duration-normal);
+  --animate-duration-moderate:  var(--duration-moderate);
+  --animate-duration-slow:      var(--duration-slow);
+  --animate-duration-cinematic: var(--duration-cinematic);
+
+  /* ── Z-Index ────────────────────────────────────────────── */
+  --z-raised:  var(--z-raised);
+  --z-content: var(--z-content);
+  --z-overlay: var(--z-overlay);
+  --z-modal:   var(--z-modal);
+  --z-navbar:  var(--z-navbar);
+  --z-top:     var(--z-top);
+}

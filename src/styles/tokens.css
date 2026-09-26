@@ -1,0 +1,355 @@
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKEN SYSTEM — Anniversary Website
+   Single source of truth for all visual design decisions.
+   All values are consumed as CSS custom properties.
+
+   Layers:
+   1. Primitive values  (raw palette, numeric scale)
+   2. Semantic tokens   (purpose-named references to primitives)
+   3. Component tokens  (component-scoped overrides)
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ─── 1. PRIMITIVE COLOR PALETTE ─────────────────────────── */
+
+  /* Warm Cream / Parchment */
+  --primitive-cream-50:  #fdf8f0;
+  --primitive-cream-100: #f9edd8;
+  --primitive-cream-200: #f2dbb4;
+  --primitive-cream-300: #e8c48a;
+  --primitive-cream-400: #d9a85f;
+  --primitive-cream-500: #c9904a;
+
+  /* Gold / Amber */
+  --primitive-gold-100:  #fef3c7;
+  --primitive-gold-200:  #fde68a;
+  --primitive-gold-300:  #f6c94e;
+  --primitive-gold-400:  #e8a820;
+  --primitive-gold-500:  #c9862b;
+  --primitive-gold-600:  #a66820;
+
+  /* Rose / Dusty Pink */
+  --primitive-rose-100:  #fce7e7;
+  --primitive-rose-200:  #f5c6c6;
+  --primitive-rose-300:  #e89898;
+  --primitive-rose-400:  #d46b6b;
+  --primitive-rose-500:  #b84848;
+  --primitive-rose-600:  #8f2f2f;
+
+  /* Sage / Moss Green */
+  --primitive-sage-100:  #e8ede0;
+  --primitive-sage-200:  #cad6bc;
+  --primitive-sage-300:  #a8bc97;
+  --primitive-sage-400:  #849e72;
+  --primitive-sage-500:  #63804f;
+  --primitive-sage-600:  #445934;
+
+  /* Deep Night */
+  --primitive-night-950: #080808;
+  --primitive-night-900: #0d0d0d;
+  --primitive-night-800: #141414;
+  --primitive-night-700: #1c1c1c;
+  --primitive-night-600: #262626;
+  --primitive-night-500: #333333;
+  --primitive-night-400: #4a4a4a;
+
+  /* Ink / Text */
+  --primitive-ink-900:   #1a1209;
+  --primitive-ink-800:   #2d1f10;
+  --primitive-ink-700:   #3d2b15;
+  --primitive-ink-600:   #5c4020;
+  --primitive-ink-500:   #7a5930;
+  --primitive-ink-400:   #9e7848;
+  --primitive-ink-300:   #c4a06e;
+
+  /* Pure */
+  --primitive-white:     #ffffff;
+  --primitive-black:     #000000;
+  --primitive-transparent: transparent;
+
+
+  /* ─── 2. SEMANTIC COLOR TOKENS ───────────────────────────── */
+
+  /* Background layers */
+  --color-bg-base:         var(--primitive-night-900);
+  --color-bg-elevated:     var(--primitive-night-800);
+  --color-bg-overlay:      var(--primitive-night-700);
+  --color-bg-surface:      var(--primitive-night-600);
+  --color-bg-paper:        var(--primitive-cream-100);
+  --color-bg-paper-aged:   var(--primitive-cream-200);
+  --color-bg-warm:         #1a1209;
+
+  /* Text */
+  --color-text-primary:    var(--primitive-cream-50);
+  --color-text-secondary:  var(--primitive-cream-300);
+  --color-text-muted:      var(--primitive-ink-300);
+  --color-text-on-paper:   var(--primitive-ink-800);
+  --color-text-on-paper-secondary: var(--primitive-ink-500);
+
+  /* Brand / Accent */
+  --color-accent-gold:     var(--primitive-gold-300);
+  --color-accent-gold-dark: var(--primitive-gold-500);
+  --color-accent-rose:     var(--primitive-rose-300);
+  --color-accent-rose-dark: var(--primitive-rose-500);
+  --color-accent-sage:     var(--primitive-sage-300);
+
+  /* Borders */
+  --color-border-subtle:   rgba(201, 144, 74, 0.15);
+  --color-border-default:  rgba(201, 144, 74, 0.30);
+  --color-border-strong:   rgba(201, 144, 74, 0.60);
+  --color-border-paper:    rgba(61, 43, 21, 0.20);
+
+  /* States */
+  --color-focus-ring:      var(--primitive-gold-300);
+  --color-hover-overlay:   rgba(201, 144, 74, 0.08);
+  --color-active-overlay:  rgba(201, 144, 74, 0.16);
+
+  /* Canonical Aliases */
+  --color-bg-primary:      var(--primitive-night-900);
+  --color-bg-secondary:    var(--primitive-night-800);
+  --color-gold:            var(--primitive-gold-300);
+  --color-gold-dark:       var(--primitive-gold-500);
+  --color-paper:           var(--primitive-cream-100);
+  --color-rose:            var(--primitive-rose-300);
+  --color-rose-dark:       var(--primitive-rose-500);
+  --color-sage:            var(--primitive-sage-300);
+
+
+  /* ─── 3. TYPOGRAPHY TOKENS ───────────────────────────────── */
+
+  /* Font families — populated by next/font CSS variables */
+  --font-display:   var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-serif:     var(--font-playfair), "Playfair Display", "Times New Roman", serif;
+  --font-sans:      var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-handwriting: var(--font-dancing), "Dancing Script", cursive;
+  --font-mono:      ui-monospace, "Cascadia Code", monospace;
+
+  /* Font sizes — fluid scale using clamp() */
+  --text-xs:        clamp(0.65rem,  0.6rem  + 0.25vw, 0.75rem);
+  --text-sm:        clamp(0.8rem,   0.75rem + 0.25vw, 0.875rem);
+  --text-base:      clamp(0.9rem,   0.875rem + 0.25vw, 1rem);
+  --text-lg:        clamp(1rem,     0.95rem + 0.5vw,  1.125rem);
+  --text-xl:        clamp(1.1rem,   1rem    + 0.75vw, 1.25rem);
+  --text-2xl:       clamp(1.25rem,  1.1rem  + 1vw,   1.5rem);
+  --text-3xl:       clamp(1.5rem,   1.25rem + 1.5vw, 1.875rem);
+  --text-4xl:       clamp(1.875rem, 1.5rem  + 2vw,   2.25rem);
+  --text-5xl:       clamp(2.25rem,  1.75rem + 3vw,   3rem);
+  --text-6xl:       clamp(3rem,     2rem    + 4vw,   4.5rem);
+  --text-7xl:       clamp(3.75rem,  2.5rem  + 5vw,   6rem);
+  --text-display:   clamp(4rem,     3rem    + 6vw,   8rem);
+
+  /* Line heights */
+  --leading-none:   1;
+  --leading-tight:  1.15;
+  --leading-snug:   1.35;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.75;
+  --leading-loose:  2;
+
+  /* Letter spacing */
+  --tracking-tighter: -0.06em;
+  --tracking-tight:   -0.03em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.05em;
+  --tracking-wider:   0.1em;
+  --tracking-widest:  0.2em;
+
+  /* Font weights */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-black:    900;
+
+
+  /* ─── 4. SPACING SCALE ───────────────────────────────────── */
+
+  --space-px:    1px;
+  --space-0-5:   0.125rem;   /*  2px */
+  --space-1:     0.25rem;    /*  4px */
+  --space-1-5:   0.375rem;   /*  6px */
+  --space-2:     0.5rem;     /*  8px */
+  --space-2-5:   0.625rem;   /* 10px */
+  --space-3:     0.75rem;    /* 12px */
+  --space-4:     1rem;       /* 16px */
+  --space-5:     1.25rem;    /* 20px */
+  --space-6:     1.5rem;     /* 24px */
+  --space-8:     2rem;       /* 32px */
+  --space-10:    2.5rem;     /* 40px */
+  --space-12:    3rem;       /* 48px */
+  --space-16:    4rem;       /* 64px */
+  --space-20:    5rem;       /* 80px */
+  --space-24:    6rem;       /* 96px */
+  --space-32:    8rem;       /* 128px */
+  --space-40:    10rem;      /* 160px */
+  --space-48:    12rem;      /* 192px */
+  --space-64:    16rem;      /* 256px */
+
+  /* Semantic spacing */
+  --section-gap:       clamp(5rem, 10vh, 8rem);
+  --section-gap-lg:    clamp(8rem, 15vh, 12rem);
+  --content-max-width: 1200px;
+  --reading-max-width: 680px;
+  --gutter:            clamp(1.5rem, 5vw, 5rem);
+
+
+  /* ─── 5. BORDER RADIUS ───────────────────────────────────── */
+
+  --radius-none:  0;
+  --radius-sm:    0.125rem;
+  --radius-base:  0.25rem;
+  --radius-md:    0.375rem;
+  --radius-lg:    0.5rem;
+  --radius-xl:    0.75rem;
+  --radius-2xl:   1rem;
+  --radius-3xl:   1.5rem;
+  --radius-full:  9999px;
+
+
+  /* ─── 6. SHADOW SYSTEM ───────────────────────────────────── */
+
+  /* Paper / card shadows — warm amber tones */
+  --shadow-paper-sm:
+    0 1px 2px rgba(26, 18, 9, 0.3),
+    0 1px 6px rgba(26, 18, 9, 0.2);
+
+  --shadow-paper:
+    0 2px 4px  rgba(26, 18, 9, 0.3),
+    0 4px 16px rgba(26, 18, 9, 0.25),
+    0 0  24px  rgba(201, 144, 74, 0.05);
+
+  --shadow-paper-lg:
+    0 4px  8px  rgba(26, 18, 9, 0.35),
+    0 8px  32px rgba(26, 18, 9, 0.30),
+    0 0   48px  rgba(201, 144, 74, 0.08);
+
+  --shadow-paper-xl:
+    0 8px  16px rgba(26, 18, 9, 0.40),
+    0 16px 64px rgba(26, 18, 9, 0.35),
+    0 0   80px  rgba(201, 144, 74, 0.12);
+
+  /* Glow shadows — cinematic effects */
+  --shadow-glow-gold:
+    0 0 20px  rgba(246, 201, 78, 0.20),
+    0 0 60px  rgba(246, 201, 78, 0.10),
+    0 0 120px rgba(246, 201, 78, 0.05);
+
+  --shadow-glow-rose:
+    0 0 20px  rgba(232, 152, 152, 0.20),
+    0 0 60px  rgba(232, 152, 152, 0.10),
+    0 0 120px rgba(232, 152, 152, 0.05);
+
+  --shadow-glow-warm:
+    0 0 40px  rgba(201, 144, 74, 0.15),
+    0 0 80px  rgba(201, 144, 74, 0.08);
+
+  /* Inset shadow — for aged paper / photo depth */
+  --shadow-inset-paper:
+    inset 0 1px 3px rgba(26, 18, 9, 0.20),
+    inset 0 0 20px  rgba(26, 18, 9, 0.05);
+
+  /* Frame shadow — photo frames */
+  --shadow-frame:
+    0 2px 4px   rgba(0, 0, 0, 0.5),
+    0 8px 24px  rgba(0, 0, 0, 0.4),
+    0 0  0 1px  rgba(0, 0, 0, 0.3),
+    inset 0 0  0 1px rgba(255, 255, 255, 0.05);
+
+
+  /* ─── 7. Z-INDEX LAYERS ──────────────────────────────────── */
+
+  --z-below:        -1;
+  --z-base:          0;
+  --z-raised:       10;   /* floating decorations */
+  --z-content:      20;   /* main content */
+  --z-sticky:       30;   /* sticky elements */
+  --z-overlay:      40;   /* scene overlays */
+  --z-modal:        50;   /* modals / drawers */
+  --z-navbar:       60;   /* navigation bar */
+  --z-toast:        70;   /* notifications */
+  --z-cursor:       80;   /* custom cursor */
+  --z-top:         999;   /* absolute top (loaders) */
+
+
+  /* ─── 8. ANIMATION TIMING TOKENS ────────────────────────── */
+
+  /* Durations */
+  --duration-instant:    0ms;
+  --duration-fast:       200ms;
+  --duration-normal:     400ms;
+  --duration-moderate:   600ms;
+  --duration-slow:       800ms;
+  --duration-slower:     1200ms;
+  --duration-cinematic:  1800ms;
+  --duration-epic:       2400ms;
+
+  /* GSAP equivalents (seconds) */
+  --gsap-fast:       0.2s;
+  --gsap-normal:     0.4s;
+  --gsap-moderate:   0.6s;
+  --gsap-slow:       0.8s;
+  --gsap-slower:     1.2s;
+  --gsap-cinematic:  1.8s;
+  --gsap-epic:       2.4s;
+
+  /* Easing functions */
+  --ease-linear:     linear;
+  --ease-in:         cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:        cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-cinematic:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce:     cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-anticipate: cubic-bezier(0.4, -0.3, 0.2, 1.3);
+  --ease-elastic:    cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+  /* Stagger values (ms) */
+  --stagger-tight:   60ms;
+  --stagger-normal:  100ms;
+  --stagger-relaxed: 150ms;
+  --stagger-slow:    200ms;
+
+
+  /* ─── 9. BLUR & FILTER TOKENS ────────────────────────────── */
+
+  --blur-none:   blur(0px);
+  --blur-sm:     blur(4px);
+  --blur-md:     blur(8px);
+  --blur-lg:     blur(12px);
+  --blur-xl:     blur(20px);
+  --blur-glass:  blur(16px) saturate(180%);
+
+  /* Vignette / overlay gradients */
+  --gradient-vignette:
+    radial-gradient(ellipse at center,
+      transparent 40%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+
+  --gradient-overlay-top:
+    linear-gradient(to bottom,
+      rgba(8, 8, 8, 0.9) 0%,
+      transparent 100%
+    );
+
+  --gradient-overlay-bottom:
+    linear-gradient(to top,
+      rgba(8, 8, 8, 0.9) 0%,
+      transparent 100%
+    );
+
+  --gradient-gold-shimmer:
+    linear-gradient(135deg,
+      var(--primitive-gold-400) 0%,
+      var(--primitive-gold-200) 40%,
+      var(--primitive-gold-400) 100%
+    );
+
+  --gradient-warm-paper:
+    linear-gradient(135deg,
+      var(--primitive-cream-100) 0%,
+      var(--primitive-cream-200) 100%
+    );
+}

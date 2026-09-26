@@ -1,8 +1,11 @@
 // ─────────────────────────────────────────────────────────────
 // Global Type Definitions
 // Shared TypeScript interfaces and types used across the app.
-// Extend this file as the project grows.
 // ─────────────────────────────────────────────────────────────
+
+export * from "./scenes";
+export * from "./components";
+export * from "./animations";
 
 // ── Site Metadata ─────────────────────────────────────────────
 export interface SiteMetadata {

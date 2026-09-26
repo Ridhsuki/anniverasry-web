@@ -1,12 +1,13 @@
 // ─────────────────────────────────────────────────────────────
 // GSAP Core Setup & Utilities
-// Centralises all GSAP imports, plugin registration, and
-// reusable animation helpers for use throughout the app.
-// All functions guard against SSR via typeof window checks.
+// Centralises GSAP plugin registration, ScrollTrigger integration,
+// and core tween lifecycle management.
 // ─────────────────────────────────────────────────────────────
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+export { fadeIn, fadeOut, reveal, reveal as staggerReveal } from "./fade";
 
 // ── Plugin Registration ────────────────────────────────────────
 /**
@@ -40,84 +41,6 @@ export const DURATION = {
   cinematic: 1.8,
 } as const;
 
-// ── Utility: Fade In ───────────────────────────────────────────
-/**
- * Fade an element in from opacity 0 with optional Y offset.
- * Returns the tween so callers can add it to a timeline.
- */
-export function fadeIn(
-  target: gsap.TweenTarget,
-  options: {
-    duration?: number;
-    ease?: string;
-    delay?: number;
-    y?: number;
-  } = {}
-): gsap.core.Tween {
-  const {
-    duration = DURATION.normal,
-    ease = EASE.smooth,
-    delay = 0,
-    y = 20,
-  } = options;
-
-  return gsap.fromTo(
-    target,
-    { opacity: 0, y },
-    { opacity: 1, y: 0, duration, ease, delay }
-  );
-}
-
-// ── Utility: Fade Out ──────────────────────────────────────────
-export function fadeOut(
-  target: gsap.TweenTarget,
-  options: {
-    duration?: number;
-    ease?: string;
-    delay?: number;
-    y?: number;
-  } = {}
-): gsap.core.Tween {
-  const {
-    duration = DURATION.fast,
-    ease = EASE.snap,
-    delay = 0,
-    y = -20,
-  } = options;
-
-  return gsap.to(target, { opacity: 0, y, duration, ease, delay });
-}
-
-// ── Utility: Stagger Reveal ────────────────────────────────────
-/**
- * Reveal a list of elements with a stagger delay.
- * Ideal for photo grids, card lists, and text lines.
- */
-export function staggerReveal(
-  targets: gsap.TweenTarget,
-  options: {
-    stagger?: number;
-    duration?: number;
-    ease?: string;
-    y?: number;
-    delay?: number;
-  } = {}
-): gsap.core.Tween {
-  const {
-    stagger = 0.1,
-    duration = DURATION.normal,
-    ease = EASE.smooth,
-    y = 30,
-    delay = 0,
-  } = options;
-
-  return gsap.fromTo(
-    targets,
-    { opacity: 0, y },
-    { opacity: 1, y: 0, duration, ease, stagger, delay }
-  );
-}
-
 // ── Utility: Create ScrollTrigger ─────────────────────────────
 /**
  * Attach a GSAP tween to a ScrollTrigger.
@@ -127,7 +50,9 @@ export function createScrollAnimation(
   target: gsap.TweenTarget,
   animationVars: gsap.TweenVars,
   scrollOptions: Partial<ScrollTrigger.Vars> = {}
-): gsap.core.Tween {
+): gsap.core.Tween | null {
+  if (typeof window === "undefined" || !target) return null;
+
   return gsap.to(target, {
     ...animationVars,
     scrollTrigger: {
@@ -145,6 +70,7 @@ export function createScrollAnimation(
  * Clean up GSAP tweens on unmount. Always call in useEffect cleanup.
  */
 export function killTweens(target: gsap.TweenTarget): void {
+  if (typeof window === "undefined" || !target) return;
   gsap.killTweensOf(target);
 }
 

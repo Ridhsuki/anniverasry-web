@@ -1,13 +1,13 @@
 // ─────────────────────────────────────────────────────────────
 // useMediaQuery Hook
 // Returns true/false based on a CSS media query string.
-// Used for responsive animation decisions (e.g. disable heavy
-// animations on mobile to preserve performance).
+// Implemented via React 19 useSyncExternalStore for tear-free,
+// cascade-free subscription to window.matchMedia.
 // ─────────────────────────────────────────────────────────────
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 /**
  * useMediaQuery
@@ -20,21 +20,24 @@ import { useEffect, useState } from "react";
  * const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
  */
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState<boolean>(false);
+  const subscribe = useCallback(
+    (callback: () => void) => {
+      if (typeof window === "undefined") return () => {};
+      const mediaQuery = window.matchMedia(query);
+      mediaQuery.addEventListener("change", callback);
+      return () => mediaQuery.removeEventListener("change", callback);
+    },
+    [query]
+  );
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const mediaQuery = window.matchMedia(query);
-    setMatches(mediaQuery.matches);
-
-    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
-    mediaQuery.addEventListener("change", handler);
-
-    return () => mediaQuery.removeEventListener("change", handler);
+  const getSnapshot = useCallback(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(query).matches;
   }, [query]);
 
-  return matches;
+  const getServerSnapshot = useCallback(() => false, []);
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
 // ── Pre-defined breakpoint hooks ──────────────────────────────

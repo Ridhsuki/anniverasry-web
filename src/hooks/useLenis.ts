@@ -6,9 +6,9 @@
 
 "use client";
 
+import type Lenis from "lenis";
 import { useEffect, useRef } from "react";
 
-import type Lenis from "lenis";
 
 import { destroyLenis, initLenis, scrollTo } from "@/lib/lenis";
 

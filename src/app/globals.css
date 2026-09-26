@@ -1,55 +1,74 @@
 /* ──────────────────────────────────────────────────────────────
-   Global Styles — Anniversary Website
+   Global Styles & Design System — Anniversary Website
    Architecture:
-   1. Tailwind import
-   2. CSS custom properties (design tokens)
-   3. Base / reset styles
-   4. GPU acceleration helpers
-   5. Scroll & animation utilities
+   1. Tailwind CSS v4 core import
+   2. Design tokens import (CSS custom properties)
+   3. Tailwind @theme mapping
+   4. Base / reset styles
+   5. Typography utilities
+   6. Scrapbook & vintage surface utilities
+   7. GPU acceleration & performance helpers
+   8. Lenis smooth scroll integration
+   9. Accessibility & reduced motion
    ──────────────────────────────────────────────────────────── */
 
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-/* ── 1. Design Tokens ─────────────────────────────────────────
-   Define all design tokens as CSS custom properties.
-   These will be extended with real brand colors during UI work.
-   ────────────────────────────────────────────────────────────*/
-:root {
-  /* Colors — placeholders, replace with brand palette */
-  --color-bg-primary: #0a0a0a;
-  --color-bg-secondary: #111111;
-  --color-text-primary: #f5f0eb;
-  --color-text-secondary: #a89882;
-  --color-accent: #c9a96e;
-  --color-accent-light: #e8d5b0;
+/* ── 3. Tailwind Theme Mapping ──────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-bg-primary:          var(--color-bg-primary);
+  --color-bg-secondary:        var(--color-bg-secondary);
+  --color-bg-overlay:          var(--color-bg-overlay);
+  --color-bg-surface:          var(--color-bg-surface);
+  --color-bg-paper:            var(--color-bg-paper);
+  --color-bg-paper-aged:       var(--color-bg-paper-aged);
+  --color-bg-warm:             var(--color-bg-warm);
 
-  /* Typography */
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
-  --font-serif: ui-serif, Georgia, serif;
-  --font-mono: ui-monospace, monospace;
+  --color-text-primary:        var(--color-text-primary);
+  --color-text-secondary:      var(--color-text-secondary);
+  --color-text-muted:          var(--color-text-muted);
+  --color-text-on-paper:       var(--color-text-on-paper);
+  --color-text-on-paper-muted: var(--color-text-on-paper-secondary);
 
-  /* Spacing scale — extend as needed */
-  --section-padding-x: clamp(1.5rem, 5vw, 5rem);
-  --section-padding-y: clamp(4rem, 10vh, 8rem);
+  --color-gold:                var(--color-gold);
+  --color-gold-dark:           var(--color-gold-dark);
+  --color-rose:                var(--color-rose);
+  --color-rose-dark:           var(--color-rose-dark);
+  --color-sage:                var(--color-sage);
 
-  /* Animation */
-  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-fast: 0.3s;
-  --duration-normal: 0.6s;
-  --duration-slow: 1s;
-  --duration-cinematic: 1.8s;
+  --color-border-subtle:       var(--color-border-subtle);
+  --color-border-default:      var(--color-border-default);
+  --color-border-strong:       var(--color-border-strong);
+  --color-border-paper:        var(--color-border-paper);
 
-  /* Blur & backdrop */
-  --blur-glass: blur(12px);
+  /* Fonts */
+  --font-display:              var(--font-display);
+  --font-serif:                var(--font-serif);
+  --font-sans:                 var(--font-sans);
+  --font-handwriting:          var(--font-handwriting);
+
+  /* Shadows */
+  --shadow-paper-sm:           var(--shadow-paper-sm);
+  --shadow-paper:              var(--shadow-paper);
+  --shadow-paper-lg:           var(--shadow-paper-lg);
+  --shadow-paper-xl:           var(--shadow-paper-xl);
+  --shadow-glow-gold:          var(--shadow-glow-gold);
+  --shadow-glow-rose:          var(--shadow-glow-rose);
+  --shadow-frame:              var(--shadow-frame);
+
+  /* Z-Index */
+  --z-raised:                  var(--z-raised);
+  --z-content:                 var(--z-content);
+  --z-sticky:                  var(--z-sticky);
+  --z-overlay:                 var(--z-overlay);
+  --z-modal:                   var(--z-modal);
+  --z-navbar:                  var(--z-navbar);
+  --z-top:                     var(--z-top);
 }
 
-@theme inline {
-  --color-background: var(--color-bg-primary);
-  --color-foreground: var(--color-text-primary);
-}
-
-/* ── 2. Base / Reset ─────────────────────────────────────────── */
+/* ── 4. Base / Reset ─────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -59,56 +78,103 @@
 }
 
 html {
-  /* Lenis overrides scroll-behavior — this is intentional */
   scroll-behavior: auto;
-  /* Prevent layout shift from scrollbar appearing */
   overflow-x: hidden;
-  /* Improve font rendering */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
 
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
-  line-height: 1.6;
+  line-height: var(--leading-normal);
   min-height: 100dvh;
   overflow-x: hidden;
 }
 
-/* Respect user's motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* ── 5. Typography Utilities ─────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
 }
 
-/* ── 3. GPU Acceleration Helpers ─────────────────────────────── */
-/* Apply to animated elements to promote to compositor layer */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-handwriting {
+  font-family: var(--font-handwriting);
+}
+
+/* Gold foil gradient text */
+.text-gold-foil {
+  background: var(--gradient-gold-shimmer);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Glowing text effects */
+.text-glow-gold {
+  text-shadow: 0 0 16px rgba(246, 201, 78, 0.4), 0 0 32px rgba(246, 201, 78, 0.2);
+}
+
+.text-glow-rose {
+  text-shadow: 0 0 16px rgba(232, 152, 152, 0.4), 0 0 32px rgba(232, 152, 152, 0.2);
+}
+
+/* ── 6. Scrapbook & Vintage Surface Utilities ────────────────── */
+.paper-texture {
+  background-color: var(--color-bg-paper);
+  background-image: var(--gradient-warm-paper);
+  color: var(--color-text-on-paper);
+  box-shadow: var(--shadow-paper);
+  position: relative;
+}
+
+.paper-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: var(--shadow-inset-paper);
+  opacity: 0.8;
+}
+
+.border-gold-ornate {
+  border: 1px solid var(--color-border-default);
+  box-shadow: 0 0 0 1px rgba(246, 201, 78, 0.1), inset 0 0 12px rgba(246, 201, 78, 0.05);
+}
+
+.vignette-overlay {
+  background: var(--gradient-vignette);
+  pointer-events: none;
+}
+
+/* ── 7. GPU Acceleration & Performance Helpers ───────────────── */
 .gpu-accelerated {
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
 }
 
-/* For elements that animate opacity */
 .gpu-opacity {
   will-change: opacity;
 }
 
-/* For elements that will scale */
 .gpu-scale {
   will-change: transform, opacity;
   backface-visibility: hidden;
 }
 
-/* ── 4. Lenis Smooth Scroll ──────────────────────────────────── */
+/* ── 8. Lenis Smooth Scroll Integration ──────────────────────── */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -126,9 +192,18 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* ── 5. Utility Classes ──────────────────────────────────────── */
+/* ── 9. Accessibility & Reduced Motion ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
-/* Visually hidden but accessible */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -141,17 +216,15 @@ html.lenis body {
   border-width: 0;
 }
 
-/* Prevent text selection on decorative elements */
 .no-select {
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* Full-bleed section */
 .section-full {
   width: 100%;
-  padding-left: var(--section-padding-x);
-  padding-right: var(--section-padding-x);
-  padding-top: var(--section-padding-y);
-  padding-bottom: var(--section-padding-y);
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+  padding-top: var(--section-gap);
+  padding-bottom: var(--section-gap);
 }

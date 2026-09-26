@@ -6,10 +6,10 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
 
 import { registerGSAPPlugins } from "@/animations/gsap";
 
@@ -86,7 +86,7 @@ export function useScrollTrigger(
       if (!el) return;
       callback(el, ScrollTrigger);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     deps,
     ref
   );
