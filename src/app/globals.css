@@ -1,26 +1,157 @@
+/* ──────────────────────────────────────────────────────────────
+   Global Styles — Anniversary Website
+   Architecture:
+   1. Tailwind import
+   2. CSS custom properties (design tokens)
+   3. Base / reset styles
+   4. GPU acceleration helpers
+   5. Scroll & animation utilities
+   ──────────────────────────────────────────────────────────── */
+
 @import "tailwindcss";
 
+/* ── 1. Design Tokens ─────────────────────────────────────────
+   Define all design tokens as CSS custom properties.
+   These will be extended with real brand colors during UI work.
+   ────────────────────────────────────────────────────────────*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors — placeholders, replace with brand palette */
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #111111;
+  --color-text-primary: #f5f0eb;
+  --color-text-secondary: #a89882;
+  --color-accent: #c9a96e;
+  --color-accent-light: #e8d5b0;
+
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, monospace;
+
+  /* Spacing scale — extend as needed */
+  --section-padding-x: clamp(1.5rem, 5vw, 5rem);
+  --section-padding-y: clamp(4rem, 10vh, 8rem);
+
+  /* Animation */
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 0.3s;
+  --duration-normal: 0.6s;
+  --duration-slow: 1s;
+  --duration-cinematic: 1.8s;
+
+  /* Blur & backdrop */
+  --blur-glass: blur(12px);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-bg-primary);
+  --color-foreground: var(--color-text-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── 2. Base / Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Lenis overrides scroll-behavior — this is intentional */
+  scroll-behavior: auto;
+  /* Prevent layout shift from scrollbar appearing */
+  overflow-x: hidden;
+  /* Improve font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── 3. GPU Acceleration Helpers ─────────────────────────────── */
+/* Apply to animated elements to promote to compositor layer */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* For elements that animate opacity */
+.gpu-opacity {
+  will-change: opacity;
+}
+
+/* For elements that will scale */
+.gpu-scale {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* ── 4. Lenis Smooth Scroll ──────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ── 5. Utility Classes ──────────────────────────────────────── */
+
+/* Visually hidden but accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Prevent text selection on decorative elements */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Full-bleed section */
+.section-full {
+  width: 100%;
+  padding-left: var(--section-padding-x);
+  padding-right: var(--section-padding-x);
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
 }

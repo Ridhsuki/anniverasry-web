@@ -1,0 +1,9 @@
+# Prettier ignore list
+node_modules/
+.next/
+out/
+build/
+public/
+*.min.js
+*.min.css
+package-lock.json
