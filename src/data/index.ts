@@ -1,11 +1,11 @@
 // ─────────────────────────────────────────────────────────────
-// Data — Placeholder Structure
-// Replace with real content when building sections.
-// Kept here rather than hard-coded in components for easy CMS
-// migration later (e.g. swapping to a headless CMS fetch).
+// Data — Central Barrel Export
+// Structured content for narrative scenes and interactive modules.
 // ─────────────────────────────────────────────────────────────
 
-import type { GallerySection, StoryEntry, DecorativeElement } from "@/types";
+import type { DecorativeElement, GallerySection, StoryEntry } from "@/types";
+
+export * from "./intro";
 
 /** Story timeline entries — fill in with real dates and text */
 export const storyEntries: StoryEntry[] = [];
