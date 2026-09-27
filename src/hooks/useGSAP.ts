@@ -50,16 +50,20 @@ export function useGSAP(
 
     registerGSAPPlugins();
 
-    // Create scoped GSAP context
-    const ctx = gsap.context(() => {
-      const cleanup = callback(gsap, ctx);
+    // Create scoped GSAP context.
+    // gsap.context invokes the callback synchronously, passing `self` (the context instance).
+    // Using the parameter `context` prevents a Temporal Dead Zone (TDZ) ReferenceError
+    // caused by accessing `ctx` before its assignment completes.
+    const ctx = gsap.context((context) => {
+      const cleanup = callback(gsap, context);
       return cleanup;
     }, scope?.current ?? undefined);
 
     contextRef.current = ctx;
 
     return () => {
-      ctx.revert(); // Kills all tweens and ScrollTriggers inside this context
+      ctx.revert(); // Kills all tweens and ScrollTriggers inside this context and runs returned cleanups
+      contextRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
