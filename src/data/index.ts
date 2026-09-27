@@ -10,6 +10,7 @@ export * from "./selection";
 export * from "./journey";
 export * from "./gallery";
 export * from "./playlist";
+export * from "./gift";
 
 /** Story timeline entries — fill in with real dates and text */
 export const storyEntries: StoryEntry[] = [];
