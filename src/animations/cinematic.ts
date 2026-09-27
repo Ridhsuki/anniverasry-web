@@ -1,6 +1,7 @@
 // ─────────────────────────────────────────────────────────────
 // Cinematic Animation Utilities
-// Pure GSAP functions for filmic chapter transitions and dramatic reveals.
+// Pure GSAP functions for filmic chapter transitions, scene enter/exit,
+// and dramatic headline reveals.
 // Designed for award-winning digital storytelling experiences.
 // SSR-safe, no React dependency.
 // ─────────────────────────────────────────────────────────────
@@ -10,15 +11,94 @@ import { gsap } from "gsap";
 import { animation } from "@/constants/tokens";
 import type {
   DramaticRevealOptions,
+  SceneEnterOptions,
+  SceneExitOptions,
   SceneTransitionOptions,
 } from "@/types/animations";
 
 /**
- * Executes a seamless cinematic transition between two scenes.
- * Fades and softly scales out the departing scene while gracefully
- * introducing the incoming scene with cinematic easing.
+ * Animates a scene container into view.
+ * Uses GPU-accelerated opacity, scale, and subtle translation.
  */
-export function sceneTransition(
+export function animateSceneEnter(
+  target: gsap.TweenTarget,
+  options: SceneEnterOptions = {}
+): gsap.core.Tween | null {
+  if (typeof window === "undefined" || !target) return null;
+
+  const {
+    duration = animation.duration.slow,
+    ease = animation.ease.cinematic,
+    delay = 0,
+    scaleStart = 1.04,
+    yOffset = 0,
+    onComplete,
+    onStart,
+  } = options;
+
+  return gsap.fromTo(
+    target,
+    {
+      opacity: 0,
+      scale: scaleStart,
+      y: yOffset,
+      force3D: true,
+      visibility: "visible",
+    },
+    {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      duration,
+      ease,
+      delay,
+      onStart,
+      onComplete,
+      clearProps: "transform",
+    }
+  );
+}
+
+/**
+ * Animates a scene container out of view.
+ * Softly scales down and fades out without jarring layout shifts.
+ */
+export function animateSceneExit(
+  target: gsap.TweenTarget,
+  options: SceneExitOptions = {}
+): gsap.core.Tween | null {
+  if (typeof window === "undefined" || !target) return null;
+
+  const {
+    duration = animation.duration.moderate,
+    ease = "power2.inOut",
+    delay = 0,
+    scaleEnd = 0.96,
+    yOffset = 0,
+    onComplete,
+    onStart,
+  } = options;
+
+  return gsap.to(target, {
+    opacity: 0,
+    scale: scaleEnd,
+    y: yOffset,
+    duration,
+    ease,
+    delay,
+    force3D: true,
+    onStart,
+    onComplete: () => {
+      if (onComplete) onComplete();
+    },
+  });
+}
+
+/**
+ * Builds an overlapping timeline linking exit of departing scene
+ * with entrance of the incoming scene.
+ */
+export function createSceneTransitionTimeline(
   leavingTarget: gsap.TweenTarget,
   enteringTarget: gsap.TweenTarget,
   options: SceneTransitionOptions = {}
@@ -29,9 +109,15 @@ export function sceneTransition(
     duration = animation.duration.slow,
     ease = animation.ease.cinematic,
     delay = 0,
+    overlapOffset,
+    onEnterStart,
     onComplete,
     onStart,
   } = options;
+
+  const exitDuration = duration * 0.55;
+  const enterDuration = duration;
+  const overlap = overlapOffset ?? duration * 0.25;
 
   const tl = gsap.timeline({
     delay,
@@ -45,7 +131,7 @@ export function sceneTransition(
       {
         opacity: 0,
         scale: 0.96,
-        duration: duration * 0.6,
+        duration: exitDuration,
         ease: "power2.inOut",
         force3D: true,
       },
@@ -60,19 +146,35 @@ export function sceneTransition(
         opacity: 0,
         scale: 1.04,
         force3D: true,
+        visibility: "visible",
       },
       {
         opacity: 1,
         scale: 1,
-        duration,
+        duration: enterDuration,
         ease,
         clearProps: "transform",
+        onStart: () => {
+          if (onEnterStart) onEnterStart();
+        },
       },
-      duration * 0.25 // Overlapping crossfade for seamless filmic cut
+      overlap
     );
   }
 
   return tl;
+}
+
+/**
+ * Executes a seamless cinematic transition between two scenes.
+ * Primary convenience wrapper around createSceneTransitionTimeline.
+ */
+export function sceneTransition(
+  leavingTarget: gsap.TweenTarget,
+  enteringTarget: gsap.TweenTarget,
+  options: SceneTransitionOptions = {}
+): gsap.core.Timeline | null {
+  return createSceneTransitionTimeline(leavingTarget, enteringTarget, options);
 }
 
 /**

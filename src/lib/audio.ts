@@ -113,6 +113,34 @@ class AudioManager {
     howl.once("fade", () => howl.stop());
   }
 
+  crossfade(
+    fromTrackId: string | null,
+    toTrackId: string,
+    durationMs: number = 1500
+  ): void {
+    if (fromTrackId && fromTrackId !== toTrackId) {
+      this.fadeOut(fromTrackId, durationMs);
+    }
+    this.currentTrackId = toTrackId;
+    this.fadeIn(toTrackId, durationMs);
+  }
+
+  playSfx(sfxId: string): void {
+    const howl = this.tracks.get(sfxId);
+    if (!howl) {
+      return;
+    }
+    howl.play();
+  }
+
+  getTrack(trackId: string): Howl | undefined {
+    return this.tracks.get(trackId);
+  }
+
+  isTrackRegistered(trackId: string): boolean {
+    return this.tracks.has(trackId);
+  }
+
   // ── Volume ───────────────────────────────────────────────────
   setVolume(value: number): void {
     this._volume = Math.max(0, Math.min(1, value));

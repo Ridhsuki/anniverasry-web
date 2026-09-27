@@ -13,3 +13,5 @@ export {
   useIsTablet,
   useIsDesktop,
 } from "./useMediaQuery";
+export { useSceneController } from "./useSceneController";
+export { useSceneAudio } from "./useSceneAudio";

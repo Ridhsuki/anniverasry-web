@@ -1,0 +1,88 @@
+// ─────────────────────────────────────────────────────────────
+// ExperienceContext & ExperienceProvider
+// Central application state provider for the interactive anniversary experience.
+// Unifies active scene state, narrative progression, audio synchronization,
+// and cross-scene interactions.
+// ─────────────────────────────────────────────────────────────
+
+"use client";
+
+import { createContext, useContext, useMemo } from "react";
+
+import type { SceneAudioController } from "@/constants/sceneAudio";
+import { useSceneAudio } from "@/hooks/useSceneAudio";
+import { useSceneController } from "@/hooks/useSceneController";
+import type {
+  SceneControllerReturn,
+  SceneName,
+} from "@/types/scenes";
+
+export interface ExperienceContextValue extends SceneControllerReturn {
+  audio: SceneAudioController;
+  isAudioEnabled: boolean;
+}
+
+const ExperienceContext = createContext<ExperienceContextValue | null>(null);
+
+export interface ExperienceProviderProps {
+  children: React.ReactNode;
+  initialScene?: SceneName;
+  syncWithUrlHash?: boolean;
+  enableAudio?: boolean;
+}
+
+/**
+ * ExperienceProvider
+ *
+ * Wraps the interactive application to provide unified scene progression,
+ * narrative navigation, and audio synchronization across all scenes.
+ */
+export function ExperienceProvider({
+  children,
+  initialScene = "intro",
+  syncWithUrlHash = true,
+  enableAudio = true,
+}: ExperienceProviderProps) {
+  const sceneController = useSceneController({
+    initialScene,
+    syncWithUrlHash,
+  });
+
+  const audioController = useSceneAudio(sceneController.currentScene, {
+    enabled: enableAudio,
+    autoSync: true,
+  });
+
+  const value = useMemo<ExperienceContextValue>(
+    () => ({
+      ...sceneController,
+      audio: audioController,
+      isAudioEnabled: enableAudio,
+    }),
+    [sceneController, audioController, enableAudio]
+  );
+
+  return (
+    <ExperienceContext.Provider value={value}>
+      {children}
+    </ExperienceContext.Provider>
+  );
+}
+
+/**
+ * useExperience
+ *
+ * Consumer hook providing access to scene navigation, progression state,
+ * and audio controls from any descendant component.
+ */
+export function useExperience(): ExperienceContextValue {
+  const context = useContext(ExperienceContext);
+  if (!context) {
+    throw new Error(
+      "useExperience must be used within an <ExperienceProvider>."
+    );
+  }
+  return context;
+}
+
+export { ExperienceContext };

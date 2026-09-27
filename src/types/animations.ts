@@ -90,11 +90,29 @@ export interface PaperRevealOptions extends BaseAnimationOptions {
   tilt?: number;
 }
 
+export interface SceneEnterOptions extends BaseAnimationOptions {
+  /** Visual transition mode */
+  mode?: "fade" | "scale-up" | "cinematic-blur" | "slide-up" | "curtain";
+  scaleStart?: number;
+  yOffset?: number;
+}
+
+export interface SceneExitOptions extends BaseAnimationOptions {
+  /** Visual transition mode */
+  mode?: "fade" | "scale-down" | "cinematic-blur" | "slide-up" | "curtain";
+  scaleEnd?: number;
+  yOffset?: number;
+}
+
 export interface SceneTransitionOptions extends BaseAnimationOptions {
   /** Transition mode */
-  mode?: "fade" | "cinematic-blur" | "wipe" | "curtain";
+  mode?: "fade" | "scale" | "cinematic-blur" | "wipe" | "curtain";
   /** Direction if wipe/curtain */
   direction?: "left" | "right" | "top" | "bottom";
+  /** Overlap delay offset in seconds between exit and enter */
+  overlapOffset?: number;
+  /** Callback fired right as the entering scene begins its animation */
+  onEnterStart?: () => void;
 }
 
 export interface DramaticRevealOptions extends BaseAnimationOptions {

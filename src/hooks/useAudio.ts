@@ -17,6 +17,12 @@ interface UseAudioReturn extends AudioManagerState {
   stop: (trackId?: string) => void;
   fadeIn: (trackId: string, durationMs?: number) => void;
   fadeOut: (trackId: string, durationMs?: number) => void;
+  crossfade: (
+    fromTrackId: string | null,
+    toTrackId: string,
+    durationMs?: number
+  ) => void;
+  playSfx: (sfxId: string) => void;
   toggleMute: () => void;
   setVolume: (volume: number) => void;
   registerTrack: (track: AudioTrack) => void;
@@ -72,6 +78,18 @@ export function useAudio(): UseAudioReturn {
     setState(audioManager.getState());
   }, []);
 
+  const crossfade = useCallback(
+    (fromTrackId: string | null, toTrackId: string, durationMs?: number) => {
+      audioManager.crossfade(fromTrackId, toTrackId, durationMs);
+      setState(audioManager.getState());
+    },
+    []
+  );
+
+  const playSfx = useCallback((sfxId: string) => {
+    audioManager.playSfx(sfxId);
+  }, []);
+
   const toggleMute = useCallback(() => {
     audioManager.toggleMute();
     setState(audioManager.getState());
@@ -93,6 +111,8 @@ export function useAudio(): UseAudioReturn {
     stop,
     fadeIn,
     fadeOut,
+    crossfade,
+    playSfx,
     toggleMute,
     setVolume,
     registerTrack,
