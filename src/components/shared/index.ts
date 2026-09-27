@@ -10,3 +10,6 @@ export * from "./AudioControls";
 export * from "./GiftBox";
 export * from "./RevealEffect";
 export * from "./GiftContentPanel";
+export * from "./LetterPaper";
+export * from "./SignatureBlock";
+export * from "./ClosingScene";
