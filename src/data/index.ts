@@ -8,6 +8,7 @@ import type { DecorativeElement, GallerySection, StoryEntry } from "@/types";
 export * from "./intro";
 export * from "./selection";
 export * from "./journey";
+export * from "./gallery";
 
 /** Story timeline entries — fill in with real dates and text */
 export const storyEntries: StoryEntry[] = [];
