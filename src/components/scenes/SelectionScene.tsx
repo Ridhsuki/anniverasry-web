@@ -429,7 +429,7 @@ export function SelectionScene(props: SceneProps) {
 
       {/* ── 3. Four Thematic Interactive Artifacts Deck ───────── */}
       <div className="relative z-10 w-full max-w-6xl mx-auto my-auto py-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 items-end justify-items-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-8 lg:gap-10 items-end justify-items-center">
           {SELECTION_CONTENT.artifacts.map((artifact) => {
             const isSelected = selectedId === artifact.id;
 

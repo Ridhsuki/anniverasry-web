@@ -13,3 +13,4 @@ export * from "./GiftContentPanel";
 export * from "./LetterPaper";
 export * from "./SignatureBlock";
 export * from "./ClosingScene";
+export * from "./GalleryLightbox";

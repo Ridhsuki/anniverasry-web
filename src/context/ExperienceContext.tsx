@@ -7,11 +7,12 @@
 
 "use client";
 
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 
 import type { SceneAudioController } from "@/constants/sceneAudio";
 import { useSceneAudio } from "@/hooks/useSceneAudio";
 import { useSceneController } from "@/hooks/useSceneController";
+import { destroyLenis, initLenis, scrollTo } from "@/lib/lenis";
 import type {
   SceneControllerReturn,
   SceneName,
@@ -35,7 +36,7 @@ export interface ExperienceProviderProps {
  * ExperienceProvider
  *
  * Wraps the interactive application to provide unified scene progression,
- * narrative navigation, and audio synchronization across all scenes.
+ * narrative navigation, smooth scrolling lifecycle, and audio synchronization across all scenes.
  */
 export function ExperienceProvider({
   children,
@@ -52,6 +53,19 @@ export function ExperienceProvider({
     enabled: enableAudio,
     autoSync: true,
   });
+
+  // Initialize Lenis smooth scrolling engine synchronized with GSAP ticker
+  useEffect(() => {
+    initLenis();
+    return () => {
+      destroyLenis();
+    };
+  }, []);
+
+  // Reset scroll position immediately when changing scenes
+  useEffect(() => {
+    scrollTo(0, { immediate: true });
+  }, [sceneController.currentScene]);
 
   const value = useMemo<ExperienceContextValue>(
     () => ({

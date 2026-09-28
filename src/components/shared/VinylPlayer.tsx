@@ -8,6 +8,7 @@
 
 "use client";
 
+import { PauseIcon, PlayIcon } from "@/components/ui/Icons";
 import type { PlaylistTrack } from "@/data/playlist";
 import { cn } from "@/utils";
 
@@ -112,8 +113,12 @@ export function VinylPlayer({
               </svg>
 
               {/* Play / Pause Symbol */}
-              <span className="absolute text-white text-xs font-bold leading-none -mt-0.5 pl-0.5 select-none drop-shadow-md">
-                {isPlaying ? "❚❚" : "▶"}
+              <span className="absolute text-white text-xs font-bold leading-none select-none drop-shadow-md flex items-center justify-center">
+                {isPlaying ? (
+                  <PauseIcon size={12} />
+                ) : (
+                  <PlayIcon size={12} className="translate-x-0.5" />
+                )}
               </span>
             </div>
 

@@ -79,11 +79,13 @@
 
 html {
   scroll-behavior: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+  scrollbar-width: thin;
+  scrollbar-color: #c9904a #120205;
 }
 
 body {
@@ -92,7 +94,28 @@ body {
   font-family: var(--font-sans);
   line-height: var(--leading-normal);
   min-height: 100dvh;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* ── Custom Vintage Slim Scrollbar ───────────────────────────── */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #120205;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9904a;
+  border-radius: 9999px;
+  border: 1px solid rgba(246, 201, 78, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e5a95d;
+  box-shadow: 0 0 8px rgba(246, 201, 78, 0.45);
 }
 
 /* ── 5. Typography Utilities ─────────────────────────────────── */
@@ -156,6 +179,30 @@ body {
 .vignette-overlay {
   background: var(--gradient-vignette);
   pointer-events: none;
+}
+
+/* ── Cinematic Reveal Light Bloom ───────────────────────────── */
+@keyframes cinematicBloomExpand {
+  0% {
+    transform: scale(0.15);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(1.35);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-bloom-expand {
+  animation: cinematicBloomExpand 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ── 7. GPU Acceleration & Performance Helpers ───────────────── */

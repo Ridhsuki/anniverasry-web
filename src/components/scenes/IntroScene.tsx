@@ -345,15 +345,31 @@ export function IntroScene(props: SceneProps) {
           <RoseCluster className="absolute -top-10 -left-6 md:-left-12 w-28 md:w-36 z-20" />
           <RoseCluster className="absolute -bottom-8 -right-6 md:-right-12 w-28 md:w-36 z-20" flip />
 
-          {/* Envelope Body */}
+          {/* Skeuomorphic Physical Envelope Body */}
           <div className="relative w-full max-w-md md:max-w-lg">
-            {/* Protruding Deckle-Edged Letter */}
-            <div className="intro-envelope-letter relative z-10 -mb-8 px-4">
+            {/* ── Layer 1: Backplate & Upward Open Triangular Flap (Behind Letter) ── */}
+            <div
+              aria-hidden="true"
+              className="absolute -top-10 sm:-top-14 left-2 right-2 h-20 sm:h-26 z-0 bg-gradient-to-b from-[#dfba80] via-[#ecd1a2] to-[#f5dfbc] border-t border-l border-r border-[#c9904a]/40 [clip-path:polygon(0%_100%,50%_0%,100%_100%)] drop-shadow-sm"
+            >
+              {/* Gold foil edge line on top flap */}
+              <div className="absolute inset-0 [clip-path:polygon(0%_100%,50%_0%,100%_100%)] border-t border-[#f6c94e]/50" />
+            </div>
+
+            {/* Envelope Interior Backplate Lining */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-2 top-0 bottom-4 z-0 rounded-t-sm bg-gradient-to-b from-[#ebd1a7] to-[#e0be88] border border-[#c9904a]/40 shadow-inner"
+            />
+
+            {/* ── Layer 2: Protruding Deckle-Edged Letter ── */}
+            <div className="intro-envelope-letter relative z-10 -mb-12 px-3 sm:px-4">
               <PaperCard
                 variant="deckle"
                 shadow="xl"
                 hasTexture={true}
-                className="w-full text-center py-8 px-6 md:py-10 md:px-10 border-[#c9904a]/40 bg-gradient-to-b from-[#fdf8f0] via-[#f9edd8] to-[#f2dbb4]"
+                padding="md"
+                className="w-full text-center border-[#c9904a]/40 bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] shadow-[0_12px_36px_rgba(26,18,9,0.35)]"
               >
                 {/* Headline: "Happy Anniversary" */}
                 <h1 className="intro-headline-text font-handwriting text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#3b1c0e] font-normal leading-tight tracking-wide drop-shadow-[0_1px_2px_rgba(201,144,74,0.3)]">
@@ -377,13 +393,32 @@ export function IntroScene(props: SceneProps) {
               </PaperCard>
             </div>
 
-            {/* Envelope Pocket Base */}
-            <div className="relative z-20 w-full h-24 md:h-28 bg-gradient-to-t from-[#e8c48a] to-[#f2dbb4] rounded-b-md shadow-2xl border-t border-[#c9904a]/50 flex items-center justify-center [clip-path:polygon(0%_0%,50%_45%,100%_0%,100%_100%,0%_100%)]">
-              <div className="absolute inset-0 bg-[radial-gradient(#c9904a_0.75px,transparent_0.75px)] [background-size:10px_10px] opacity-30" />
+            {/* ── Layer 3: Physical Front Pocket & Folded Triangular Flaps ── */}
+            <div className="relative z-20 w-full h-28 sm:h-34 rounded-b-md shadow-[0_16px_40px_rgba(0,0,0,0.6)] overflow-hidden bg-gradient-to-t from-[#dcb67a] via-[#ebcf9e] to-[#f7e3bf] border border-[#c9904a]/50">
+              {/* Paper fiber grain */}
+              <div className="absolute inset-0 bg-[radial-gradient(#c9904a_0.75px,transparent_0.75px)] [background-size:10px_10px] opacity-25 pointer-events-none" />
+
+              {/* Left Triangular Fold */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#e4be82] to-[#edd19f] [clip-path:polygon(0%_0%,100%_52%,0%_100%)] opacity-90 drop-shadow-[1px_0_3px_rgba(45,28,16,0.18)]"
+              />
+
+              {/* Right Triangular Fold */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#e4be82] to-[#edd19f] [clip-path:polygon(100%_0%,0%_52%,100%_100%)] opacity-90 drop-shadow-[-1px_0_3px_rgba(45,28,16,0.18)]"
+              />
+
+              {/* Bottom Triangular Flap Meeting at Center Apex */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-[#d8b072] via-[#e8cb97] to-[#fbf0d6] [clip-path:polygon(0%_100%,50%_32%,100%_100%)] drop-shadow-[0_-3px_8px_rgba(45,28,16,0.3)] border-b border-[#c9904a]/40"
+              />
             </div>
 
-            {/* Central Dimensional Wax Seal Button */}
-            <div className="absolute left-1/2 bottom-12 md:bottom-14 -translate-x-1/2 z-30">
+            {/* ── Layer 4: Central Dimensional Wax Seal Button at Pocket Apex ── */}
+            <div className="absolute left-1/2 bottom-12 sm:bottom-16 -translate-x-1/2 z-30">
               <VintageButton
                 variant="wax-seal"
                 aria-label="Open anniversary envelope"

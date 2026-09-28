@@ -30,6 +30,7 @@ export interface VintageButtonProps
 // ── PaperCard Props ───────────────────────────────────────────
 export type PaperCardVariant = "plain" | "aged" | "torn" | "deckle";
 export type PaperCardShadow = "none" | "sm" | "md" | "lg" | "xl";
+export type PaperCardPadding = "none" | "sm" | "md" | "lg";
 
 export interface PaperCardProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Paper appearance style */
@@ -42,6 +43,10 @@ export interface PaperCardProps extends React.HTMLAttributes<HTMLDivElement> {
   hasTexture?: boolean;
   /** Optional border styling preset */
   hasBorder?: boolean;
+  /** Inner content spacing tier */
+  padding?: PaperCardPadding;
+  /** Optional className for the inner content container */
+  contentClassName?: string;
 }
 
 // ── PhotoFrame Props ──────────────────────────────────────────

@@ -7,10 +7,15 @@
 // initLenis() inside a useEffect.
 // ─────────────────────────────────────────────────────────────
 
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
+import { registerGSAPPlugins } from "@/animations/gsap";
+
 let lenisInstance: Lenis | null = null;
-let rafId: number | null = null;
+let tickerCallback: ((time: number) => void) | null = null;
+let scrollListener: (() => void) | null = null;
 
 // ── Configuration ──────────────────────────────────────────────
 const LENIS_OPTIONS: ConstructorParameters<typeof Lenis>[0] = {
@@ -24,39 +29,53 @@ const LENIS_OPTIONS: ConstructorParameters<typeof Lenis>[0] = {
 
 // ── Lifecycle Helpers ─────────────────────────────────────────
 /**
- * Initialise Lenis and start the RAF loop.
+ * Initialise Lenis, synchronize with GSAP ticker, and connect ScrollTrigger.
  * Safe to call multiple times — returns existing instance if already running.
  */
-export function initLenis(): Lenis {
+export function initLenis(): Lenis | null {
+  if (typeof window === "undefined") return null;
   if (lenisInstance) return lenisInstance;
+
+  registerGSAPPlugins();
 
   lenisInstance = new Lenis(LENIS_OPTIONS);
 
-  function raf(time: number) {
-    lenisInstance?.raf(time);
-    rafId = requestAnimationFrame(raf);
-  }
+  // Synchronize ScrollTrigger with Lenis scroll positions
+  scrollListener = () => {
+    ScrollTrigger.update();
+  };
+  lenisInstance.on("scroll", scrollListener);
 
-  rafId = requestAnimationFrame(raf);
+  // Bind Lenis animation frame to GSAP ticker for zero-latency frame lock
+  tickerCallback = (time: number) => {
+    lenisInstance?.raf(time * 1000);
+  };
+  gsap.ticker.add(tickerCallback);
+  gsap.ticker.lagSmoothing(0);
+
   return lenisInstance;
 }
 
 /**
- * Stop the Lenis scroll (pause RAF without destroying instance).
+ * Stop the Lenis scroll (pause ticker and movement without destroying instance).
  */
 export function stopLenis(): void {
-  if (rafId !== null) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
+  if (tickerCallback) {
+    gsap.ticker.remove(tickerCallback);
+    tickerCallback = null;
   }
   lenisInstance?.stop();
 }
 
 /**
- * Destroy the Lenis instance completely (call on route change or unmount).
+ * Destroy the Lenis instance completely (call on unmount).
  */
 export function destroyLenis(): void {
   stopLenis();
+  if (lenisInstance && scrollListener) {
+    lenisInstance.off("scroll", scrollListener);
+    scrollListener = null;
+  }
   lenisInstance?.destroy();
   lenisInstance = null;
 }
@@ -75,7 +94,15 @@ export function scrollTo(
   target: HTMLElement | number | string,
   options?: Parameters<Lenis["scrollTo"]>[1]
 ): void {
-  lenisInstance?.scrollTo(target, options);
+  if (lenisInstance) {
+    lenisInstance.scrollTo(target, options);
+  } else if (typeof window !== "undefined") {
+    if (typeof target === "number") {
+      window.scrollTo({ top: target, behavior: options?.immediate ? "instant" : "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }
 }
 
 export { Lenis };

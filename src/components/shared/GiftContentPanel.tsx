@@ -34,7 +34,8 @@ export function GiftContentPanel({
         variant="deckle"
         shadow="xl"
         hasTexture={true}
-        className="w-full p-6 sm:p-8 bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/50 text-[#2d1f10] shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(246,201,78,0.3)]"
+        padding="md"
+        className="w-full bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/50 text-[#2d1f10] shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(246,201,78,0.3)]"
       >
         {/* Header Ribbon & Monogram Tag */}
         <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2.5 mb-4">

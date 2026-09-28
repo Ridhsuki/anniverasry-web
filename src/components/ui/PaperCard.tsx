@@ -31,6 +31,13 @@ const variantClasses: Record<NonNullable<PaperCardProps["variant"]>, string> = {
     "bg-gradient-to-b from-[#fdf8f0] to-[#f2dbb4] text-[#2d1f10] rounded-sm border border-[#c9904a]/25",
 };
 
+const paddingClasses: Record<NonNullable<PaperCardProps["padding"]>, string> = {
+  none: "p-0",
+  sm: "p-3 sm:p-4",
+  md: "p-6 md:p-8",
+  lg: "p-8 md:p-12",
+};
+
 export const PaperCard = forwardRef<HTMLDivElement, PaperCardProps>(
   (
     {
@@ -39,6 +46,8 @@ export const PaperCard = forwardRef<HTMLDivElement, PaperCardProps>(
       rotation = 0,
       hasTexture = true,
       hasBorder = true,
+      padding = "md",
+      contentClassName,
       className,
       style,
       children,
@@ -79,7 +88,15 @@ export const PaperCard = forwardRef<HTMLDivElement, PaperCardProps>(
         )}
 
         {/* Content slot */}
-        <div className="relative z-10 p-6 md:p-8">{children}</div>
+        <div
+          className={cn(
+            "relative z-10",
+            paddingClasses[padding],
+            contentClassName
+          )}
+        >
+          {children}
+        </div>
       </div>
     );
   }

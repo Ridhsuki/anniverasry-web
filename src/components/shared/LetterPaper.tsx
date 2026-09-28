@@ -16,20 +16,30 @@ export interface LetterPaperProps {
   paragraphs: string[];
   photo: LetterPhotoMetadata;
   children?: React.ReactNode;
+  padding?: "none" | "sm" | "md" | "lg";
   className?: string;
 }
+
+const letterPaddingClasses: Record<"none" | "sm" | "md" | "lg", string> = {
+  none: "p-0",
+  sm: "p-4 sm:p-6",
+  md: "p-6 sm:p-10 md:p-14",
+  lg: "p-8 sm:p-12 md:p-16",
+};
 
 export function LetterPaper({
   greeting,
   paragraphs,
   photo,
   children,
+  padding = "md",
   className,
 }: LetterPaperProps) {
   return (
     <article
       className={cn(
-        "letter-paper-sheet relative w-full max-w-2xl mx-auto p-6 sm:p-10 md:p-14 select-none",
+        "letter-paper-sheet relative w-full max-w-2xl mx-auto select-none",
+        letterPaddingClasses[padding],
         "bg-gradient-to-b from-[#fdfbf7] via-[#f7f0e4] to-[#f0e2cd] text-[#2d1c10]",
         "rounded-sm border border-[#c9904a]/40 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(201,144,74,0.15)]",
         className
@@ -63,7 +73,7 @@ export function LetterPaper({
       />
 
       {/* ── 3. Embedded Corner Keepsake Polaroid Photo ────────── */}
-      <div className="float-right ml-4 sm:ml-6 mb-4 w-32 sm:w-40 md:w-44 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)]">
+      <div className="sm:float-right mx-auto sm:mx-0 sm:ml-6 mb-5 w-36 sm:w-40 md:w-44 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] flex justify-center">
         <PhotoFrame
           variant="polaroid"
           rotation={photo.rotation}

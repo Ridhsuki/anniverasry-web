@@ -90,7 +90,8 @@ export function TimelineItem({
             variant={index % 2 === 0 ? "aged" : "plain"}
             shadow="lg"
             hasTexture={true}
-            className="w-full p-4 sm:p-5 md:p-6 border-[#c9904a]/35"
+            padding="sm"
+            className="w-full border-[#c9904a]/35"
           >
             {/* Header: Chapter Tag & Date */}
             <div className="flex items-center justify-between border-b border-[#c9904a]/25 pb-2.5 mb-3">

@@ -6,6 +6,14 @@
 
 "use client";
 
+import {
+  NextTrackIcon,
+  PauseIcon,
+  PlayIcon,
+  PrevTrackIcon,
+  VolumeHighIcon,
+  VolumeMuteIcon,
+} from "@/components/ui/Icons";
 import type { PlaylistTrack } from "@/data/playlist";
 import { cn } from "@/utils";
 
@@ -106,7 +114,7 @@ export function AudioControls({
             onClick={onPrevTrack}
             className="w-8 h-8 rounded-full flex items-center justify-center text-gold/80 hover:text-gold hover:bg-[#380e18] transition-all active:scale-90 cursor-pointer"
           >
-            ⏮
+            <PrevTrackIcon size={14} />
           </button>
 
           {/* Main Play / Pause Button */}
@@ -116,7 +124,11 @@ export function AudioControls({
             onClick={onTogglePlay}
             className="w-10 h-10 rounded-full bg-gradient-to-br from-[#d9a85f] via-[#fde68a] to-[#c9904a] text-[#1c080d] flex items-center justify-center font-bold text-sm shadow-[0_2px_12px_rgba(246,201,78,0.35)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
           >
-            {isPlaying ? "❚❚" : "▶"}
+            {isPlaying ? (
+              <PauseIcon size={14} />
+            ) : (
+              <PlayIcon size={14} className="translate-x-0.5" />
+            )}
           </button>
 
           {/* Next Track */}
@@ -126,7 +138,7 @@ export function AudioControls({
             onClick={onNextTrack}
             className="w-8 h-8 rounded-full flex items-center justify-center text-gold/80 hover:text-gold hover:bg-[#380e18] transition-all active:scale-90 cursor-pointer"
           >
-            ⏭
+            <NextTrackIcon size={14} />
           </button>
         </div>
 
@@ -138,7 +150,11 @@ export function AudioControls({
             onClick={onToggleMute}
             className="text-xs text-gold/70 hover:text-gold transition-colors cursor-pointer p-1"
           >
-            {isMuted || volume === 0 ? "🔇" : "🔊"}
+            {isMuted || volume === 0 ? (
+              <VolumeMuteIcon size={16} />
+            ) : (
+              <VolumeHighIcon size={16} />
+            )}
           </button>
 
           {/* Mini Volume Range */}

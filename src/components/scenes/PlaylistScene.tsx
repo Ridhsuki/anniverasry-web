@@ -16,7 +16,14 @@ import {
   reveal,
 } from "@/animations";
 import { AudioControls, TrackItem, VinylPlayer } from "@/components/shared";
-import { FloatingDecoration, PaperCard, PhotoFrame } from "@/components/ui";
+import {
+  BlossomIcon,
+  FloatingDecoration,
+  PaperCard,
+  PhotoFrame,
+  RoseIcon,
+  RosePetalIcon,
+} from "@/components/ui";
 import { useExperience } from "@/context/ExperienceContext";
 import { PLAYLIST_CONTENT, type PlaylistTrack } from "@/data/playlist";
 import { useAudio } from "@/hooks/useAudio";
@@ -122,14 +129,14 @@ function RosePetalBorder() {
       className="pointer-events-none absolute -inset-3.5 sm:-inset-4.5 rounded-lg border-2 border-dashed border-rose/30 flex items-center justify-center select-none z-20"
     >
       {/* Decorative Corner & Flank Rose Petals */}
-      <div className="absolute -top-3 -left-3 text-lg drop-shadow-md">🌹</div>
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-sm drop-shadow-md">🥀</div>
-      <div className="absolute -top-3 -right-3 text-lg drop-shadow-md">🌹</div>
-      <div className="absolute top-1/2 -left-3 -translate-y-1/2 text-sm drop-shadow-md">🥀</div>
-      <div className="absolute top-1/2 -right-3 -translate-y-1/2 text-sm drop-shadow-md">🥀</div>
-      <div className="absolute -bottom-3 -left-3 text-lg drop-shadow-md">🌹</div>
-      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-sm drop-shadow-md">🥀</div>
-      <div className="absolute -bottom-3 -right-3 text-lg drop-shadow-md">🌹</div>
+      <div className="absolute -top-3.5 -left-3.5"><RoseIcon size={22} /></div>
+      <div className="absolute -top-2.5 left-1/2 -translate-x-1/2"><RosePetalIcon size={16} /></div>
+      <div className="absolute -top-3.5 -right-3.5"><RoseIcon size={22} /></div>
+      <div className="absolute top-1/2 -left-2.5 -translate-y-1/2"><RosePetalIcon size={16} /></div>
+      <div className="absolute top-1/2 -right-2.5 -translate-y-1/2"><RosePetalIcon size={16} /></div>
+      <div className="absolute -bottom-3.5 -left-3.5"><RoseIcon size={22} /></div>
+      <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2"><RosePetalIcon size={16} /></div>
+      <div className="absolute -bottom-3.5 -right-3.5"><RoseIcon size={22} /></div>
     </div>
   );
 }
@@ -371,7 +378,8 @@ export function PlaylistScene(props: SceneProps) {
                 variant="deckle"
                 shadow="xl"
                 hasTexture={true}
-                className="w-full p-6 sm:p-7 md:p-8 bg-gradient-to-b from-[#fdf8f0] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/40 text-[#2d1f10]"
+                padding="md"
+                className="w-full bg-gradient-to-b from-[#fdf8f0] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/40 text-[#2d1f10]"
               >
                 <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
                   <span className="font-serif text-xs tracking-widest text-[#783e15] uppercase font-semibold">
@@ -451,10 +459,10 @@ export function PlaylistScene(props: SceneProps) {
               </PhotoFrame>
 
               {/* Decorative Roses below photo */}
-              <div className="flex items-center justify-center gap-2 -mt-4 text-xl select-none pointer-events-none drop-shadow-md">
-                <span>🌹</span>
-                <span>🌸</span>
-                <span>🌹</span>
+              <div className="flex items-center justify-center gap-2.5 -mt-3.5 select-none pointer-events-none drop-shadow-md">
+                <RoseIcon size={22} />
+                <BlossomIcon size={20} />
+                <RoseIcon size={22} />
               </div>
             </div>
 

@@ -7,3 +7,4 @@ export * from "./VintageButton";
 export * from "./PaperCard";
 export * from "./PhotoFrame";
 export * from "./FloatingDecoration";
+export * from "./Icons";

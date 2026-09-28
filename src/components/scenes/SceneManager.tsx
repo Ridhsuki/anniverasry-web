@@ -154,7 +154,7 @@ export function SceneManager({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full min-h-screen overflow-hidden bg-bg-primary select-none",
+        "relative w-full min-h-screen overflow-x-clip bg-bg-primary select-none",
         className
       )}
     >
@@ -167,7 +167,7 @@ export function SceneManager({
           className="absolute inset-0 z-0 w-full h-full pointer-events-none gpu-accelerated"
         >
           <ExitingComponent
-            isActive={false}
+            isActive={true}
             onComplete={nextScene}
             onNext={nextScene}
             onPrevious={prevScene}
@@ -181,11 +181,11 @@ export function SceneManager({
         key={activeSlot.key}
         className={cn(
           "relative z-10 w-full min-h-screen gpu-accelerated",
-          exitingSlot ? "pointer-events-none" : "pointer-events-auto"
+          exitingSlot ? "pointer-events-none opacity-0" : "pointer-events-auto"
         )}
       >
         <ActiveComponent
-          isActive={!exitingSlot}
+          isActive={true}
           onComplete={nextScene}
           onNext={nextScene}
           onPrevious={prevScene}

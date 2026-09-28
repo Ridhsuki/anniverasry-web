@@ -14,8 +14,8 @@ import {
   floatingMovement,
   reveal,
 } from "@/animations";
-import { PhotoGalleryItem } from "@/components/shared";
-import { FloatingDecoration, PaperCard } from "@/components/ui";
+import { GalleryLightbox, PhotoGalleryItem } from "@/components/shared";
+import { FloatingDecoration } from "@/components/ui";
 import { useExperience } from "@/context/ExperienceContext";
 import { GALLERY_CONTENT, type GalleryPhotoItem } from "@/data/gallery";
 import { useAudio } from "@/hooks/useAudio";
@@ -405,79 +405,10 @@ export function GalleryScene(props: SceneProps) {
       </footer>
 
       {/* ── 5. Scrapbook Lightbox Expansion Modal ────────────── */}
-      {activeModalPhoto && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Enlarged view: ${activeModalPhoto.caption}`}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm animate-fade-in select-none"
-          onClick={handleCloseModal}
-        >
-          <div
-            className="relative max-w-lg w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <PaperCard
-              variant="plain"
-              shadow="xl"
-              hasTexture={true}
-              className="w-full p-6 sm:p-8 bg-[#fdf8f0] border-[#c9904a]/50 text-[#1a1209]"
-            >
-              {/* Modal Close Button */}
-              <button
-                type="button"
-                aria-label="Close photo preview"
-                onClick={handleCloseModal}
-                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-[#3b0d14] text-gold hover:bg-[#520f1c] flex items-center justify-center font-serif text-sm transition-transform active:scale-90 shadow-md cursor-pointer"
-              >
-                ✕
-              </button>
-
-              {/* Enlarged Photo Container */}
-              <div className="relative w-full aspect-[4/3] rounded-xs overflow-hidden bg-[#160b06] shadow-inner mb-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={activeModalPhoto.src}
-                  alt={activeModalPhoto.alt}
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center pointer-events-none">
-                  <span className="text-gold/80 text-2xl mb-1">✦</span>
-                  <span className="font-handwriting text-gold text-lg">{activeModalPhoto.caption}</span>
-                </div>
-              </div>
-
-              {/* Title & Date */}
-              <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
-                <h3 className="font-serif text-xl sm:text-2xl text-[#2a1708] font-bold">
-                  {activeModalPhoto.caption}
-                </h3>
-                <span className="font-serif text-xs text-[#6e3712] tracking-wider uppercase font-semibold">
-                  {activeModalPhoto.date}
-                </span>
-              </div>
-
-              {/* Story Narrative */}
-              {activeModalPhoto.storySnippet && (
-                <p className="font-serif text-sm text-[#3d2412] leading-relaxed mb-3">
-                  {activeModalPhoto.storySnippet}
-                </p>
-              )}
-
-              {/* Location Badge */}
-              {activeModalPhoto.location && (
-                <div className="flex items-center gap-1.5 text-xs text-[#8c4918] font-sans">
-                  <span>📍</span>
-                  <span className="tracking-wide">{activeModalPhoto.location}</span>
-                </div>
-              )}
-            </PaperCard>
-          </div>
-        </div>
-      )}
+      <GalleryLightbox
+        photo={activeModalPhoto}
+        onClose={handleCloseModal}
+      />
     </section>
   );
 }

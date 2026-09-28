@@ -10,13 +10,14 @@ import type Lenis from "lenis";
 import { useEffect, useRef } from "react";
 
 
-import { destroyLenis, initLenis, scrollTo } from "@/lib/lenis";
+import { destroyLenis, getLenis, initLenis, scrollTo } from "@/lib/lenis";
 
 interface UseLenisReturn {
   scrollTo: (
     target: HTMLElement | number | string,
     options?: Parameters<InstanceType<typeof Lenis>["scrollTo"]>[1]
   ) => void;
+  getLenis: () => Lenis | null;
 }
 
 /**
@@ -44,7 +45,7 @@ export function useLenis(): UseLenisReturn {
     };
   }, []);
 
-  return { scrollTo };
+  return { scrollTo, getLenis };
 }
 
 /**
@@ -62,6 +63,7 @@ export function useLenisScroll(
     if (typeof window === "undefined") return;
 
     const lenis = initLenis();
+    if (!lenis) return;
 
     // Lenis scroll handler
     const handler = (e: { scroll: number; progress: number }) => {
