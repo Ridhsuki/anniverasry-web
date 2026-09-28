@@ -9,9 +9,11 @@
 
 import { createContext, useContext, useEffect, useMemo } from "react";
 
+import { AUDIO_TRACKS } from "@/constants/audio";
 import type { SceneAudioController } from "@/constants/sceneAudio";
 import { useSceneAudio } from "@/hooks/useSceneAudio";
 import { useSceneController } from "@/hooks/useSceneController";
+import { audioManager } from "@/lib/audio";
 import { destroyLenis, initLenis, scrollTo } from "@/lib/lenis";
 import type {
   SceneControllerReturn,
@@ -61,6 +63,13 @@ export function ExperienceProvider({
       destroyLenis();
     };
   }, []);
+
+  // Register all canonical soundtrack tracks and interactive SFX with AudioManager
+  useEffect(() => {
+    if (enableAudio) {
+      AUDIO_TRACKS.forEach((track) => audioManager.registerTrack(track));
+    }
+  }, [enableAudio]);
 
   // Reset scroll position immediately when changing scenes
   useEffect(() => {

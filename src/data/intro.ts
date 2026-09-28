@@ -37,7 +37,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
   photos: [
     {
       id: "intro-photo-1",
-      src: "/images/photos/photo-intro-couple-standing.webp",
+      src: "/images/intro/photo-intro-couple-standing.webp",
       alt: "Nayyy & Keillaa standing together",
       rotation: -8,
       variant: "gold",
@@ -47,7 +47,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
     },
     {
       id: "intro-photo-2",
-      src: "/images/photos/photo-intro-selfie-red.webp",
+      src: "/images/intro/photo-intro-selfie-red.webp",
       alt: "Couple selfie portrait",
       rotation: 6,
       variant: "polaroid",
@@ -58,7 +58,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
     },
     {
       id: "intro-photo-3",
-      src: "/images/photos/photo-intro-portrait-top-right.webp",
+      src: "/images/intro/photo-intro-portrait-top-right.webp",
       alt: "Romantic portrait moment",
       rotation: 10,
       variant: "gold",
@@ -68,7 +68,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
     },
     {
       id: "intro-photo-4",
-      src: "/images/photos/photo-intro-portrait-cap.webp",
+      src: "/images/intro/photo-intro-portrait-cap.webp",
       alt: "Portrait with baseball cap",
       rotation: -6,
       variant: "polaroid",
@@ -78,7 +78,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
     },
     {
       id: "intro-photo-5",
-      src: "/images/photos/photo-intro-portrait-bottom-right.webp",
+      src: "/images/intro/photo-intro-portrait-bottom-right.webp",
       alt: "Playful smile portrait",
       rotation: 7,
       variant: "gold",

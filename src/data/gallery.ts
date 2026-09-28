@@ -49,7 +49,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     // ── Row 1 (Top 4 Polaroids) ─────────────────────────────
     {
       id: "gallery-photo-1",
-      src: "/images/photos/photo-gallery-smile.webp",
+      src: "/images/gallery/photo-gallery-smile.webp",
       alt: "Senyuman manis saat pertama kali jalan bersama",
       caption: "Senyuman Pertama",
       date: "26-09-23",
@@ -63,7 +63,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     },
     {
       id: "gallery-photo-2",
-      src: "/images/photos/photo-gallery-coffee.webp",
+      src: "/images/gallery/photo-gallery-coffee.webp",
       alt: "Kencan sore di coffee shop favorit",
       caption: "Kencan Sederhana",
       date: "14-11-23",
@@ -77,7 +77,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     },
     {
       id: "gallery-photo-3",
-      src: "/images/photos/photo-gallery-sunset.webp",
+      src: "/images/gallery/photo-gallery-sunset.webp",
       alt: "Siluet berdua saat matahari terbenam",
       caption: "Langit Senja Kita",
       date: "28-01-24",
@@ -91,7 +91,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     },
     {
       id: "gallery-photo-4",
-      src: "/images/photos/photo-gallery-selfie.webp",
+      src: "/images/gallery/photo-gallery-selfie.webp",
       alt: "Selfie konyol dan tawa lepas",
       caption: "Tawa Tanpa Batas",
       date: "14-02-24",
@@ -107,7 +107,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     // ── Row 2 (Bottom 4 Polaroids) ──────────────────────────
     {
       id: "gallery-photo-5",
-      src: "/images/photos/photo-gallery-beach.webp",
+      src: "/images/gallery/photo-gallery-beach.webp",
       alt: "Berjalan santai di tepi pantai",
       caption: "Menyusuri Pantai",
       date: "21-05-24",
@@ -121,7 +121,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     },
     {
       id: "gallery-photo-6",
-      src: "/images/photos/photo-gallery-city.webp",
+      src: "/images/gallery/photo-gallery-city.webp",
       alt: "Suasana malam berdua di bawah lampu kota",
       caption: "Di Bawah Lampu Kota",
       date: "18-07-24",
@@ -135,7 +135,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     },
     {
       id: "gallery-photo-7",
-      src: "/images/photos/photo-gallery-trip.webp",
+      src: "/images/gallery/photo-gallery-trip.webp",
       alt: "Perjalanan liburan akhir pekan",
       caption: "Petualangan Kecil",
       date: "09-08-24",
@@ -149,7 +149,7 @@ export const GALLERY_CONTENT: GallerySceneContent = {
     },
     {
       id: "gallery-photo-8",
-      src: "/images/photos/photo-gallery-anniversary.webp",
+      src: "/images/gallery/photo-gallery-anniversary.webp",
       alt: "Momen perayaan satu tahun cinta kita",
       caption: "Satu Tahun Bersama",
       date: "26-09-24",

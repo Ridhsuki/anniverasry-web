@@ -57,7 +57,7 @@ export const FINAL_LETTER_CONTENT: FinalLetterContent = {
     monogram: "N&K",
   },
   photo: {
-    src: "/images/photos/photo-journey-hero-left.webp",
+    src: "/images/final-letter/photo-letter-keepsake.webp",
     alt: "Nayyy & Keillaa anniversary keepsake photo",
     caption: "Forever & Always",
     date: "26-09-26",

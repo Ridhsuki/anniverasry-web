@@ -71,7 +71,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
         "Sebuah perjalanan rasa yang dimulai dari tatap mata sederhana, tumbuh menjadi komitmen terindah.",
       photo: {
         id: "hero-photo-couple",
-        src: "/images/photos/photo-journey-hero-left.webp",
+        src: "/images/journey/photo-journey-hero-left.webp",
         alt: "Nayyy & Keillaa in Baroque Gilded Frame",
         caption: "Risk It All For You",
         date: "26-09-26",
@@ -89,7 +89,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
       photos: [
         {
           id: "hero-photo-tilted-back",
-          src: "/images/photos/photo-journey-right-back.webp",
+          src: "/images/journey/photo-journey-right-back.webp",
           alt: "Sweet moment together",
           frameVariant: "gold",
           aspectRatio: "portrait",
@@ -98,7 +98,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
         },
         {
           id: "hero-photo-front-square",
-          src: "/images/photos/photo-journey-right-front.webp",
+          src: "/images/journey/photo-journey-right-front.webp",
           alt: "Candid smile portrait",
           caption: "Forever & Always",
           frameVariant: "filigree",
@@ -121,7 +121,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
       quote: "Every love story is beautiful, but ours is my favorite.",
       photo: {
         id: "milestone-1-photo",
-        src: "/images/photos/photo-journey-first-meet.webp",
+        src: "/images/journey/photo-journey-first-meet.webp",
         alt: "Hari pertama kita bertemu",
         caption: "Hari Pertama Kisah Kita",
         date: "14-02-24",
@@ -143,7 +143,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
       quote: "It's not where we go, but who we walk with.",
       photo: {
         id: "milestone-2-photo",
-        src: "/images/photos/photo-journey-walk.webp",
+        src: "/images/journey/photo-journey-walk.webp",
         alt: "Menjelajahi sudut kota bersama",
         caption: "Senja di Sudut Kota",
         date: "21-05-24",
@@ -165,7 +165,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
       quote: "'Cause I'd risk it all for you...",
       photo: {
         id: "milestone-3-photo",
-        src: "/images/photos/photo-journey-anniversary.webp",
+        src: "/images/journey/photo-journey-anniversary.webp",
         alt: "Perayaan satu tahun perjalanan cinta",
         caption: "Melodi Abadi Kita",
         date: "26-09-24",
@@ -187,7 +187,7 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
       quote: "Today, tomorrow, and every single lifetime after.",
       photo: {
         id: "milestone-4-photo",
-        src: "/images/photos/photo-journey-future.webp",
+        src: "/images/journey/photo-journey-future.webp",
         alt: "Genggaman tangan menuju masa depan",
         caption: "Janji Selamanya",
         date: "26-09-26",
