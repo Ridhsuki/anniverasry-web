@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   },
   description: SITE_METADATA.description,
   metadataBase: new URL(SITE_METADATA.url),
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -26,6 +29,11 @@ export const metadata: Metadata = {
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
     siteName: SITE_METADATA.title,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_METADATA.title,
+    description: SITE_METADATA.description,
   },
   robots: {
     index: false, // Keep private until ready to share
@@ -38,7 +46,7 @@ export const viewport: Viewport = {
   themeColor: "#0d0d0d",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
 };
 
 // ── Layout ──────────────────────────────────────────────────────

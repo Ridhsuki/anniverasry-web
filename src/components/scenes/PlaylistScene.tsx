@@ -7,6 +7,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
@@ -447,14 +448,28 @@ export function PlaylistScene(props: SceneProps) {
               >
                 <div className="relative w-full h-full min-h-[170px] bg-gradient-to-br from-[#24140b] via-[#160b06] to-[#0a0503] flex flex-col items-center justify-center p-2 overflow-hidden">
                   <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
-                  <div className="absolute inset-0 shadow-[inset_0_0_18px_rgba(201,144,74,0.35)]" />
-                  <span className="text-gold/80 text-xl mb-1">✦</span>
-                  <span className="font-handwriting text-gold text-base tracking-wide text-center">
-                    {PLAYLIST_CONTENT.photoAltar.caption}
-                  </span>
-                  <span className="font-sans text-[0.6rem] text-gold/50 tracking-widest uppercase mt-0.5">
-                    Nayyy & Keillaa
-                  </span>
+                  <div className="absolute inset-0 shadow-[inset_0_0_18px_rgba(201,144,74,0.35)] pointer-events-none z-20" />
+                  {PLAYLIST_CONTENT.photoAltar.photoSrc ? (
+                    <Image
+                      src={PLAYLIST_CONTENT.photoAltar.photoSrc}
+                      alt={PLAYLIST_CONTENT.photoAltar.photoAlt}
+                      fill
+                      sizes="240px"
+                      loading="lazy"
+                      quality={85}
+                      className="relative z-10 w-full h-full object-cover rounded-xs"
+                    />
+                  ) : (
+                    <>
+                      <span className="text-gold/80 text-xl mb-1">✦</span>
+                      <span className="font-handwriting text-gold text-base tracking-wide text-center">
+                        {PLAYLIST_CONTENT.photoAltar.caption}
+                      </span>
+                      <span className="font-sans text-[0.6rem] text-gold/50 tracking-widest uppercase mt-0.5">
+                        Nayyy & Keillaa
+                      </span>
+                    </>
+                  )}
                 </div>
               </PhotoFrame>
 

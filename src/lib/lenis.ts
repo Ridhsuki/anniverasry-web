@@ -38,7 +38,14 @@ export function initLenis(): Lenis | null {
 
   registerGSAPPlugins();
 
-  lenisInstance = new Lenis(LENIS_OPTIONS);
+  const prefersReducedMotion =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  lenisInstance = new Lenis({
+    ...LENIS_OPTIONS,
+    duration: prefersReducedMotion ? 0.001 : 1.2,
+    smoothWheel: !prefersReducedMotion,
+  });
 
   // Synchronize ScrollTrigger with Lenis scroll positions
   scrollListener = () => {

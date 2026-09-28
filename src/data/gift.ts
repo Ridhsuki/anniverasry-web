@@ -12,6 +12,7 @@ export interface GiftMetadata {
   sealMonogram: string;
   ribbonColor?: string;
   keepsakeTitle: string;
+  photoSrc?: string;
 }
 
 export interface GiftRevealMessage {
@@ -53,6 +54,7 @@ export const GIFT_CONTENT: GiftContent = {
     sealMonogram: "N&K",
     ribbonColor: "gold",
     keepsakeTitle: "Kado Terindah: Kehadiranmu",
+    photoSrc: "/images/gift/photo-gift-keepsake.webp",
   },
   revealMessage: {
     heading: "Untukmu yang Teristimewa",

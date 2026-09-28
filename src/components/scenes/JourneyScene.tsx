@@ -6,6 +6,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
 import {
@@ -420,16 +421,28 @@ export function JourneyScene(props: SceneProps) {
               >
                 <div className="relative w-full h-full min-h-[220px] bg-gradient-to-br from-[#2a1710] via-[#1a0e08] to-[#0d0704] flex flex-col items-center justify-center p-3 overflow-hidden">
                   <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
-                  <div className="absolute inset-0 shadow-[inset_0_0_24px_rgba(201,144,74,0.35)]" />
-                  <div className="relative z-10 flex flex-col items-center gap-1.5 text-center">
-                    <span className="text-gold/80 text-xl">✦</span>
-                    <span className="font-handwriting text-gold text-lg md:text-xl tracking-wide">
-                      {JOURNEY_CONTENT.hero.left.photo.caption}
-                    </span>
-                    <span className="font-sans text-[0.65rem] text-gold/60 tracking-widest uppercase">
-                      Nayyy & Keillaa
-                    </span>
-                  </div>
+                  <div className="absolute inset-0 shadow-[inset_0_0_24px_rgba(201,144,74,0.35)] pointer-events-none z-20" />
+                  {JOURNEY_CONTENT.hero.left.photo.src ? (
+                    <Image
+                      src={JOURNEY_CONTENT.hero.left.photo.src}
+                      alt={JOURNEY_CONTENT.hero.left.photo.alt}
+                      fill
+                      sizes="(max-width: 768px) 240px, 300px"
+                      loading="lazy"
+                      quality={85}
+                      className="relative z-10 w-full h-full object-cover rounded-xs"
+                    />
+                  ) : (
+                    <div className="relative z-10 flex flex-col items-center gap-1.5 text-center">
+                      <span className="text-gold/80 text-xl">✦</span>
+                      <span className="font-handwriting text-gold text-lg md:text-xl tracking-wide">
+                        {JOURNEY_CONTENT.hero.left.photo.caption}
+                      </span>
+                      <span className="font-sans text-[0.65rem] text-gold/60 tracking-widest uppercase">
+                        Nayyy & Keillaa
+                      </span>
+                    </div>
+                  )}
                 </div>
               </PhotoFrame>
             </div>
@@ -454,8 +467,20 @@ export function JourneyScene(props: SceneProps) {
                   tapeStyle={JOURNEY_CONTENT.hero.right.photos[0].tapeStyle}
                   className="w-full"
                 >
-                  <div className="w-full h-full min-h-[170px] bg-gradient-to-br from-[#24130b] to-[#0c0603] flex items-center justify-center p-2">
-                    <span className="font-handwriting text-gold/70 text-sm">Cherished Memory</span>
+                  <div className="relative w-full h-full min-h-[170px] bg-gradient-to-br from-[#24130b] to-[#0c0603] flex items-center justify-center p-2 overflow-hidden">
+                    {JOURNEY_CONTENT.hero.right.photos[0]?.src ? (
+                      <Image
+                        src={JOURNEY_CONTENT.hero.right.photos[0].src}
+                        alt={JOURNEY_CONTENT.hero.right.photos[0].alt}
+                        fill
+                        sizes="200px"
+                        loading="lazy"
+                        quality={85}
+                        className="relative z-10 w-full h-full object-cover rounded-xs"
+                      />
+                    ) : (
+                      <span className="font-handwriting text-gold/70 text-sm">Cherished Memory</span>
+                    )}
                   </div>
                 </PhotoFrame>
               </div>
@@ -469,9 +494,23 @@ export function JourneyScene(props: SceneProps) {
                   caption={JOURNEY_CONTENT.hero.right.photos[1].caption}
                   className="w-full"
                 >
-                  <div className="w-full h-full min-h-[160px] bg-gradient-to-br from-[#2a1710] to-[#0d0704] flex flex-col items-center justify-center p-2">
-                    <span className="text-gold/80 text-base">♥</span>
-                    <span className="font-handwriting text-gold text-sm tracking-wide">Forever & Always</span>
+                  <div className="relative w-full h-full min-h-[160px] bg-gradient-to-br from-[#2a1710] to-[#0d0704] flex flex-col items-center justify-center p-2 overflow-hidden">
+                    {JOURNEY_CONTENT.hero.right.photos[1]?.src ? (
+                      <Image
+                        src={JOURNEY_CONTENT.hero.right.photos[1].src}
+                        alt={JOURNEY_CONTENT.hero.right.photos[1].alt}
+                        fill
+                        sizes="220px"
+                        loading="lazy"
+                        quality={85}
+                        className="relative z-10 w-full h-full object-cover rounded-xs"
+                      />
+                    ) : (
+                      <>
+                        <span className="text-gold/80 text-base">♥</span>
+                        <span className="font-handwriting text-gold text-sm tracking-wide">Forever & Always</span>
+                      </>
+                    )}
                   </div>
                 </PhotoFrame>
               </div>

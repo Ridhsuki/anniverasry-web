@@ -8,6 +8,7 @@
 "use client";
 
 import { gsap } from "gsap";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PaperCard } from "@/components/ui/PaperCard";
@@ -42,6 +43,7 @@ function LocationPinIcon({ className }: { className?: string }) {
 
 export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxProps) {
   const [isClosing, setIsClosing] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -171,19 +173,22 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
 
           {/* Enlarged Photo Container */}
           <div className="relative w-full aspect-[4/3] rounded-xs overflow-hidden bg-[#160b06] shadow-inner mb-4">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center pointer-events-none">
-              <span className="text-gold/80 text-2xl mb-1">✦</span>
-              <span className="font-handwriting text-gold text-lg">{photo.caption}</span>
-            </div>
+            {!imageError && photo.src ? (
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                sizes="(max-width: 640px) 100vw, 512px"
+                quality={90}
+                onError={() => setImageError(true)}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                <span className="text-gold/80 text-2xl mb-1">✦</span>
+                <span className="font-handwriting text-gold text-lg">{photo.caption}</span>
+              </div>
+            )}
           </div>
 
           {/* Title & Date */}

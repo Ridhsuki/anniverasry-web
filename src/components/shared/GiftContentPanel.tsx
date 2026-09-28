@@ -6,7 +6,9 @@
 
 "use client";
 
-import { PaperCard, VintageButton } from "@/components/ui";
+import Image from "next/image";
+
+import { PaperCard, PhotoFrame, VintageButton } from "@/components/ui";
 import { GIFT_CONTENT } from "@/data/gift";
 import { cn } from "@/utils";
 
@@ -57,6 +59,34 @@ export function GiftContentPanel({
         <p className="font-handwriting text-base sm:text-lg text-rose/90 mt-1 mb-3.5">
           {GIFT_CONTENT.revealMessage.subheading}
         </p>
+
+        {/* Keepsake Photo */}
+        {GIFT_CONTENT.metadata.photoSrc && (
+          <div className="my-3 flex justify-center">
+            <div className="w-32 sm:w-40 drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]">
+              <PhotoFrame
+                variant="polaroid"
+                rotation={-1.5}
+                aspectRatio="square"
+                tapeStyle="top-center"
+                caption={GIFT_CONTENT.metadata.keepsakeTitle}
+                className="w-full"
+              >
+                <div className="relative w-full h-full min-h-[110px] sm:min-h-[120px] bg-gradient-to-br from-[#24140b] to-[#0a0503] overflow-hidden">
+                  <Image
+                    src={GIFT_CONTENT.metadata.photoSrc}
+                    alt={GIFT_CONTENT.metadata.keepsakeTitle}
+                    fill
+                    sizes="160px"
+                    loading="lazy"
+                    quality={85}
+                    className="relative z-10 w-full h-full object-cover"
+                  />
+                </div>
+              </PhotoFrame>
+            </div>
+          </div>
+        )}
 
         {/* Body Dedication */}
         <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-relaxed text-justify opacity-95">

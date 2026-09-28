@@ -7,6 +7,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 import { PhotoFrame } from "@/components/ui";
@@ -102,12 +103,15 @@ export function PhotoGalleryItem({
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
           <div className="absolute inset-0 shadow-[inset_0_0_18px_rgba(201,144,74,0.25)]" />
 
-          {!imageError ? (
+          {!imageError && photo.src ? (
             // Photographic memory image
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={photo.src}
               alt={photo.alt}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 240px"
+              loading="lazy"
+              quality={85}
               onError={() => setImageError(true)}
               className="relative z-10 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />

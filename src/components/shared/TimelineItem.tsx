@@ -6,6 +6,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 import { PaperCard, PhotoFrame } from "@/components/ui";
@@ -121,12 +122,15 @@ export function TimelineItem({
                     <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
                     <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)]" />
 
-                    {!imageError ? (
-                      // Next/Standard image with graceful fallback on error
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                    {!imageError && milestone.photo.src ? (
+                      // Next/Image with graceful fallback on error
+                      <Image
                         src={milestone.photo.src}
                         alt={milestone.photo.alt}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 180px"
+                        loading="lazy"
+                        quality={85}
                         onError={() => setImageError(true)}
                         className="relative z-10 w-full h-full object-cover rounded-xs"
                       />

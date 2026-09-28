@@ -7,6 +7,8 @@
 
 "use client";
 
+import Image from "next/image";
+
 import { PhotoFrame } from "@/components/ui";
 import type { LetterPhotoMetadata } from "@/data/finalLetter";
 import { cn } from "@/utils";
@@ -85,10 +87,25 @@ export function LetterPaper({
         >
           <div className="relative w-full h-full min-h-[110px] sm:min-h-[130px] bg-gradient-to-br from-[#2a1710] to-[#0a0503] flex flex-col items-center justify-center p-2 text-center overflow-hidden">
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
-            <span className="text-gold/80 text-base mb-0.5">♥</span>
-            <span className="font-handwriting text-gold text-xs sm:text-sm tracking-wide line-clamp-2">
-              {photo.caption}
-            </span>
+            <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)] pointer-events-none z-20" />
+            {photo.src ? (
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                sizes="180px"
+                loading="lazy"
+                quality={85}
+                className="relative z-10 w-full h-full object-cover rounded-xs"
+              />
+            ) : (
+              <>
+                <span className="text-gold/80 text-base mb-0.5">♥</span>
+                <span className="font-handwriting text-gold text-xs sm:text-sm tracking-wide line-clamp-2">
+                  {photo.caption}
+                </span>
+              </>
+            )}
           </div>
         </PhotoFrame>
       </div>

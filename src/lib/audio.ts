@@ -19,6 +19,8 @@ export interface AudioTrack {
   loop?: boolean;
   volume?: number;
   autoplay?: boolean;
+  html5?: boolean;
+  preload?: boolean | "metadata";
 }
 
 export interface AudioManagerState {
@@ -34,22 +36,28 @@ class AudioManager {
   private currentTrackId: string | null = null;
   private _isMuted: boolean = false;
   private _volume: number = 0.7;
+  private _unlocked: boolean = false;
 
   // ── Initialisation ───────────────────────────────────────────
   /**
-   * Register audio tracks without loading them.
-   * Tracks are loaded lazily on first play.
+   * Register audio tracks with optimal streaming and preload strategies.
+   * - SFX: Web Audio API (html5: false), preloaded for zero-latency instant playback.
+   * - BGM: HTML5 streaming (html5: true), lazy-loaded on demand to preserve bandwidth.
    */
   registerTrack(track: AudioTrack): void {
     if (this.tracks.has(track.id)) return;
+
+    const isSfx = track.id.startsWith("sfx-");
+    const useHtml5 = track.html5 ?? !isSfx;
+    const shouldPreload = track.preload ?? (isSfx ? true : false);
 
     const howl = new Howl({
       src: track.src,
       loop: track.loop ?? false,
       volume: track.volume ?? this._volume,
       autoplay: false,
-      preload: true,
-      html5: true, // Use HTML5 audio for long tracks (streaming)
+      preload: shouldPreload,
+      html5: useHtml5,
       onloaderror: (_id, error) => {
         console.error(`[AudioManager] Failed to load track "${track.id}":`, error);
       },
@@ -61,6 +69,20 @@ class AudioManager {
     });
 
     this.tracks.set(track.id, howl);
+  }
+
+  /**
+   * Unlock audio context on mobile browsers upon user interaction.
+   */
+  unlockAudio(): void {
+    if (this._unlocked || typeof window === "undefined") return;
+    if (Howler.ctx && Howler.ctx.state === "suspended") {
+      Howler.ctx.resume().then(() => {
+        this._unlocked = true;
+      });
+    } else {
+      this._unlocked = true;
+    }
   }
 
   // ── Playback Controls ────────────────────────────────────────

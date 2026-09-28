@@ -6,6 +6,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
 import {
@@ -182,8 +183,10 @@ function RoseCluster({
   );
 }
 
-/** Tilted scrapbook photo item with placeholder fallback */
+/** Tilted scrapbook photo item with Next.js Image and placeholder fallback */
 function IntroPhotoCard({ photo }: { photo: IntroPhotoItem }) {
+  const [hasError, setHasError] = useState(false);
+
   return (
     <div
       className={cn(
@@ -202,18 +205,31 @@ function IntroPhotoCard({ photo }: { photo: IntroPhotoItem }) {
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
 
           {/* Golden inner vignette */}
-          <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(201,144,74,0.25)]" />
+          <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(201,144,74,0.25)] pointer-events-none z-20" />
 
-          {/* Placeholder art representation */}
-          <div className="relative z-10 flex flex-col items-center gap-1.5 text-center">
-            <span className="text-gold/70 text-lg">✦</span>
-            <span className="font-handwriting text-gold/80 text-sm tracking-wide">
-              {photo.alt}
-            </span>
-            <span className="font-sans text-[0.6rem] text-gold/50 tracking-widest uppercase">
-              26-09-26
-            </span>
-          </div>
+          {!hasError && photo.src ? (
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              fill
+              sizes="(max-width: 768px) 160px, 220px"
+              priority={photo.id === "intro-photo-1"}
+              quality={85}
+              onError={() => setHasError(true)}
+              className="relative z-10 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            /* Placeholder art representation */
+            <div className="relative z-10 flex flex-col items-center gap-1.5 text-center">
+              <span className="text-gold/70 text-lg">✦</span>
+              <span className="font-handwriting text-gold/80 text-sm tracking-wide">
+                {photo.alt}
+              </span>
+              <span className="font-sans text-[0.6rem] text-gold/50 tracking-widest uppercase">
+                26-09-26
+              </span>
+            </div>
+          )}
 
           {/* Perched monarch butterfly if assigned */}
           {photo.hasButterfly && (

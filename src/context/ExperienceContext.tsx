@@ -68,6 +68,20 @@ export function ExperienceProvider({
   useEffect(() => {
     if (enableAudio) {
       AUDIO_TRACKS.forEach((track) => audioManager.registerTrack(track));
+
+      const unlockHandler = () => {
+        audioManager.unlockAudio();
+        window.removeEventListener("pointerdown", unlockHandler);
+        window.removeEventListener("keydown", unlockHandler);
+      };
+
+      window.addEventListener("pointerdown", unlockHandler, { passive: true });
+      window.addEventListener("keydown", unlockHandler, { passive: true });
+
+      return () => {
+        window.removeEventListener("pointerdown", unlockHandler);
+        window.removeEventListener("keydown", unlockHandler);
+      };
     }
   }, [enableAudio]);
 
