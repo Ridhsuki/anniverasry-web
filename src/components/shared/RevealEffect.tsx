@@ -1,17 +1,17 @@
 // ─────────────────────────────────────────────────────────────
 // RevealEffect
 // Luminous opening bloom effect triggered upon gift/envelope unsealing.
-// Radiates golden light rays, celestial sparkles, and warm ambient particle flash.
+// GSAP-driven multi-stage radial bloom: initial flash, organic expansion,
+// rotating celestial rays, and scattered starlight flares.
+// Rendered as fixed inset-0 overlay so it is never clipped by parent bounds.
 // ─────────────────────────────────────────────────────────────
 
 "use client";
 
-import { cn } from "@/utils";
+import { useRef } from "react";
 
-export interface RevealEffectProps {
-  isActive: boolean;
-  className?: string;
-}
+import { useGSAP } from "@/hooks/useGSAP";
+import { cn } from "@/utils";
 
 export function RevealEffect({
   isActive,
@@ -20,48 +20,188 @@ export function RevealEffect({
   isActive: boolean;
   className?: string;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // GSAP-driven organic bloom — replaces previous CSS animate-bloom-expand
+  useGSAP(
+    (gsapInstance) => {
+      if (!isActive || !containerRef.current) return;
+
+      const tl = gsapInstance.timeline();
+
+      // 1. Instant flash: both halos appear rapidly from center
+      tl.fromTo(
+        ".bloom-halo-outer",
+        { scale: 0.08, opacity: 0 },
+        {
+          scale: 0.9,
+          opacity: 0.85,
+          duration: 0.28,
+          ease: "power4.out",
+        }
+      );
+      tl.fromTo(
+        ".bloom-halo-core",
+        { scale: 0.05, opacity: 0 },
+        {
+          scale: 0.75,
+          opacity: 1,
+          duration: 0.22,
+          ease: "power4.out",
+        },
+        "<"
+      );
+
+      // 2. Organic outward expansion with soft ease
+      tl.to(
+        ".bloom-halo-outer",
+        {
+          scale: 3.2,
+          opacity: 0,
+          duration: 1.85,
+          ease: "power2.out",
+        },
+        "+=0.05"
+      );
+      tl.to(
+        ".bloom-halo-core",
+        {
+          scale: 2.4,
+          opacity: 0,
+          duration: 1.55,
+          ease: "power3.out",
+        },
+        "<"
+      );
+
+      // 3. Celestial rays sweep in, rotate, and fade
+      tl.fromTo(
+        ".bloom-rays",
+        { scale: 0.15, opacity: 0, rotation: -15 },
+        {
+          scale: 1.6,
+          opacity: 0.65,
+          rotation: 30,
+          duration: 1.2,
+          ease: "power3.out",
+        },
+        0.05
+      );
+      tl.to(
+        ".bloom-rays",
+        {
+          scale: 2.2,
+          opacity: 0,
+          rotation: 75,
+          duration: 0.75,
+          ease: "power1.in",
+        },
+        1.0
+      );
+
+      // 4. Sparkle flares pop in with stagger then fade
+      tl.fromTo(
+        ".bloom-sparkle",
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.3,
+          ease: "back.out(2.5)",
+          stagger: 0.06,
+        },
+        0.18
+      );
+      tl.to(
+        ".bloom-sparkle",
+        {
+          opacity: 0,
+          scale: 1.4,
+          duration: 0.55,
+          ease: "power1.in",
+          stagger: 0.04,
+        },
+        1.05
+      );
+    },
+    [isActive],
+    containerRef
+  );
+
   if (!isActive) return null;
 
   return (
     <div
+      ref={containerRef}
       aria-hidden="true"
       className={cn(
         "reveal-bloom-container pointer-events-none fixed inset-0 z-50 flex items-center justify-center select-none overflow-visible",
         className
       )}
     >
-      {/* Layer 1: Ambient Wide Atmospheric Halo */}
-      <div className="absolute w-[800px] md:w-[1100px] h-[800px] md:h-[1100px] rounded-full bg-[radial-gradient(circle,_rgba(254,240,138,0.45)_0%,_rgba(246,201,78,0.22)_35%,_rgba(201,144,74,0.08)_65%,_transparent_75%)] blur-3xl animate-bloom-expand" />
+      {/* Layer 1: Wide Atmospheric Ambient Halo */}
+      <div
+        className="bloom-halo-outer absolute w-[820px] md:w-[1120px] h-[820px] md:h-[1120px] rounded-full gpu-accelerated"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(254,240,138,0.42) 0%, rgba(246,201,78,0.20) 32%, rgba(201,144,74,0.07) 62%, transparent 75%)",
+          filter: "blur(40px)",
+        }}
+      />
 
-      {/* Layer 2: Radiant Golden Supernova Core */}
-      <div className="absolute w-[360px] md:w-[500px] h-[360px] md:h-[500px] rounded-full bg-[radial-gradient(circle,_#ffffff_0%,_rgba(254,240,138,0.95)_25%,_rgba(246,201,78,0.6)_55%,_transparent_75%)] blur-2xl animate-bloom-expand" />
+      {/* Layer 2: Radiant Supernova Core — brighter, tighter */}
+      <div
+        className="bloom-halo-core absolute w-[340px] md:w-[480px] h-[340px] md:h-[480px] rounded-full gpu-accelerated"
+        style={{
+          background:
+            "radial-gradient(circle, #ffffff 0%, rgba(254,240,138,0.96) 22%, rgba(246,201,78,0.65) 52%, transparent 75%)",
+          filter: "blur(22px)",
+        }}
+      />
 
       {/* Layer 3: Rotating Celestial Sunburst Rays */}
       <svg
         viewBox="0 0 500 500"
         fill="none"
-        className="absolute w-[550px] md:w-[750px] h-[550px] md:h-[750px] animate-[spin_16s_linear_infinite] opacity-75 mix-blend-screen animate-bloom-expand"
+        aria-hidden="true"
+        className="bloom-rays absolute w-[560px] md:w-[760px] h-[560px] md:h-[760px] mix-blend-screen gpu-accelerated"
       >
-        <path d="M250 0 L262 250 L250 500 L238 250 Z" fill="url(#rayGoldGrad)" />
-        <path d="M0 250 L250 262 L500 250 L250 238 Z" fill="url(#rayGoldGrad)" />
-        <path d="M73 73 L258 242 L427 427 L242 258 Z" fill="url(#rayGoldGrad)" opacity="0.8" />
-        <path d="M73 427 L242 258 L427 73 L258 242 Z" fill="url(#rayGoldGrad)" opacity="0.8" />
         <defs>
           <radialGradient id="rayGoldGrad" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-            <stop offset="25%" stopColor="#fef08a" stopOpacity="0.8" />
-            <stop offset="60%" stopColor="#f59e0b" stopOpacity="0.3" />
+            <stop offset="22%" stopColor="#fef08a" stopOpacity="0.82" />
+            <stop offset="58%" stopColor="#f59e0b" stopOpacity="0.28" />
             <stop offset="100%" stopColor="#d97706" stopOpacity="0" />
           </radialGradient>
         </defs>
+        <path d="M250 0 L263 250 L250 500 L237 250 Z" fill="url(#rayGoldGrad)" />
+        <path d="M0 250 L250 263 L500 250 L250 237 Z" fill="url(#rayGoldGrad)" />
+        <path d="M73 73 L258 242 L427 427 L242 258 Z" fill="url(#rayGoldGrad)" opacity="0.78" />
+        <path d="M73 427 L242 258 L427 73 L258 242 Z" fill="url(#rayGoldGrad)" opacity="0.78" />
+        <path d="M128 0 L255 248 L128 500 L245 250 Z" fill="url(#rayGoldGrad)" opacity="0.45" />
+        <path d="M372 0 L255 248 L372 500 L265 250 Z" fill="url(#rayGoldGrad)" opacity="0.45" />
       </svg>
 
       {/* Layer 4: Scattered Starlight Flares */}
-      <div className="absolute inset-0 flex items-center justify-center animate-bloom-expand pointer-events-none">
-        <span className="absolute -top-24 left-1/3 text-gold text-3xl animate-[pulse_1s_ease-in-out_infinite] drop-shadow-[0_0_12px_rgba(246,201,78,0.8)]">✦</span>
-        <span className="absolute -bottom-20 right-1/3 text-[#fef08a] text-2xl animate-[pulse_1.2s_ease-in-out_infinite] drop-shadow-[0_0_10px_rgba(254,240,138,0.8)]">✦</span>
-        <span className="absolute top-1/4 -right-16 text-gold text-2xl animate-[pulse_0.9s_ease-in-out_infinite] drop-shadow-[0_0_8px_rgba(246,201,78,0.8)]">✧</span>
-        <span className="absolute bottom-1/4 -left-16 text-[#fde68a] text-2xl animate-[pulse_1.1s_ease-in-out_infinite] drop-shadow-[0_0_8px_rgba(254,240,138,0.8)]">✧</span>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <span className="bloom-sparkle absolute -top-24 left-1/3 text-gold text-3xl drop-shadow-[0_0_14px_rgba(246,201,78,0.9)] gpu-accelerated">
+          ✦
+        </span>
+        <span className="bloom-sparkle absolute -bottom-20 right-1/3 text-[#fef08a] text-2xl drop-shadow-[0_0_10px_rgba(254,240,138,0.85)] gpu-accelerated">
+          ✦
+        </span>
+        <span className="bloom-sparkle absolute top-1/4 -right-16 text-gold text-2xl drop-shadow-[0_0_9px_rgba(246,201,78,0.85)] gpu-accelerated">
+          ✧
+        </span>
+        <span className="bloom-sparkle absolute bottom-1/4 -left-16 text-[#fde68a] text-2xl drop-shadow-[0_0_9px_rgba(254,240,138,0.85)] gpu-accelerated">
+          ✧
+        </span>
+        <span className="bloom-sparkle absolute top-1/2 -translate-y-1/2 -left-24 text-gold text-xl drop-shadow-[0_0_8px_rgba(246,201,78,0.8)] gpu-accelerated">
+          ✦
+        </span>
+        <span className="bloom-sparkle absolute top-1/2 -translate-y-1/2 -right-24 text-[#fef08a] text-xl drop-shadow-[0_0_8px_rgba(254,240,138,0.8)] gpu-accelerated">
+          ✦
+        </span>
       </div>
     </div>
   );

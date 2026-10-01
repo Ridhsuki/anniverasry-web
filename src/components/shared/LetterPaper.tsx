@@ -75,7 +75,7 @@ export function LetterPaper({
       />
 
       {/* ── 3. Embedded Corner Keepsake Polaroid Photo ────────── */}
-      <div className="sm:float-right mx-auto sm:mx-0 sm:ml-6 mb-5 w-36 sm:w-40 md:w-44 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] flex justify-center">
+      <div className="sm:float-right mx-auto sm:mx-0 sm:ml-6 mb-5 w-28 sm:w-36 md:w-40 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] flex justify-center">
         <PhotoFrame
           variant="polaroid"
           rotation={photo.rotation}

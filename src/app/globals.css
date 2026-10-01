@@ -84,8 +84,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  scrollbar-width: thin;
-  scrollbar-color: #c9904a #120205;
+  scrollbar-width: none;
 }
 
 body {
@@ -97,6 +96,11 @@ body {
   overflow-x: clip;
 }
 
+/* Restore vintage scrollbar only when Lenis is NOT managing scroll */
+html:not(.lenis) {
+  scrollbar-width: thin;
+  scrollbar-color: #c9904a #120205;
+}
 /* ── Custom Vintage Slim Scrollbar ───────────────────────────── */
 ::-webkit-scrollbar {
   width: 7px;
@@ -225,6 +229,10 @@ body {
 html.lenis,
 html.lenis body {
   height: auto;
+}
+
+html.lenis body {
+  overflow: hidden; /* Lenis manages scroll; suppress native body scrollbar */
 }
 
 .lenis.lenis-smooth {

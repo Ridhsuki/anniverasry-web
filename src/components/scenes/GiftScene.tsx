@@ -222,7 +222,7 @@ export function GiftScene(props: SceneProps) {
       </header>
 
       {/* ── 3. Main Center Stage: Envelope & Reveal Bloom ─────── */}
-      <main className="gift-stage-center relative z-20 w-full max-w-3xl mx-auto my-auto flex flex-col items-center justify-center min-h-[380px] sm:min-h-[440px]">
+      <main className="gift-stage-center relative z-20 w-full max-w-3xl mx-auto my-auto flex flex-col items-center justify-center min-h-[280px] sm:min-h-[380px] md:min-h-[440px]">
         {/* Luminous Bloom Particle Effect on Unsealing */}
         <RevealEffect isActive={isOpening} />
 

@@ -89,6 +89,15 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [handleClose]);
 
+  // Track previous photo id to synchronously reset stale state on photo change.
+  // This avoids calling setState inside a useEffect body (react-hooks/set-state-in-effect).
+  const prevPhotoIdRef = useRef<string | undefined>(undefined);
+  if (photo?.id !== prevPhotoIdRef.current) {
+    prevPhotoIdRef.current = photo?.id;
+    if (isClosing) setIsClosing(false);
+    if (imageError) setImageError(false);
+  }
+
   // GSAP Entrance Timeline
   useGSAP(
     () => {
