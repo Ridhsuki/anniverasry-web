@@ -351,7 +351,7 @@ export function IntroScene(props: SceneProps) {
       {/* ── 2. Primary Composition Stage ─────────────────────── */}
       <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
         {/* Floating Envelope Composition */}
-        <div className="intro-floating-envelope relative w-full max-w-xl flex items-center justify-center">
+        <div className="intro-floating-envelope relative w-full max-w-xs sm:max-w-sm md:max-w-xl flex items-center justify-center">
           {/* Scrapbook Photos Layer (Positioned around envelope matching intro-scene.png) */}
           {INTRO_CONTENT.photos.map((photo) => (
             <IntroPhotoCard key={photo.id} photo={photo} />
@@ -363,23 +363,34 @@ export function IntroScene(props: SceneProps) {
 
           {/* Skeuomorphic Physical Envelope Body */}
           <div className="relative w-full max-w-md md:max-w-lg">
-            {/* ── Layer 1: Backplate & Upward Open Triangular Flap (Behind Letter) ── */}
+            {/* Layer 0: Full Ivory Envelope Backplate */}
+            {/* Physical body of the envelope - sits behind all other layers */}
             <div
               aria-hidden="true"
-              className="absolute -top-10 sm:-top-14 left-2 right-2 h-20 sm:h-26 z-0 bg-gradient-to-b from-[#dfba80] via-[#ecd1a2] to-[#f5dfbc] border-t border-l border-r border-[#c9904a]/40 [clip-path:polygon(0%_100%,50%_0%,100%_100%)] drop-shadow-sm"
+              className="absolute inset-x-0 top-0 bottom-0 z-0 rounded-sm bg-gradient-to-b from-[#f4e2c0] via-[#eace98] to-[#dbb568] border border-[#c9904a]/35 shadow-[0_20px_52px_rgba(0,0,0,0.5),0_4px_12px_rgba(45,28,16,0.3)]"
+            />
+
+            {/* Layer 1: Rear Triangular Flap (open upward, behind letter) */}
+            {/* Taller triangle pointing up - the opened envelope back flap */}
+            <div
+              aria-hidden="true"
+              className="absolute -top-16 sm:-top-20 left-0 right-0 h-24 sm:h-28 z-[1] overflow-hidden"
             >
-              {/* Gold foil edge line on top flap */}
-              <div className="absolute inset-0 [clip-path:polygon(0%_100%,50%_0%,100%_100%)] border-t border-[#f6c94e]/50" />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#eedcb0] via-[#e5c88a] to-[#d9b468] [clip-path:polygon(1%_100%,50%_5%,99%_100%)]" />
+              {/* Fold crease shadow at base of flap */}
+              <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-[rgba(45,28,16,0.22)] to-transparent [clip-path:polygon(1%_100%,50%_5%,99%_100%)]" />
+              {/* Subtle gold trim along flap edges */}
+              <div className="absolute inset-0 [clip-path:polygon(1%_100%,50%_5%,99%_100%)] border border-[#d9a85f]/25" />
             </div>
 
-            {/* Envelope Interior Backplate Lining */}
+            {/* Layer 1b: Warm interior lining (warm honey, visible above letter) */}
             <div
               aria-hidden="true"
-              className="absolute inset-x-2 top-0 bottom-4 z-0 rounded-t-sm bg-gradient-to-b from-[#ebd1a7] to-[#e0be88] border border-[#c9904a]/40 shadow-inner"
+              className="absolute inset-x-1 top-1 h-20 sm:h-24 z-[2] rounded-t-xs bg-gradient-to-b from-[#c98e3a]/50 via-[#a87230]/35 to-transparent"
             />
 
             {/* ── Layer 2: Protruding Deckle-Edged Letter ── */}
-            <div className="intro-envelope-letter relative z-10 -mb-12 px-3 sm:px-4">
+            <div className="intro-envelope-letter relative z-10 -mb-14 sm:-mb-16 px-2 sm:px-3">
               <PaperCard
                 variant="deckle"
                 shadow="xl"
@@ -410,31 +421,31 @@ export function IntroScene(props: SceneProps) {
             </div>
 
             {/* ── Layer 3: Physical Front Pocket & Folded Triangular Flaps ── */}
-            <div className="relative z-20 w-full h-28 sm:h-34 rounded-b-md shadow-[0_16px_40px_rgba(0,0,0,0.6)] overflow-hidden bg-gradient-to-t from-[#dcb67a] via-[#ebcf9e] to-[#f7e3bf] border border-[#c9904a]/50">
+            <div className="relative z-20 w-full h-32 sm:h-40 rounded-b-sm shadow-[0_18px_48px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.15)] overflow-hidden bg-gradient-to-t from-[#c9904a] via-[#e2c280] to-[#f4dca8] border border-[#c9904a]/50">
               {/* Paper fiber grain */}
               <div className="absolute inset-0 bg-[radial-gradient(#c9904a_0.75px,transparent_0.75px)] [background-size:10px_10px] opacity-25 pointer-events-none" />
 
               {/* Left Triangular Fold */}
               <div
                 aria-hidden="true"
-                className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#e4be82] to-[#edd19f] [clip-path:polygon(0%_0%,100%_52%,0%_100%)] opacity-90 drop-shadow-[1px_0_3px_rgba(45,28,16,0.18)]"
+                className="absolute inset-y-0 left-0 w-1/2 [clip-path:polygon(0%_0%,100%_50%,0%_100%)] bg-gradient-to-r from-[#b87c30] via-[#d4a055] to-transparent opacity-85"
               />
 
               {/* Right Triangular Fold */}
               <div
                 aria-hidden="true"
-                className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#e4be82] to-[#edd19f] [clip-path:polygon(100%_0%,0%_52%,100%_100%)] opacity-90 drop-shadow-[-1px_0_3px_rgba(45,28,16,0.18)]"
+                className="absolute inset-y-0 right-0 w-1/2 [clip-path:polygon(100%_0%,0%_50%,100%_100%)] bg-gradient-to-l from-[#b87c30] via-[#d4a055] to-transparent opacity-85"
               />
 
               {/* Bottom Triangular Flap Meeting at Center Apex */}
               <div
                 aria-hidden="true"
-                className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-[#d8b072] via-[#e8cb97] to-[#fbf0d6] [clip-path:polygon(0%_100%,50%_32%,100%_100%)] drop-shadow-[0_-3px_8px_rgba(45,28,16,0.3)] border-b border-[#c9904a]/40"
+                className="absolute inset-x-0 bottom-0 h-full [clip-path:polygon(0%_100%,50%_30%,100%_100%)] bg-gradient-to-t from-[#b87030] via-[#d9a558] to-[#f0d090] shadow-[0_-4px_12px_rgba(45,28,16,0.35)]"
               />
             </div>
 
             {/* ── Layer 4: Central Dimensional Wax Seal Button at Pocket Apex ── */}
-            <div className="absolute left-1/2 bottom-12 sm:bottom-16 -translate-x-1/2 z-30">
+            <div className="absolute left-1/2 -translate-x-1/2 z-30" style={{bottom: "28%"}}>
               <VintageButton
                 variant="wax-seal"
                 aria-label="Open anniversary envelope"
@@ -459,7 +470,7 @@ export function IntroScene(props: SceneProps) {
         </div>
 
         {/* ── 3. Bottom CTA Action Banner ────────────────────── */}
-        <div className="relative z-20 mt-12 md:mt-16 flex flex-col items-center gap-3">
+        <div className="relative z-20 mt-14 md:mt-20 flex flex-col items-center gap-4">
           <VintageButton
             variant="secondary"
             size="lg"

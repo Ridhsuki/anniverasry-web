@@ -36,11 +36,11 @@ export const SELECTION_CONTENT: SelectionSceneContent = {
     },
     {
       id: "artifact-moment",
-      targetScene: "journey",
+      targetScene: "gallery",
       label: "Moment",
       subtitle: "Cherished Time",
       tag: "26-09-26",
-      ariaLabel: "Choose Moment: View timeless milestones and moments",
+      ariaLabel: "Choose Moment: View timeless gallery of cherished memories",
       hasUnderline: true,
     },
     {

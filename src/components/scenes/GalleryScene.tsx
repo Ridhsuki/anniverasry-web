@@ -345,12 +345,12 @@ export function GalleryScene(props: SceneProps) {
 
       {/* ── 3. Scrapbook Board & 2x4 Photo Grid ──────────────── */}
       <main className="relative z-10 w-full max-w-6xl mx-auto my-6 md:my-10">
-        <div className="relative rounded-lg p-4 sm:p-6 md:p-8 bg-[#20050a]/40 border border-[#c9904a]/25 shadow-[0_16px_48px_rgba(0,0,0,0.6)] backdrop-blur-xs">
+        <div className="relative rounded-lg p-2 sm:p-6 md:p-8 bg-[#20050a]/40 border border-[#c9904a]/25 shadow-[0_16px_48px_rgba(0,0,0,0.6)] backdrop-blur-xs">
           {/* Top Center Red Satin Ribbon Bow */}
           <RibbonBow className="gallery-ambient-sticker absolute -top-5 left-1/2 -translate-x-1/2 w-16 sm:w-20 z-30" />
 
           {/* 8-Photo Scrapbook Polaroid Grid (2x4 on desktop) */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 items-center justify-items-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 lg:gap-8 items-center justify-items-center">
             {GALLERY_CONTENT.photos.map((photo, index) => (
               <PhotoGalleryItem
                 key={photo.id}

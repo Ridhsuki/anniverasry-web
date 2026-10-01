@@ -25,7 +25,7 @@ import { cn } from "@/utils";
 /** Artifact 1: 35mm Vintage Rangefinder Camera resting on aged letters */
 function CameraArtifact() {
   return (
-    <div className="relative w-44 sm:w-48 md:w-52 aspect-[5/4] flex items-center justify-center select-none">
+    <div className="relative w-36 sm:w-44 md:w-48 lg:w-52 aspect-[5/4] flex items-center justify-center select-none">
       {/* Tilted aged correspondence envelopes in background */}
       <div
         aria-hidden="true"
@@ -104,7 +104,7 @@ function CameraArtifact() {
 /** Artifact 2: Antique Pocket Watch with Roman numerals & luggage date tag */
 function PocketWatchArtifact() {
   return (
-    <div className="relative w-44 sm:w-48 md:w-52 aspect-[5/4] flex items-center justify-center select-none">
+    <div className="relative w-36 sm:w-44 md:w-48 lg:w-52 aspect-[5/4] flex items-center justify-center select-none">
       {/* Surrounding pink blossoms & floral leaves */}
       <div
         aria-hidden="true"
@@ -197,7 +197,7 @@ function PocketWatchArtifact() {
 /** Artifact 3: Vintage Vinyl Sleeve with disc sliding out & rose petal confetti */
 function VinylArtifact() {
   return (
-    <div className="relative w-44 sm:w-48 md:w-52 aspect-[5/4] flex items-center justify-center select-none">
+    <div className="relative w-36 sm:w-44 md:w-48 lg:w-52 aspect-[5/4] flex items-center justify-center select-none">
       {/* Vinyl Record Disc sliding outward to the top-right */}
       <div
         aria-hidden="true"
@@ -249,7 +249,7 @@ function VinylArtifact() {
 /** Artifact 4: Crimson Gift Box with ornate lace bow & perched butterfly */
 function GiftBoxArtifact() {
   return (
-    <div className="relative w-44 sm:w-48 md:w-52 aspect-[5/4] flex items-center justify-center select-none">
+    <div className="relative w-36 sm:w-44 md:w-48 lg:w-52 aspect-[5/4] flex items-center justify-center select-none">
       {/* Gift Box Container */}
       <div className="relative z-10 w-32 sm:w-36 h-28 sm:h-32 flex flex-col items-center justify-end">
         {/* Large Cream Floral Lace Ribbon Bow on top */}
@@ -429,7 +429,7 @@ export function SelectionScene(props: SceneProps) {
 
       {/* ── 3. Four Thematic Interactive Artifacts Deck ───────── */}
       <div className="relative z-10 w-full max-w-6xl mx-auto my-auto py-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-8 lg:gap-10 items-end justify-items-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3.5 sm:gap-8 lg:gap-10 items-end justify-items-center px-1 sm:px-0">
           {SELECTION_CONTENT.artifacts.map((artifact) => {
             const isSelected = selectedId === artifact.id;
 
