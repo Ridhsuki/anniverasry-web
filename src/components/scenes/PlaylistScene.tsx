@@ -362,7 +362,7 @@ export function PlaylistScene(props: SceneProps) {
           type="button"
           aria-label="Back to selection hub"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {PLAYLIST_CONTENT.backButtonLabel}
         </button>
@@ -511,8 +511,9 @@ export function PlaylistScene(props: SceneProps) {
       <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-2 pb-2 md:pb-4">
         <button
           type="button"
+          aria-label="Advance to the gift unboxing experience"
           onClick={handleAdvance}
-          className="playlist-advance-btn group relative inline-flex flex-col items-center cursor-pointer transition-transform duration-300 focus-visible:outline-none"
+          className="playlist-advance-btn group relative inline-flex flex-col items-center cursor-pointer transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm p-1"
         >
           <span className="font-serif text-xs sm:text-sm md:text-base tracking-[0.25em] text-[#fdf8f0] font-medium uppercase transition-colors duration-300 group-hover:text-gold drop-shadow-md">
             {PLAYLIST_CONTENT.advanceButtonLabel}

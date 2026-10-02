@@ -214,7 +214,7 @@ export function GiftScene(props: SceneProps) {
             type="button"
             aria-label="Back to selection hub"
             onClick={handleBack}
-            className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40"
+            className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
           >
             {GIFT_CONTENT.visual.backButtonLabel}
           </button>
@@ -248,8 +248,9 @@ export function GiftScene(props: SceneProps) {
         {!isOpened ? (
           <button
             type="button"
+            aria-label="Unseal the anniversary gift envelope"
             onClick={handleOpenGift}
-            className="gift-initial-cta group relative inline-flex items-center gap-3 cursor-pointer transition-transform duration-300 focus-visible:outline-none"
+            className="gift-initial-cta group relative inline-flex items-center gap-3 cursor-pointer transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm p-1"
           >
             <StarlightFlare className="text-sm sm:text-base" />
             <span className="font-handwriting text-2xl sm:text-3xl md:text-4xl text-gold/90 font-normal tracking-wide transition-colors duration-300 group-hover:text-gold drop-shadow-md">

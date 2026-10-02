@@ -474,6 +474,7 @@ export function IntroScene(props: SceneProps) {
           <VintageButton
             variant="secondary"
             size="lg"
+            aria-label="Open anniversary invitation envelope to reveal surprises"
             onClick={handleOpenEnvelope}
             className="intro-cta-banner px-8 py-3 bg-gradient-to-r from-[#fdf8f0] via-[#f9edd8] to-[#f2dbb4] text-[#2d1f10] border border-[#c9904a]/50 shadow-[0_4px_16px_rgba(0,0,0,0.4),0_0_20px_rgba(201,144,74,0.15)] hover:border-gold hover:shadow-[0_0_24px_rgba(246,201,78,0.3)] transition-all duration-300 tracking-[0.25em] text-xs sm:text-sm font-serif"
           >

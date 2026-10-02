@@ -175,7 +175,7 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
             type="button"
             aria-label="Close photo preview"
             onClick={handleClose}
-            className="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-full bg-[#3b0d14] text-gold hover:bg-[#520f1c] hover:text-[#fde68a] flex items-center justify-center font-serif text-sm transition-transform active:scale-90 shadow-md cursor-pointer border border-gold/40"
+            className="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-full bg-[#3b0d14] text-gold hover:bg-[#520f1c] hover:text-[#fde68a] flex items-center justify-center font-serif text-sm transition-transform active:scale-90 shadow-md cursor-pointer border border-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#3b0d14]"
           >
             ✕
           </button>

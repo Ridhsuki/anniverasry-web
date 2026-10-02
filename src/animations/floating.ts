@@ -22,6 +22,11 @@ export function floatingMovement(
 ): gsap.core.Tween | null {
   if (typeof window === "undefined" || !target) return null;
 
+  // Respect user preference for reduced motion
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return null;
+  }
+
   const {
     duration = 4,
     ease = "sine.inOut",
@@ -72,6 +77,12 @@ export function breathingAnimation(
     onComplete,
     onStart,
   } = options;
+
+  // Respect user preference for reduced motion
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    gsap.set(target, { opacity: opacityTo, scale: 1, force3D: true });
+    return null;
+  }
 
   // Set initial opacity baseline
   gsap.set(target, { opacity: opacityFrom, force3D: true });

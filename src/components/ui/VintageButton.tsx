@@ -54,7 +54,7 @@ export const VintageButton = forwardRef<HTMLButtonElement, VintageButtonProps>(
         type={type}
         disabled={disabled || isLoading}
         className={cn(
-          "group relative inline-flex items-center justify-center font-serif transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 disabled:pointer-events-none disabled:opacity-50 select-none gpu-accelerated cursor-pointer",
+          "group relative inline-flex items-center justify-center font-serif transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] disabled:pointer-events-none disabled:opacity-50 select-none gpu-accelerated cursor-pointer",
           isWaxSeal
             ? "aspect-square p-3"
             : cn("rounded-sm uppercase", sizeStyles[size]),

@@ -108,6 +108,7 @@ export function GiftContentPanel({
           <VintageButton
             variant="gold"
             size="md"
+            aria-label="Advance to the Final Love Letter scene"
             onClick={onAdvance}
             className="w-full sm:w-auto px-8 py-3 text-xs sm:text-sm tracking-[0.2em] font-serif shadow-lg hover:shadow-[0_0_24px_rgba(246,201,78,0.5)] transition-all"
           >

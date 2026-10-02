@@ -440,7 +440,7 @@ export function SelectionScene(props: SceneProps) {
                 aria-label={artifact.ariaLabel}
                 onClick={() => handleSelectArtifact(artifact.targetScene, artifact.id)}
                 className={cn(
-                  "selection-artifact-card group relative flex flex-col items-center justify-end text-center focus-visible:outline-none cursor-pointer gpu-accelerated transition-transform duration-300 ease-out",
+                  "selection-artifact-card group relative flex flex-col items-center justify-end text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm cursor-pointer gpu-accelerated transition-transform duration-300 ease-out",
                   isSelected && "scale-105"
                 )}
               >
@@ -483,8 +483,9 @@ export function SelectionScene(props: SceneProps) {
       <footer className="relative z-10 w-full flex flex-col items-center pb-2 md:pb-4">
         <button
           type="button"
+          aria-label="Advance to the first chapter: Our Journey"
           onClick={handleAdvance}
-          className="selection-cta-btn group relative inline-flex flex-col items-center text-center cursor-pointer transition-colors duration-300 focus-visible:outline-none"
+          className="selection-cta-btn group relative inline-flex flex-col items-center text-center cursor-pointer transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm p-1"
         >
           <span className="font-serif text-xs sm:text-sm md:text-base tracking-[0.25em] text-[#fdf8f0] font-medium uppercase transition-colors duration-300 group-hover:text-gold drop-shadow-md">
             {SELECTION_CONTENT.ctaText}

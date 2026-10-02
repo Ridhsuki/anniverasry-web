@@ -74,6 +74,7 @@ export function TimelineItem({
         <div
           role="button"
           tabIndex={0}
+          aria-label={`Milestone: ${milestone.chapter} — ${milestone.title} (${milestone.date})`}
           onClick={() => onSelect?.(milestone.id)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -82,7 +83,7 @@ export function TimelineItem({
             }
           }}
           className={cn(
-            "group relative block text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-sm transition-transform duration-300 ease-out",
+            "group relative block text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm transition-transform duration-300 ease-out",
             "hover:-translate-y-1.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.55)]",
             isSelected && "-translate-y-1.5 ring-2 ring-gold/60 shadow-[0_0_24px_rgba(246,201,78,0.35)]"
           )}

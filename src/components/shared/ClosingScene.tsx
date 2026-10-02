@@ -47,6 +47,7 @@ export function ClosingScene({
         <VintageButton
           variant="gold"
           size="lg"
+          aria-label="Replay the anniversary experience from the beginning"
           onClick={onReplay}
           className="px-8 py-3.5 text-xs sm:text-sm tracking-[0.25em] font-serif shadow-[0_4px_20px_rgba(246,201,78,0.35)] hover:shadow-[0_0_30px_rgba(246,201,78,0.55)] transition-all active:scale-95"
         >

@@ -10,7 +10,11 @@ import { ExperienceProvider } from "@/context";
 
 export default function HomePage() {
   return (
-    <main className="w-full min-h-screen bg-bg-primary overflow-x-hidden">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="w-full min-h-screen bg-bg-primary overflow-x-hidden outline-none"
+    >
       <ExperienceProvider initialScene="intro">
         <SceneManager />
         {/* Global cinematic polish: vignette + warm color grade + film grain */}

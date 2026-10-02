@@ -62,6 +62,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       className={`${fontVariables} antialiased`}
     >
       <body className="min-h-dvh overflow-x-hidden antialiased bg-bg-primary text-text-primary">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#f9edd8] focus:text-[#1a1209] focus:border focus:border-[#c9904a] focus:rounded-sm focus:shadow-lg focus:font-serif focus:text-sm focus:tracking-wider focus:outline-none focus:ring-2 focus:ring-gold"
+        >
+          Skip to main content
+        </a>
         {children}
       </body>
     </html>

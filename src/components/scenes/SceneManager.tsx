@@ -36,6 +36,16 @@ const SCENE_COMPONENTS: Record<
   "final-letter": FinalLetterScene,
 };
 
+const SCENE_ANNOUNCEMENTS: Record<CanonicalSceneName, string> = {
+  intro: "Introduction chapter: Anniversary invitation",
+  selection: "Selection chapter: Choose a surprise",
+  journey: "Our Journey chapter: Timeline and milestones",
+  gallery: "Moments chapter: Scrapbook photo gallery",
+  playlist: "Our Soundtrack chapter: Music room and playlist",
+  gift: "Gift chapter: Unboxing celebration",
+  "final-letter": "Final chapter: Handwritten love letter keepsake",
+};
+
 export interface SceneManagerProps {
   className?: string;
   transitionOptions?: SceneTransitionOptions;
@@ -158,6 +168,16 @@ export function SceneManager({
         className
       )}
     >
+      {/* Accessible live region for screen readers announcing scene transitions */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {SCENE_ANNOUNCEMENTS[currentScene] ?? `${currentScene} scene`}
+      </div>
+
       {/* Exiting Scene (Rendered during crossfade transition) */}
       {exitingSlot && ExitingComponent && (
         <div

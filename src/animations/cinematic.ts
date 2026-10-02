@@ -115,9 +115,13 @@ export function createSceneTransitionTimeline(
     onStart,
   } = options;
 
-  const exitDuration = duration * 0.55;
-  const enterDuration = duration;
-  const overlap = overlapOffset ?? duration * 0.25;
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const exitDuration = prefersReduced ? 0.15 : duration * 0.55;
+  const enterDuration = prefersReduced ? 0.15 : duration;
+  const overlap = prefersReduced ? 0 : (overlapOffset ?? duration * 0.25);
 
   const tl = gsap.timeline({
     delay,
@@ -130,9 +134,9 @@ export function createSceneTransitionTimeline(
       leavingTarget,
       {
         opacity: 0,
-        scale: 0.96,
+        scale: prefersReduced ? 1 : 0.96,
         duration: exitDuration,
-        ease: "power2.inOut",
+        ease: prefersReduced ? "none" : "power2.inOut",
         force3D: true,
       },
       0
@@ -144,7 +148,7 @@ export function createSceneTransitionTimeline(
       enteringTarget,
       {
         opacity: 0,
-        scale: 1.04,
+        scale: prefersReduced ? 1 : 1.04,
         force3D: true,
         visibility: "visible",
       },
@@ -152,7 +156,7 @@ export function createSceneTransitionTimeline(
         opacity: 1,
         scale: 1,
         duration: enterDuration,
-        ease,
+        ease: prefersReduced ? "none" : ease,
         clearProps: "transform",
         onStart: () => {
           if (onEnterStart) onEnterStart();
