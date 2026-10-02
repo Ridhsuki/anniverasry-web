@@ -99,3 +99,33 @@ When tasked with implementing features, pages, or bug fixes on this repository, 
 
 ### Rule 5: Keep Documentation Synchronized
 - When adding new scenes, props, or animation utilities, update the corresponding documentation file in `docs/`.
+
+---
+
+## 6. CI/CD Workflow & Production Quality Gates
+
+Automated continuous integration is orchestrated via GitHub Actions (`.github/workflows/ci.yml`). Every change proposed or committed must pass all automated verification checks before merging.
+
+### 6.1 Trigger Conditions
+The CI workflow automatically executes on:
+- Any `push` to `main` or `master` branches.
+- Any `pull_request` targeting `main` or `master` branches.
+- Consecutive commits cancel in-progress runs via GitHub concurrency grouping (`concurrency.cancel-in-progress: true`).
+
+### 6.2 Pipeline Verification Stages
+The pipeline runs on `ubuntu-latest` with **Node.js 22** and deterministic package installation (`npm ci` with cached dependencies), executing the unified production validation suite:
+
+```bash
+npm run validate
+```
+
+This single command strictly executes the 4 quality gates in order:
+1. **TypeScript Type Check (`npm run type-check`):** Verifies 0 compilation errors under strict TypeScript compiler settings.
+2. **ESLint Analysis (`npm run lint`):** Enforces 0 errors and 0 warnings under Next.js and React 19 rules.
+3. **Automated Test Suite (`npm test`):** Executes 19+ Vitest interaction tests covering scene navigation, lightbox lifecycle, gift bloom reveal, audio synchronization, and reduced-motion accessibility.
+4. **Production Build (`npm run build`):** Generates static pre-rendered routes with Turbopack, verifying zero build failures or asset reference discrepancies.
+
+### 6.3 Developer Responsibility
+- **Local Pre-Commit Verification:** Always execute `npm run validate` locally prior to pushing or opening a pull request.
+- **Zero-Tolerance Policy:** Any failing test, TypeScript issue, lint error, or build break will immediately block merging.
+
