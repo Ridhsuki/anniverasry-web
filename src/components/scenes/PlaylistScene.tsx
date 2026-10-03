@@ -189,6 +189,18 @@ export function PlaylistScene(props: SceneProps) {
     };
   }, []);
 
+  // Auto‑resume main BGM when leaving the Playlist scene (scene deactivation)
+  useEffect(() => {
+    if (!isActive) {
+      const currentTrackId = getTrackSoundtrackId(activeTrackRef.current);
+      if (isPlaylistPlayingRef.current && currentTrackId !== MAIN_BGM_TRACK_ID) {
+        audioManager.stop(currentTrackId);
+        audioManager.resumeMainBgm(400);
+        setIsPlaylistPlaying(false);
+      }
+    }
+  }, [isActive]);
+
   // Sync progress with Howler track position when active
   useEffect(() => {
     if (!isPlaying) return;
