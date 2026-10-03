@@ -15,6 +15,8 @@ interface UseAudioReturn extends AudioManagerState {
   play: (trackId: string) => void;
   pause: (trackId?: string) => void;
   stop: (trackId?: string) => void;
+  pauseMainBgm: (fadeDurationMs?: number) => void;
+  resumeMainBgm: (fadeDurationMs?: number) => void;
   fadeIn: (trackId: string, durationMs?: number, targetVolume?: number) => void;
   fadeOut: (trackId: string, durationMs?: number) => void;
   crossfade: (
@@ -69,6 +71,16 @@ export function useAudio(): UseAudioReturn {
     setState(audioManager.getState());
   }, []);
 
+  const pauseMainBgm = useCallback((fadeDurationMs?: number) => {
+    audioManager.pauseMainBgm(fadeDurationMs);
+    setState(audioManager.getState());
+  }, []);
+
+  const resumeMainBgm = useCallback((fadeDurationMs?: number) => {
+    audioManager.resumeMainBgm(fadeDurationMs);
+    setState(audioManager.getState());
+  }, []);
+
   const fadeIn = useCallback((trackId: string, durationMs?: number, targetVolume?: number) => {
     audioManager.fadeIn(trackId, durationMs, targetVolume);
     setState(audioManager.getState());
@@ -115,6 +127,8 @@ export function useAudio(): UseAudioReturn {
     play,
     pause,
     stop,
+    pauseMainBgm,
+    resumeMainBgm,
     fadeIn,
     fadeOut,
     crossfade,

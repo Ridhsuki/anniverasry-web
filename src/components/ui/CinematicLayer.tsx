@@ -9,6 +9,7 @@
 "use client";
 
 import { cn } from "@/utils";
+
 import { AmbientParticles } from "./AmbientParticles";
 
 export interface CinematicLayerProps {

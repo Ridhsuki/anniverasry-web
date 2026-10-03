@@ -89,7 +89,7 @@ export const AUDIO_TRACKS: AudioTrack[] = [
       "/audio/bgm/soundtrack-die-with-a-smile.mp3",
       "/audio/soundtrack-die-with-a-smile.mp3",
     ],
-    loop: false,
+    loop: true,
     volume: 0.8,
   },
 
@@ -157,3 +157,6 @@ export const TRACK_IDS = {
 } as const;
 
 export type TrackId = (typeof TRACK_IDS)[keyof typeof TRACK_IDS];
+
+/** Continuous main background soundtrack identifier */
+export const MAIN_BGM_TRACK_ID = TRACK_IDS.DIE_WITH_A_SMILE;

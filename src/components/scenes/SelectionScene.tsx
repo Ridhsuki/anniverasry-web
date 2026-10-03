@@ -525,7 +525,7 @@ export function SelectionScene(props: SceneProps) {
       data-scene="selection"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-hidden px-4 py-8 md:py-14 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-hidden px-4 sm:px-6 md:px-8 py-8 md:py-14 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -574,10 +574,38 @@ export function SelectionScene(props: SceneProps) {
                   isSelected && "scale-105"
                 )}
               >
+                {/* Subtle specular glint overlay across artifact card on hover */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-2 bg-gradient-to-tr from-transparent via-gold/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"
+                />
+
                 {/* Vertical Light Beam aura behind each artifact */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute -bottom-4 w-32 sm:w-40 h-44 rounded-full bg-[radial-gradient(ellipse,_rgba(246,201,78,0.18)_0%,_transparent_70%)] blur-xl opacity-60 transition-opacity duration-300 group-hover:opacity-100 group-hover:scale-110"
+                />
+
+                {/* Starlight sparkles & magical dust motes */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-1 -right-1 text-gold/70 text-xs sm:text-sm animate-[pulse_3s_ease-in-out_infinite] group-hover:text-[#fef08a] group-hover:scale-125 transition-all duration-300 drop-shadow-[0_0_6px_rgba(246,201,78,0.8)]"
+                >
+                  ✦
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-1/3 -left-2 text-gold/50 text-[0.65rem] sm:text-xs animate-[pulse_4s_ease-in-out_infinite_1s] group-hover:text-gold/90 transition-all duration-300 drop-shadow-[0_0_4px_rgba(246,201,78,0.6)]"
+                >
+                  ✧
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-3 right-1/4 w-1 h-1 rounded-full bg-[#fde68a]/60 blur-[0.4px] animate-[pulse_2.5s_ease-in-out_infinite]"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-14 left-1/4 w-1.5 h-1.5 rounded-full bg-[#f5d089]/40 blur-[0.6px] animate-[pulse_3.5s_ease-in-out_infinite_0.5s]"
                 />
 
                 {/* Skeuomorphic Physical Artifact Representation */}

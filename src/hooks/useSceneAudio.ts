@@ -98,5 +98,7 @@ export function useSceneAudio(
     toggleMute: audio.toggleMute,
     syncSceneAudio,
     playSfx: audio.playSfx,
+    pauseMainBgm: audio.pauseMainBgm,
+    resumeMainBgm: audio.resumeMainBgm,
   };
 }

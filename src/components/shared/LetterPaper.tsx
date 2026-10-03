@@ -22,9 +22,9 @@ export interface LetterPaperProps {
 
 const letterPaddingClasses: Record<"none" | "sm" | "md" | "lg", string> = {
   none: "p-0",
-  sm: "px-4 py-4 sm:px-6 sm:py-6",
-  md: "px-5 py-6 sm:px-10 sm:py-10 md:px-14 md:py-12 lg:px-16",
-  lg: "px-6 py-8 sm:px-12 sm:py-12 md:px-16 md:py-14 lg:px-20",
+  sm: "px-5 py-5 sm:px-8 sm:py-7",
+  md: "px-7 py-7 sm:px-10 sm:py-10 md:px-14 md:py-12 lg:px-16",
+  lg: "px-8 py-9 sm:px-12 sm:py-12 md:px-16 md:py-14 lg:px-20",
 };
 
 export function LetterPaper({

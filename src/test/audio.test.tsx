@@ -113,7 +113,7 @@ describe("Audio Subsystem & Interaction Flow", () => {
     expect(screen.getByRole("button", { name: "Unmute audio" })).toBeInTheDocument();
   });
 
-  it("updates scene soundtrack transition when active scene changes", () => {
+  it("maintains continuous main soundtrack across scene transitions", () => {
     AUDIO_TRACKS.forEach((track) => audioManager.registerTrack(track));
 
     const { rerender } = renderHook(
@@ -124,10 +124,26 @@ describe("Audio Subsystem & Interaction Flow", () => {
       }
     );
 
-    expect(audioManager.getState().currentTrackId).toBe("soundtrack-prologue");
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-die-with-a-smile");
 
-    // Transition to gallery scene
+    // Transition to gallery scene — main BGM remains continuous without restarts
     rerender({ scene: "gallery" });
-    expect(audioManager.getState().currentTrackId).toBe("soundtrack-gallery");
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-die-with-a-smile");
+  });
+
+  it("pauses and resumes main BGM preserving continuous soundtrack flow", () => {
+    AUDIO_TRACKS.forEach((track) => audioManager.registerTrack(track));
+
+    audioManager.play("soundtrack-die-with-a-smile");
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-die-with-a-smile");
+
+    // Playlist starts playing a vinyl track: pause main BGM
+    audioManager.pauseMainBgm(0);
+    audioManager.play("soundtrack-blue");
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-blue");
+
+    // Playlist stops or closes: resume main BGM
+    audioManager.resumeMainBgm(0);
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-die-with-a-smile");
   });
 });

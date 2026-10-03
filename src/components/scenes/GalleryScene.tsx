@@ -298,7 +298,7 @@ export function GalleryScene(props: SceneProps) {
       data-scene="gallery"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 sm:px-6 md:px-8 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -337,7 +337,7 @@ export function GalleryScene(props: SceneProps) {
           type="button"
           aria-label="Back to selection hub"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.7rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3 py-1.5 sm:px-4 md:px-6 sm:py-2 min-h-[36px] md:min-h-[42px] rounded-full bg-[#87b07c] hover:bg-[#97c38b] text-[#162e15] shadow-[0_2px_10px_rgba(0,0,0,0.4)] border border-[#a8d39f]/50 transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.65rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3.5 sm:px-5 md:px-6 py-2 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-full bg-[#87b07c] hover:bg-[#97c38b] text-[#162e15] shadow-[0_2px_10px_rgba(0,0,0,0.4)] border border-[#a8d39f]/50 transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {GALLERY_CONTENT.backButtonLabel}
         </button>
@@ -345,7 +345,7 @@ export function GalleryScene(props: SceneProps) {
 
       {/* ── 3. Scrapbook Board & 2x4 Photo Grid ──────────────── */}
       <main className="relative z-10 w-full max-w-6xl mx-auto my-6 md:my-10">
-        <div className="relative rounded-lg p-2 sm:p-6 md:p-8 bg-[#20050a]/40 border border-[#c9904a]/25 shadow-[0_16px_48px_rgba(0,0,0,0.6)] backdrop-blur-xs">
+        <div className="relative rounded-lg p-3.5 sm:p-6 md:p-8 bg-[#20050a]/40 border border-[#c9904a]/25 shadow-[0_16px_48px_rgba(0,0,0,0.6)] backdrop-blur-xs">
           {/* Top Center Red Satin Ribbon Bow */}
           <RibbonBow className="gallery-ambient-sticker absolute -top-5 left-1/2 -translate-x-1/2 w-16 sm:w-20 z-30" />
 

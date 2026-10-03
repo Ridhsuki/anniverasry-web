@@ -324,3 +324,13 @@ html.lenis body {
   padding-top: var(--section-gap);
   padding-bottom: var(--section-gap);
 }
+
+/* ── 10. Cinematic Cursor Native Override (Desktop Fine Pointer Only) ── */
+@media (pointer: fine) {
+  html.cinematic-cursor-active,
+  html.cinematic-cursor-active *,
+  html.cinematic-cursor-active *::before,
+  html.cinematic-cursor-active *::after {
+    cursor: none !important;
+  }
+}

@@ -34,15 +34,10 @@ export function useSceneController(
 ): SceneControllerReturn {
   const { initialScene = "intro", syncWithUrlHash = true } = options;
 
-  const [currentScene, setCurrentScene] = useState<CanonicalSceneName>(() => {
-    if (typeof window !== "undefined" && syncWithUrlHash) {
-      const hash = window.location.hash.replace("#", "") as SceneName;
-      if (SCENE_ORDER.includes(normalizeSceneName(hash))) {
-        return normalizeSceneName(hash);
-      }
-    }
-    return normalizeSceneName(initialScene);
-  });
+  // Deterministic initial scene across SSR and client to ensure perfect hydration matching
+  const [currentScene, setCurrentScene] = useState<CanonicalSceneName>(() =>
+    normalizeSceneName(initialScene)
+  );
 
   const [previousScene, setPreviousScene] = useState<CanonicalSceneName | null>(
     null
@@ -124,9 +119,21 @@ export function useSceneController(
     );
   }, []);
 
-  // Listen to browser popstate (e.g. back/forward buttons)
+  // Listen to initial hash post-hydration and browser popstate (e.g. back/forward buttons)
   useEffect(() => {
     if (!syncWithUrlHash || typeof window === "undefined") return;
+
+    let rafId: number | null = null;
+    const initialHash = window.location.hash.replace("#", "") as SceneName;
+    if (initialHash && SCENE_ORDER.includes(normalizeSceneName(initialHash))) {
+      const canonical = normalizeSceneName(initialHash);
+      if (canonical !== normalizeSceneName(initialScene)) {
+        rafId = requestAnimationFrame(() => {
+          setCurrentScene(canonical);
+          setHistory((prev) => (prev.includes(canonical) ? prev : [...prev, canonical]));
+        });
+      }
+    }
 
     const handlePopState = () => {
       const hash = window.location.hash.replace("#", "") as SceneName;
@@ -144,8 +151,13 @@ export function useSceneController(
     };
 
     window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [syncWithUrlHash]);
+    return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [initialScene, syncWithUrlHash]);
 
   return {
     currentScene,

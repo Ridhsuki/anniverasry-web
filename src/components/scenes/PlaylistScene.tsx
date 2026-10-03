@@ -154,17 +154,23 @@ export function PlaylistScene(props: SceneProps) {
 
   // Active track state
   const [activeTrackIndex, setActiveTrackIndex] = useState(0);
-  const [userPlaybackOverride, setUserPlaybackOverride] = useState<boolean | null>(null);
+  const [isPlaylistPlaying, setIsPlaylistPlaying] = useState(false);
   const [progress, setProgress] = useState(0.15); // Initial progress preview
 
   const containerRef = useRef<HTMLElement>(null);
   const activeTrack = PLAYLIST_CONTENT.tracks[activeTrackIndex] ?? PLAYLIST_CONTENT.tracks[0];
+  const isPlaying = isPlaylistPlaying;
 
-  // Derive isPlaying: if user interacted, respect override; otherwise follow scene audio
-  const isPlaying =
-    userPlaybackOverride !== null
-      ? userPlaybackOverride
-      : (isActive && audio.isPlaying);
+  // Cleanup on unmount or scene deactivation: resume main BGM if playlist track was playing
+  useEffect(() => {
+    return () => {
+      if (isPlaylistPlaying) {
+        const currentTrackId = getTrackSoundtrackId(activeTrack);
+        audio.stop(currentTrackId);
+        audio.resumeMainBgm(1000);
+      }
+    };
+  }, [isPlaylistPlaying, activeTrack, audio]);
 
   // Sync progress with Howler track position when active
   useEffect(() => {
@@ -181,7 +187,6 @@ export function PlaylistScene(props: SceneProps) {
           return;
         }
       }
-      setProgress((prev) => (prev >= 1 ? 0 : prev + 0.01));
     }, 500);
 
     return () => clearInterval(interval);
@@ -203,19 +208,21 @@ export function PlaylistScene(props: SceneProps) {
     [audio.currentTrackId, activeTrack]
   );
 
-  // Toggle Play / Pause with actual audio playback
+  // Toggle Play / Pause with actual audio playback & continuous main BGM handover
   const handleTogglePlay = useCallback(() => {
-    const next = !isPlaying;
-    setUserPlaybackOverride(next);
+    const next = !isPlaylistPlaying;
+    setIsPlaylistPlaying(next);
+    const targetId = getTrackSoundtrackId(activeTrack);
     if (next) {
-      const targetId = getTrackSoundtrackId(activeTrack);
+      audio.pauseMainBgm(400);
       audio.play(targetId);
       audio.playSfx("sfx-needle-drop");
     } else {
-      audio.pause();
+      audio.stop(targetId);
+      audio.resumeMainBgm(1000);
       audio.playSfx("sfx-card-flip");
     }
-  }, [audio, activeTrack, isPlaying]);
+  }, [audio, activeTrack, isPlaylistPlaying]);
 
   // Select Track with real crossfade audio
   const handleSelectTrack = useCallback(
@@ -223,10 +230,11 @@ export function PlaylistScene(props: SceneProps) {
       const idx = PLAYLIST_CONTENT.tracks.findIndex((t) => t.id === track.id);
       if (idx !== -1) {
         setActiveTrackIndex(idx);
-        setUserPlaybackOverride(true);
+        setIsPlaylistPlaying(true);
         setProgress(0);
+        audio.pauseMainBgm(400);
         const targetId = getTrackSoundtrackId(track);
-        audio.crossfade(audio.currentTrackId, targetId, 600);
+        audio.play(targetId);
         audio.playSfx("sfx-needle-drop");
       }
     },
@@ -239,12 +247,11 @@ export function PlaylistScene(props: SceneProps) {
     const nextIdx = (activeTrackIndex + 1) % PLAYLIST_CONTENT.tracks.length;
     setActiveTrackIndex(nextIdx);
     setProgress(0);
-    if (isPlaying) {
-      setUserPlaybackOverride(true);
+    if (isPlaylistPlaying) {
       const nextTrack = PLAYLIST_CONTENT.tracks[nextIdx];
       audio.crossfade(audio.currentTrackId, getTrackSoundtrackId(nextTrack), 600);
     }
-  }, [audio, activeTrackIndex, isPlaying]);
+  }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
   // Prev Track
   const handlePrevTrack = useCallback(() => {
@@ -253,12 +260,11 @@ export function PlaylistScene(props: SceneProps) {
       activeTrackIndex === 0 ? PLAYLIST_CONTENT.tracks.length - 1 : activeTrackIndex - 1;
     setActiveTrackIndex(prevIdx);
     setProgress(0);
-    if (isPlaying) {
-      setUserPlaybackOverride(true);
+    if (isPlaylistPlaying) {
       const prevTrack = PLAYLIST_CONTENT.tracks[prevIdx];
       audio.crossfade(audio.currentTrackId, getTrackSoundtrackId(prevTrack), 600);
     }
-  }, [audio, activeTrackIndex, isPlaying]);
+  }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
   // Volume & Mute handlers
   const handleVolumeChange = useCallback(
@@ -272,25 +278,35 @@ export function PlaylistScene(props: SceneProps) {
     audio.toggleMute();
   }, [audio]);
 
-  // Return to Selection Hub
+  // Return to Selection Hub — restore main BGM if playlist was active
   const handleBack = useCallback(() => {
+    if (isPlaylistPlaying) {
+      setIsPlaylistPlaying(false);
+      audio.stop(getTrackSoundtrackId(activeTrack));
+      audio.resumeMainBgm(1000);
+    }
     audio.playSfx("sfx-card-flip");
     if (onPrevious) {
       onPrevious();
     } else {
       goToScene("selection");
     }
-  }, [audio, onPrevious, goToScene]);
+  }, [audio, isPlaylistPlaying, activeTrack, onPrevious, goToScene]);
 
-  // Advance to Gift Scene
+  // Advance to Gift Scene — restore main BGM if playlist was active
   const handleAdvance = useCallback(() => {
+    if (isPlaylistPlaying) {
+      setIsPlaylistPlaying(false);
+      audio.stop(getTrackSoundtrackId(activeTrack));
+      audio.resumeMainBgm(1000);
+    }
     audio.playSfx("sfx-card-flip");
     if (onNext) {
       onNext();
     } else {
       goToScene("gift");
     }
-  }, [audio, onNext, goToScene]);
+  }, [audio, isPlaylistPlaying, activeTrack, onNext, goToScene]);
 
   // GSAP animation lifecycle
   useGSAP(
@@ -362,7 +378,7 @@ export function PlaylistScene(props: SceneProps) {
       data-scene="playlist"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 sm:px-6 md:px-8 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -405,14 +421,14 @@ export function PlaylistScene(props: SceneProps) {
           type="button"
           aria-label="Back to selection hub"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.7rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3 py-1.5 sm:px-4 md:px-6 sm:py-2 min-h-[36px] md:min-h-[42px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.65rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3.5 sm:px-5 md:px-6 py-2 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {PLAYLIST_CONTENT.backButtonLabel}
         </button>
       </header>
 
       {/* ── 3. Main Stage: Love Letter, Vinyl Turntable, Altar ── */}
-      <main className="relative z-10 w-full max-w-6xl mx-auto my-4 sm:my-6 md:my-10 px-1 sm:px-2">
+      <main className="relative z-10 w-full max-w-6xl mx-auto my-4 sm:my-6 md:my-10 px-2 sm:px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-8 items-start justify-items-center">
           {/* ── Left Feature: Love Letter with Rose Petal Border ─ */}
           <div className="playlist-left-card lg:col-span-4 w-full max-w-md px-1 sm:px-0">

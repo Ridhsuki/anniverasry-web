@@ -18,12 +18,16 @@ export function CinematicCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const rippleRef = useRef<HTMLDivElement>(null);
-  const trailRef = useRef<HTMLDivElement>(null);
+  const mote1Ref = useRef<HTMLDivElement>(null);
+  const mote2Ref = useRef<HTMLDivElement>(null);
+  const mote3Ref = useRef<HTMLDivElement>(null);
 
   // Mutable animation state
   const mousePos = useRef({ x: -100, y: -100 });
   const ringPos = useRef({ x: -100, y: -100 });
-  const trailPos = useRef({ x: -100, y: -100 });
+  const mote1Pos = useRef({ x: -100, y: -100 });
+  const mote2Pos = useRef({ x: -100, y: -100 });
+  const mote3Pos = useRef({ x: -100, y: -100 });
   const isHovered = useRef(false);
   const isClicking = useRef(false);
   const isVisible = useRef(false);
@@ -56,7 +60,13 @@ export function CinematicCursor() {
   }, []);
 
   useEffect(() => {
-    if (!isEnabled) return;
+    if (!isEnabled) {
+      document.documentElement.classList.remove("cinematic-cursor-active");
+      return;
+    }
+
+    // Toggle active class to hide native OS cursor exclusively on fine-pointer devices
+    document.documentElement.classList.add("cinematic-cursor-active");
 
     // Movement handler
     const handleMouseMove = (e: MouseEvent) => {
@@ -67,8 +77,12 @@ export function CinematicCursor() {
         // Snap trailing positions to initial position to avoid fly-in from corner
         ringPos.current.x = e.clientX;
         ringPos.current.y = e.clientY;
-        trailPos.current.x = e.clientX;
-        trailPos.current.y = e.clientY;
+        mote1Pos.current.x = e.clientX;
+        mote1Pos.current.y = e.clientY;
+        mote2Pos.current.x = e.clientX;
+        mote2Pos.current.y = e.clientY;
+        mote3Pos.current.x = e.clientX;
+        mote3Pos.current.y = e.clientY;
       }
     };
 
@@ -114,13 +128,19 @@ export function CinematicCursor() {
 
       // Smooth organic lerp factors
       const ringLerp = isHovered.current ? 0.28 : 0.18;
-      const trailLerp = 0.09;
 
       ringPos.current.x += (targetX - ringPos.current.x) * ringLerp;
       ringPos.current.y += (targetY - ringPos.current.y) * ringLerp;
 
-      trailPos.current.x += (targetX - trailPos.current.x) * trailLerp;
-      trailPos.current.y += (targetY - trailPos.current.y) * trailLerp;
+      // Cascading star dust motes lerping
+      mote1Pos.current.x += (targetX - mote1Pos.current.x) * 0.14;
+      mote1Pos.current.y += (targetY - mote1Pos.current.y) * 0.14;
+
+      mote2Pos.current.x += (mote1Pos.current.x - mote2Pos.current.x) * 0.11;
+      mote2Pos.current.y += (mote1Pos.current.y - mote2Pos.current.y) * 0.11;
+
+      mote3Pos.current.x += (mote2Pos.current.x - mote3Pos.current.x) * 0.08;
+      mote3Pos.current.y += (mote2Pos.current.y - mote3Pos.current.y) * 0.08;
 
       const currentVisibility = isVisible.current ? "1" : "0";
 
@@ -138,10 +158,20 @@ export function CinematicCursor() {
         ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%) scale(${ringScale})`;
       }
 
-      // 3. Trailing Mote Sparkle (soft float behind)
-      if (trailRef.current) {
-        trailRef.current.style.opacity = currentVisibility;
-        trailRef.current.style.transform = `translate3d(${trailPos.current.x}px, ${trailPos.current.y}px, 0) translate(-50%, -50%)`;
+      // 3. Multi-Mote Star Dust Trail (cascading magical motes)
+      if (mote1Ref.current) {
+        mote1Ref.current.style.opacity = currentVisibility;
+        mote1Ref.current.style.transform = `translate3d(${mote1Pos.current.x}px, ${mote1Pos.current.y}px, 0) translate(-50%, -50%)`;
+      }
+
+      if (mote2Ref.current) {
+        mote2Ref.current.style.opacity = currentVisibility;
+        mote2Ref.current.style.transform = `translate3d(${mote2Pos.current.x}px, ${mote2Pos.current.y}px, 0) translate(-50%, -50%)`;
+      }
+
+      if (mote3Ref.current) {
+        mote3Ref.current.style.opacity = currentVisibility;
+        mote3Ref.current.style.transform = `translate3d(${mote3Pos.current.x}px, ${mote3Pos.current.y}px, 0) translate(-50%, -50%)`;
       }
 
       rafId.current = requestAnimationFrame(render);
@@ -158,6 +188,7 @@ export function CinematicCursor() {
     rafId.current = requestAnimationFrame(render);
 
     return () => {
+      document.documentElement.classList.remove("cinematic-cursor-active");
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseleave", handleMouseLeave);
@@ -178,10 +209,18 @@ export function CinematicCursor() {
       aria-hidden="true"
       className="cinematic-cursor-layer pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none"
     >
-      {/* ── Soft Trailing Ambient Mote ─────────────────────────── */}
+      {/* ── Multi-Mote Star Dust Trail ─────────────────────────── */}
       <div
-        ref={trailRef}
-        className="pointer-events-none absolute top-0 left-0 w-3 h-3 rounded-full bg-gradient-to-br from-[#fef08a]/20 to-transparent blur-[1.5px] will-change-transform"
+        ref={mote3Ref}
+        className="pointer-events-none absolute top-0 left-0 w-2.5 h-2.5 rounded-full bg-[#fde047]/30 blur-[1px] will-change-transform"
+      />
+      <div
+        ref={mote2Ref}
+        className="pointer-events-none absolute top-0 left-0 w-2 h-2 rounded-full bg-[#fef08a]/45 blur-[0.7px] will-change-transform"
+      />
+      <div
+        ref={mote1Ref}
+        className="pointer-events-none absolute top-0 left-0 w-1.5 h-1.5 rounded-full bg-[#fffbeb]/65 blur-[0.4px] will-change-transform"
       />
 
       {/* ── Outer Trailing Halo Ring ───────────────────────────── */}

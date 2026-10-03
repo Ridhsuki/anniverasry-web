@@ -12,7 +12,6 @@ import {
   breathingAnimation,
   dramaticReveal,
   floatingMovement,
-  paperReveal,
   reveal,
 } from "@/animations";
 import {
@@ -278,19 +277,22 @@ export function IntroScene(props: SceneProps) {
         ease: "power2.out",
       });
 
-      // 2. Unfold parchment letter within the envelope
-      paperReveal(".intro-envelope-letter", {
-        duration: 1.2,
-        direction: "unfold",
-        delay: 0.25,
-      });
-
-      // 3. Typographic headline reveal
+      // 2. Typographic headline dramatic expansion (paper stays stable in place)
       dramaticReveal(".intro-headline-text", {
         duration: 1.5,
-        delay: 0.4,
+        delay: 0.3,
         trackingStart: "0.18em",
         trackingEnd: "0.02em",
+      });
+
+      // 3. Subtle upward fade-in for letter text elements
+      reveal(".intro-letter-body", {
+        direction: "up",
+        distance: 12,
+        duration: 1.0,
+        delay: 0.45,
+        stagger: 0.1,
+        ease: "power2.out",
       });
 
       // 4. Subtle ambient breathing on the wax seal
@@ -395,13 +397,8 @@ export function IntroScene(props: SceneProps) {
               className="absolute inset-x-1 top-1 h-20 sm:h-24 z-[2] rounded-t-xs bg-gradient-to-b from-[#5c2411]/60 via-[#a87230]/40 to-transparent shadow-[inset_0_4px_12px_rgba(0,0,0,0.4)]"
             />
 
-            {/* ── Layer 2: Protruding Deckle-Edged Letter ── */}
-            <div
-              className={cn(
-                "intro-envelope-letter relative z-10 -mb-14 sm:-mb-16 px-2 sm:px-3 transition-transform duration-500 ease-out",
-                isOpening && "-translate-y-6 sm:-translate-y-8"
-              )}
-            >
+            {/* ── Layer 2: Protruding Deckle-Edged Letter (Stable Paper Container) ── */}
+            <div className="intro-envelope-letter relative z-10 -mb-14 sm:-mb-16 px-2 sm:px-3">
               <PaperCard
                 variant="deckle"
                 shadow="xl"
@@ -415,12 +412,12 @@ export function IntroScene(props: SceneProps) {
                 </h1>
 
                 {/* Commemorative Date: 26-09-26 */}
-                <p className="mt-3 font-serif text-xs sm:text-sm md:text-base tracking-[0.25em] text-[#6b3a1a] font-medium uppercase">
+                <p className="intro-letter-body mt-3 font-serif text-xs sm:text-sm md:text-base tracking-[0.25em] text-[#6b3a1a] font-medium uppercase">
                   {INTRO_CONTENT.date}
                 </p>
 
                 {/* Dedication Text */}
-                <div className="mt-4 flex flex-col items-center gap-0.5">
+                <div className="intro-letter-body mt-4 flex flex-col items-center gap-0.5">
                   <p className="font-handwriting text-base sm:text-lg text-[#5c3016] italic">
                     {INTRO_CONTENT.salutation}
                   </p>

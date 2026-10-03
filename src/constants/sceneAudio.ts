@@ -5,54 +5,59 @@
 // (Architecture only — audio assets configured in src/constants/audio.ts)
 // ─────────────────────────────────────────────────────────────
 
+import { MAIN_BGM_TRACK_ID } from "@/constants/audio";
 import type { CanonicalSceneName, SceneAudioConfig } from "@/types/scenes";
+
+export { MAIN_BGM_TRACK_ID };
 
 /**
  * Scene-to-Soundtrack Mapping Specification
  * Governs automatic audio state transitions when scenes change.
+ * Phase 8.5D: Uses one continuous main soundtrack ("Die With A Smile") across scenes,
+ * preserving emotional continuity and preventing rapid-switch fade conflicts.
  */
 export const SCENE_AUDIO_MAPPING: Record<CanonicalSceneName, SceneAudioConfig> = {
   intro: {
-    soundtrackId: "soundtrack-prologue",
+    soundtrackId: MAIN_BGM_TRACK_ID,
     sfxOnEnterId: "sfx-envelope-shimmer",
     crossfadeDurationMs: 1800,
-    volumeMultiplier: 0.7,
+    volumeMultiplier: 0.8,
   },
   selection: {
-    soundtrackId: "soundtrack-selection",
+    soundtrackId: MAIN_BGM_TRACK_ID,
     sfxOnEnterId: "sfx-card-flip",
     crossfadeDurationMs: 1400,
-    volumeMultiplier: 0.65,
+    volumeMultiplier: 0.8,
   },
   journey: {
-    soundtrackId: "soundtrack-journey",
+    soundtrackId: MAIN_BGM_TRACK_ID,
     sfxOnEnterId: "sfx-musicbox-chime",
     crossfadeDurationMs: 1600,
-    volumeMultiplier: 0.75,
+    volumeMultiplier: 0.8,
   },
   gallery: {
-    soundtrackId: "soundtrack-gallery",
+    soundtrackId: MAIN_BGM_TRACK_ID,
     sfxOnEnterId: "sfx-polaroid-place",
     crossfadeDurationMs: 1500,
-    volumeMultiplier: 0.7,
+    volumeMultiplier: 0.8,
   },
   playlist: {
-    soundtrackId: "soundtrack-vinyl",
-    sfxOnEnterId: "sfx-needle-drop",
+    soundtrackId: MAIN_BGM_TRACK_ID,
+    sfxOnEnterId: undefined,
     crossfadeDurationMs: 1200,
-    volumeMultiplier: 0.85,
+    volumeMultiplier: 0.8,
   },
   gift: {
-    soundtrackId: "soundtrack-gift-anticipation",
+    soundtrackId: MAIN_BGM_TRACK_ID,
     sfxOnEnterId: "sfx-wax-crack",
     crossfadeDurationMs: 1500,
     volumeMultiplier: 0.8,
   },
   "final-letter": {
-    soundtrackId: "soundtrack-final-letter",
+    soundtrackId: MAIN_BGM_TRACK_ID,
     sfxOnEnterId: "sfx-parchment-unfold",
     crossfadeDurationMs: 2200,
-    volumeMultiplier: 0.9,
+    volumeMultiplier: 0.85,
   },
 };
 
@@ -78,4 +83,6 @@ export interface SceneAudioController {
   toggleMute: () => void;
   syncSceneAudio: (sceneName: CanonicalSceneName) => void;
   playSfx: (sfxId: string) => void;
+  pauseMainBgm?: (fadeDurationMs?: number) => void;
+  resumeMainBgm?: (fadeDurationMs?: number) => void;
 }

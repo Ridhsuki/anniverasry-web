@@ -192,6 +192,7 @@ export function SceneManager({
         aria-live="polite"
         aria-atomic="true"
         className="sr-only"
+        suppressHydrationWarning
       >
         {SCENE_ANNOUNCEMENTS[currentScene] ?? `${currentScene} scene`}
       </div>
