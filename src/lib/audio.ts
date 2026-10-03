@@ -49,10 +49,23 @@ class AudioManager {
 
     const isSfx = track.id.startsWith("sfx-");
     const useHtml5 = track.html5 ?? !isSfx;
-    const shouldPreload = track.preload ?? (isSfx ? true : false);
+    const shouldPreload = track.preload ?? false;
+
+    // Multi-source array in Howler is strictly intended for format negotiation (e.g. webm, mp3).
+    // Deduplicate identical file extensions to ensure Howler does not combine duplicate URLs.
+    const seenExtensions = new Set<string>();
+    const sanitizedSrc = (Array.isArray(track.src) ? track.src : [track.src]).filter(
+      (sourceUrl) => {
+        const extMatch = /\.([^.?#]+)(?:[?#]|$)/.exec(sourceUrl);
+        const ext = extMatch ? extMatch[1].toLowerCase() : "";
+        if (!ext || seenExtensions.has(ext)) return false;
+        seenExtensions.add(ext);
+        return true;
+      }
+    );
 
     const howl = new Howl({
-      src: track.src,
+      src: sanitizedSrc.length > 0 ? sanitizedSrc : track.src,
       loop: track.loop ?? false,
       volume: track.volume ?? this._volume,
       autoplay: false,
@@ -93,6 +106,10 @@ class AudioManager {
       return;
     }
 
+    if (howl.state() === "unloaded") {
+      howl.load();
+    }
+
     // Stop current track before switching
     if (this.currentTrackId && this.currentTrackId !== trackId) {
       this.stop(this.currentTrackId);
@@ -123,6 +140,9 @@ class AudioManager {
   fadeIn(trackId: string, durationMs: number = 2000): void {
     const howl = this.tracks.get(trackId);
     if (!howl) return;
+    if (howl.state() === "unloaded") {
+      howl.load();
+    }
     howl.volume(0);
     if (!howl.playing()) howl.play();
     howl.fade(0, this._volume, durationMs);
@@ -151,6 +171,9 @@ class AudioManager {
     const howl = this.tracks.get(sfxId);
     if (!howl) {
       return;
+    }
+    if (howl.state() === "unloaded") {
+      howl.load();
     }
     howl.play();
   }

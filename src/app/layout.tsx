@@ -36,8 +36,8 @@ export const metadata: Metadata = {
     description: SITE_METADATA.description,
   },
   robots: {
-    index: false, // Keep private until ready to share
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

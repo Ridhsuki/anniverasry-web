@@ -12,8 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "scratch/**",
   ]),
   {
+    plugins: {
+      ...nextVitals[0]?.plugins,
+    },
     rules: {
       // Enforce consistent return types for TypeScript functions
       "@typescript-eslint/explicit-function-return-type": "off",

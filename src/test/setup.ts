@@ -101,6 +101,7 @@ vi.mock("howler", () => {
     off = vi.fn().mockReturnThis();
     once = vi.fn().mockReturnThis();
     unload = vi.fn();
+    load = vi.fn().mockReturnThis();
   }
 
   const HowlerMock = {

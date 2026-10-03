@@ -48,3 +48,6 @@ coverage/
 # Testing
 test-results/
 playwright-report/
+scratch/
+*.report.json
+*.report.html
