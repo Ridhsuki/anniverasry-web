@@ -119,9 +119,14 @@ export function createSceneTransitionTimeline(
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const exitDuration = prefersReduced ? 0.15 : duration * 0.6;
-  const enterDuration = prefersReduced ? 0.15 : duration;
-  const overlap = prefersReduced ? 0 : (overlapOffset ?? duration * 0.2);
+  const isMobile =
+    typeof window !== "undefined" &&
+    (window.matchMedia("(max-width: 768px)").matches ||
+     window.matchMedia("(pointer: coarse)").matches);
+
+  const exitDuration = prefersReduced ? 0.15 : isMobile ? 0.25 : duration * 0.6;
+  const enterDuration = prefersReduced ? 0.15 : isMobile ? 0.35 : duration;
+  const overlap = prefersReduced ? 0 : isMobile ? 0.08 : (overlapOffset ?? duration * 0.2);
 
   const tl = gsap.timeline({
     delay,
@@ -134,10 +139,10 @@ export function createSceneTransitionTimeline(
       leavingTarget,
       {
         opacity: 0,
-        scale: prefersReduced ? 1 : 0.98,
+        scale: prefersReduced || isMobile ? 1 : 0.98,
         duration: exitDuration,
         ease: prefersReduced ? "none" : "power2.inOut",
-        force3D: true,
+        force3D: !isMobile,
       },
       0
     );
@@ -148,8 +153,8 @@ export function createSceneTransitionTimeline(
       enteringTarget,
       {
         opacity: 0,
-        scale: prefersReduced ? 1 : 1.02,
-        force3D: true,
+        scale: prefersReduced || isMobile ? 1 : 1.02,
+        force3D: !isMobile,
         visibility: "visible",
       },
       {

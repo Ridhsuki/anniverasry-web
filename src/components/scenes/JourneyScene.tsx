@@ -262,7 +262,25 @@ export function JourneyScene(props: SceneProps) {
   const { goToScene } = useExperience();
 
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<string | null>(null);
+  const [mobileMilestoneIndex, setMobileMilestoneIndex] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
+
+  const activeMobileMilestone =
+    JOURNEY_CONTENT.milestones[mobileMilestoneIndex] ?? JOURNEY_CONTENT.milestones[0];
+
+  const prevMobileMilestone = useCallback(() => {
+    audio.playSfx("sfx-card-flip");
+    setMobileMilestoneIndex((prev) =>
+      prev > 0 ? prev - 1 : JOURNEY_CONTENT.milestones.length - 1
+    );
+  }, [audio]);
+
+  const nextMobileMilestone = useCallback(() => {
+    audio.playSfx("sfx-card-flip");
+    setMobileMilestoneIndex((prev) =>
+      prev < JOURNEY_CONTENT.milestones.length - 1 ? prev + 1 : 0
+    );
+  }, [audio]);
 
   // Audio feedback and milestone selection
   const handleSelectMilestone = useCallback(
@@ -408,6 +426,109 @@ export function JourneyScene(props: SceneProps) {
         </button>
       </header>
 
+      {/* ── Mobile Layout: Compact Single-Screen Milestone Deck ── */}
+      <div className="flex md:hidden flex-col items-center w-full max-w-sm mx-auto my-3 z-10">
+        {/* Compact Chapter Indicator */}
+        <div className="flex items-center justify-between w-full px-2 mb-3">
+          <span className="font-serif text-[0.65rem] text-gold/80 tracking-widest uppercase font-semibold">
+            Chapter {String(mobileMilestoneIndex + 1).padStart(2, "0")} / {String(JOURNEY_CONTENT.milestones.length).padStart(2, "0")}
+          </span>
+          <div className="flex items-center gap-1.5">
+            {JOURNEY_CONTENT.milestones.map((m, idx) => (
+              <button
+                key={m.id}
+                type="button"
+                aria-label={`Go to chapter ${idx + 1}: ${m.title}`}
+                onClick={() => {
+                  audio.playSfx("sfx-card-flip");
+                  setMobileMilestoneIndex(idx);
+                }}
+                className={cn(
+                  "w-6 h-6 rounded-full text-[0.65rem] font-serif transition-all duration-200 flex items-center justify-center cursor-pointer",
+                  mobileMilestoneIndex === idx
+                    ? "bg-[#380e18] text-gold border border-gold font-bold shadow-[0_0_8px_rgba(246,201,78,0.3)] scale-110"
+                    : "bg-[#1c080d]/60 text-white/50 border border-gold/20 hover:text-gold"
+                )}
+              >
+                {idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Milestone Card */}
+        <div className="relative w-full rounded-md bg-gradient-to-b from-[#240b12]/95 to-[#120306]/95 border border-[#c9904a]/40 p-4 shadow-xl flex flex-col items-center text-center">
+          {/* Milestone Photo if available */}
+          {activeMobileMilestone.photo?.src ? (
+            <div className="relative w-44 aspect-[4/3] rounded-xs overflow-hidden border border-gold/40 mb-3 shadow-md">
+              <CinematicImage
+                key={activeMobileMilestone.id}
+                src={activeMobileMilestone.photo.src}
+                alt={activeMobileMilestone.photo.alt ?? activeMobileMilestone.title}
+                fill
+                sizes="200px"
+                loading="lazy"
+                quality={85}
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold text-lg mb-2">
+              ❦
+            </div>
+          )}
+
+          {/* Date & Tag */}
+          <div className="flex items-center gap-2 text-gold/80 text-[0.65rem] font-serif tracking-widest uppercase mb-1">
+            <span>{activeMobileMilestone.date}</span>
+            <span>•</span>
+            <span className="text-rose-300/80">
+              {activeMobileMilestone.tags?.[0] ?? activeMobileMilestone.chapter}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 className="font-serif text-base font-bold text-[#fdf8f0] mb-2 drop-shadow-sm">
+            {activeMobileMilestone.title}
+          </h3>
+
+          {/* Story Narrative */}
+          <p className="font-serif text-xs text-[#f4e4cf]/90 leading-relaxed max-w-xs mb-2">
+            {activeMobileMilestone.description}
+          </p>
+
+          {/* Subtitle / Location */}
+          {activeMobileMilestone.subtitle && (
+            <span className="font-sans text-[0.65rem] text-gold/60 tracking-wider">
+              ✦ {activeMobileMilestone.subtitle}
+            </span>
+          )}
+
+          {/* Card Prev/Next Controls */}
+          <div className="flex items-center justify-between w-full mt-3 pt-2.5 border-t border-gold/20">
+            <button
+              type="button"
+              onClick={prevMobileMilestone}
+              className="px-3 py-1 rounded-xs bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
+            >
+              ‹ Prev
+            </button>
+            <span className="font-handwriting text-sm text-gold/80">
+              {activeMobileMilestone.title}
+            </span>
+            <button
+              type="button"
+              onClick={nextMobileMilestone}
+              className="px-3 py-1 rounded-xs bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
+            >
+              Next ›
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Desktop Layout: Full Hero Stage & Chronological Timeline ── */}
+      <div className="hidden md:flex flex-col w-full">
       {/* ── 3. Hero Feature Stage (Visual Benchmark) ─────────── */}
       <section className="relative z-10 w-full max-w-6xl mx-auto my-8 md:my-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center justify-items-center">
@@ -576,6 +697,7 @@ export function JourneyScene(props: SceneProps) {
           </div>
         </div>
       </section>
+      </div>
 
       {/* ── 5. Bottom Navigation Action Footer ────────────────── */}
       <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">

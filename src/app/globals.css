@@ -453,7 +453,21 @@ html.lenis body {
    1. Stacking context promotion conflicts with Lenis scroll
    2. position: fixed elements repainted on each scroll frame
    3. CSS filter/backdrop-blur forcing heavy rasterization layers */
-@media (pointer: coarse) {
+@media (pointer: coarse), (max-width: 768px) {
+  /* Hide custom scrollbar completely on mobile */
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
   /* Let Lenis still manage scroll but use native momentum */
   html.lenis body {
     /* Restore native scroll momentum on mobile */

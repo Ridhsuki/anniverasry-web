@@ -65,7 +65,7 @@ export function useSceneAudio(
         if (currentTrack === targetTrack) {
           if (!audioManager.getTrack(targetTrack)?.playing()) {
             if (targetTrack === MAIN_BGM_TRACK_ID) {
-              audioManager.resumeMainBgm(400);
+              audioManager.resumeMainBgm(0);
             } else {
               audio.play(targetTrack);
             }
@@ -74,7 +74,12 @@ export function useSceneAudio(
         }
 
         if (currentTrack !== targetTrack) {
-          if (audioManager.isTrackRegistered(targetTrack)) {
+          if (targetTrack === MAIN_BGM_TRACK_ID) {
+            if (currentTrack) {
+              audioManager.stop(currentTrack);
+            }
+            audioManager.resumeMainBgm(0);
+          } else if (audioManager.isTrackRegistered(targetTrack)) {
             const crossfadeDuration =
               mapping.crossfadeDurationMs ??
               AUDIO_DEFAULTS.defaultCrossfadeDurationMs;

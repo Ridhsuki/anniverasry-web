@@ -188,14 +188,10 @@ export function PlaylistScene(props: SceneProps) {
   // Cleanup on unmount ONLY: resume main BGM if any non-BGM track was playing
   useEffect(() => {
     return () => {
-      // Use audioManager directly (not React state) to get the real current state
       const state = audioManager.getState();
       if (state.currentTrackId && state.currentTrackId !== MAIN_BGM_TRACK_ID) {
         audioManager.stop(state.currentTrackId);
-        audioManager.resumeMainBgm(400);
-      } else if (!state.currentTrackId || !audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
-        // Ensure main BGM is playing even if it was in an intermediate state
-        audioManager.resumeMainBgm(400);
+        audioManager.resumeMainBgm(0);
       }
     };
   }, []);
@@ -203,15 +199,11 @@ export function PlaylistScene(props: SceneProps) {
   // Auto‑resume main BGM when leaving the Playlist scene (scene deactivation)
   useEffect(() => {
     if (!isActive) {
-      // Read directly from audioManager to avoid stale React state
       const state = audioManager.getState();
       const currentTrackId = state.currentTrackId;
       if (currentTrackId && currentTrackId !== MAIN_BGM_TRACK_ID) {
         audioManager.stop(currentTrackId);
-        audioManager.resumeMainBgm(400);
-      } else if (!audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
-        // BGM not playing (e.g. paused) — resume it
-        audioManager.resumeMainBgm(400);
+        audioManager.resumeMainBgm(0);
       }
     }
   }, [isActive]);
@@ -355,16 +347,13 @@ export function PlaylistScene(props: SceneProps) {
 
   // Return to Selection Hub — restore main BGM if playlist was active
   const handleBack = useCallback(() => {
-    // Use audioManager directly (not stale React state) to determine what's playing
     const state = audioManager.getState();
     const currentTrackId = state.currentTrackId;
+    setIsPlaylistPlaying(false);
     if (currentTrackId && currentTrackId !== MAIN_BGM_TRACK_ID) {
-      setIsPlaylistPlaying(false);
       audioManager.stop(currentTrackId);
-      audioManager.resumeMainBgm(400);
-    } else if (!audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
-      audioManager.resumeMainBgm(400);
     }
+    audioManager.resumeMainBgm(0);
     audio.playSfx("sfx-card-flip");
     if (onPrevious) {
       onPrevious();
@@ -375,16 +364,13 @@ export function PlaylistScene(props: SceneProps) {
 
   // Advance to Gift Scene — restore main BGM if playlist was active
   const handleAdvance = useCallback(() => {
-    // Use audioManager directly (not stale React state) to determine what's playing
     const state = audioManager.getState();
     const currentTrackId = state.currentTrackId;
+    setIsPlaylistPlaying(false);
     if (currentTrackId && currentTrackId !== MAIN_BGM_TRACK_ID) {
-      setIsPlaylistPlaying(false);
       audioManager.stop(currentTrackId);
-      audioManager.resumeMainBgm(400);
-    } else if (!audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
-      audioManager.resumeMainBgm(400);
     }
+    audioManager.resumeMainBgm(0);
     audio.playSfx("sfx-card-flip");
     if (onNext) {
       onNext();
@@ -591,34 +577,23 @@ export function PlaylistScene(props: SceneProps) {
                 variant="filigree"
                 rotation={-2}
                 aspectRatio="portrait"
-                caption={PLAYLIST_CONTENT.photoAltar.caption}
-                date={PLAYLIST_CONTENT.photoAltar.date}
+                caption={`${activeTrack.title} • ${activeTrack.artist}`}
+                date={activeTrack.metadata?.year ?? PLAYLIST_CONTENT.photoAltar.date}
                 className="w-full"
               >
                 <div className="relative w-full h-full min-h-[160px] sm:min-h-[170px] bg-gradient-to-br from-[#24140b] via-[#160b06] to-[#0a0503] flex flex-col items-center justify-center p-2 overflow-hidden">
                   <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
                   <div className="absolute inset-0 shadow-[inset_0_0_18px_rgba(201,144,74,0.35)] pointer-events-none z-20" />
-                  {PLAYLIST_CONTENT.photoAltar.photoSrc ? (
-                    <CinematicImage
-                      src={PLAYLIST_CONTENT.photoAltar.photoSrc}
-                      alt={PLAYLIST_CONTENT.photoAltar.photoAlt}
-                      fill
-                      sizes="240px"
-                      loading="lazy"
-                      quality={85}
-                      className="relative z-10 w-full h-full object-cover rounded-xs"
-                    />
-                  ) : (
-                    <>
-                      <span className="text-gold/80 text-xl mb-1">✦</span>
-                      <span className="font-handwriting text-gold text-base tracking-wide text-center">
-                        {PLAYLIST_CONTENT.photoAltar.caption}
-                      </span>
-                      <span className="font-sans text-[0.6rem] text-gold/50 tracking-widest uppercase mt-0.5">
-                        Nayyy & Keillaa
-                      </span>
-                    </>
-                  )}
+                  <CinematicImage
+                    key={activeTrack.id}
+                    src={activeTrack.coverImage || PLAYLIST_CONTENT.photoAltar.photoSrc}
+                    alt={`${activeTrack.title} by ${activeTrack.artist}`}
+                    fill
+                    sizes="240px"
+                    loading="lazy"
+                    quality={85}
+                    className="relative z-10 w-full h-full object-cover rounded-xs transition-opacity duration-300"
+                  />
                 </div>
               </PhotoFrame>
 

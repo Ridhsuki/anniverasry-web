@@ -198,6 +198,9 @@ class AudioManager {
         howl.once("fade", () => {
           if (this.pausedMainBgmTrackId === mainTrackId) {
             howl.pause();
+            // Restore default volume so when resumed, it is not trapped at volume 0
+            const defaultVol = this.trackVolumes.get(mainTrackId) ?? this._volume;
+            howl.volume(defaultVol);
           }
         });
       } else {
@@ -209,7 +212,7 @@ class AudioManager {
   /**
    * Resume continuous main BGM from its exact previous seek position.
    */
-  resumeMainBgm(fadeDurationMs: number = 400): void {
+  resumeMainBgm(_fadeDurationMs: number = 0): void {
     const mainTrackId = this.pausedMainBgmTrackId || MAIN_BGM_TRACK_ID;
     // Stop any temporary track (e.g. playlist vinyl track) immediately to avoid audio clashes
     if (this.currentTrackId && this.currentTrackId !== mainTrackId) {
@@ -225,19 +228,18 @@ class AudioManager {
       howl.load();
     }
     const targetVol = this.trackVolumes.get(mainTrackId) ?? this._volume;
-    if (fadeDurationMs > 0) {
-      if (!howl.playing()) {
-        howl.volume(0);
-        howl.play();
-        howl.fade(0, targetVol, fadeDurationMs);
-      } else {
-        howl.fade(howl.volume() as number, targetVol, fadeDurationMs);
-      }
-    } else {
-      howl.volume(targetVol);
-      if (!howl.playing()) {
-        howl.play();
-      }
+    
+    // Always restore volume immediately so it is never trapped in silent 0 state
+    howl.volume(targetVol);
+
+    if (howl.state() === "loading") {
+      howl.once("load", () => {
+        if (this.currentTrackId === mainTrackId && !howl.playing()) {
+          howl.play();
+        }
+      });
+    } else if (!howl.playing()) {
+      howl.play();
     }
   }
 
