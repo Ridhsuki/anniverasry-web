@@ -174,9 +174,16 @@ export function PlaylistScene(props: SceneProps) {
   }, []);
 
   const isPlaylistPlayingRef = useRef(isPlaylistPlaying);
-  isPlaylistPlayingRef.current = isPlaylistPlaying;
   const activeTrackRef = useRef(activeTrack);
-  activeTrackRef.current = activeTrack;
+
+  // Keep refs in sync without causing render side‑effects
+  useEffect(() => {
+    isPlaylistPlayingRef.current = isPlaylistPlaying;
+  }, [isPlaylistPlaying]);
+
+  useEffect(() => {
+    activeTrackRef.current = activeTrack;
+  }, [activeTrack]);
 
   // Cleanup on unmount ONLY: resume main BGM if custom playlist track was playing
   useEffect(() => {
