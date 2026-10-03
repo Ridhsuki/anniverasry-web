@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef } from "react";
 
 import {
   AUDIO_DEFAULTS,
+  MAIN_BGM_TRACK_ID,
   SCENE_AUDIO_MAPPING,
   type SceneAudioController,
 } from "@/constants/sceneAudio";
@@ -52,9 +53,25 @@ export function useSceneAudio(
       }
 
       // Check soundtrack transition
+      // IMPORTANT: Read currentTrackId directly from the audioManager singleton,
+      // not from the React state (audio.currentTrackId) which can be stale by up
+      // to 500ms due to polling. This prevents race conditions when the PlaylistScene
+      // has already called stop() + resumeMainBgm() before the scene transition fires.
       if (mapping.soundtrackId) {
-        const currentTrack = audio.currentTrackId;
+        const currentTrack = audioManager.getState().currentTrackId;
         const targetTrack = mapping.soundtrackId;
+
+        // If target track is already current:
+        if (currentTrack === targetTrack) {
+          if (!audioManager.getTrack(targetTrack)?.playing()) {
+            if (targetTrack === MAIN_BGM_TRACK_ID) {
+              audioManager.resumeMainBgm(400);
+            } else {
+              audio.play(targetTrack);
+            }
+          }
+          return;
+        }
 
         if (currentTrack !== targetTrack) {
           if (audioManager.isTrackRegistered(targetTrack)) {

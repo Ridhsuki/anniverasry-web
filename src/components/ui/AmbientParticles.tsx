@@ -11,6 +11,7 @@
 
 import { useMemo } from "react";
 
+import { useIsMobile } from "@/hooks/useMediaQuery";
 import { cn } from "@/utils";
 
 interface ParticleDef {
@@ -57,9 +58,12 @@ export interface AmbientParticlesProps {
 }
 
 export function AmbientParticles({ className, count = 20 }: AmbientParticlesProps) {
+  const isMobile = useIsMobile();
+  // On mobile, use far fewer particles to reduce GPU compositor load
+  const effectiveCount = isMobile ? Math.min(count, 6) : count;
   const particles = useMemo(() => {
-    return DETERMINISTIC_PARTICLES.slice(0, Math.min(count, DETERMINISTIC_PARTICLES.length));
-  }, [count]);
+    return DETERMINISTIC_PARTICLES.slice(0, Math.min(effectiveCount, DETERMINISTIC_PARTICLES.length));
+  }, [effectiveCount]);
 
   return (
     <div
@@ -72,7 +76,10 @@ export function AmbientParticles({ className, count = 20 }: AmbientParticlesProp
       {particles.map((p) => (
         <span
           key={p.id}
-          className="pointer-events-none absolute rounded-full animate-ambient-mote will-change-transform"
+          className={cn(
+            "pointer-events-none absolute rounded-full animate-ambient-mote",
+            !isMobile && "will-change-transform"
+          )}
           style={
             {
               top: p.top,
@@ -80,8 +87,8 @@ export function AmbientParticles({ className, count = 20 }: AmbientParticlesProp
               width: `${p.size}px`,
               height: `${p.size}px`,
               backgroundColor: p.color,
-              boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
-              filter: `blur(${p.blur})`,
+              boxShadow: isMobile ? undefined : `0 0 ${p.size * 2}px ${p.color}`,
+              filter: isMobile ? undefined : `blur(${p.blur})`,
               "--duration": p.duration,
               animationDelay: p.delay,
               "--drift-x": p.driftX,

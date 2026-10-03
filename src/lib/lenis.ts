@@ -40,11 +40,15 @@ export function initLenis(): Lenis | null {
 
   const prefersReducedMotion =
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isTouchDevice =
+    window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
 
   lenisInstance = new Lenis({
     ...LENIS_OPTIONS,
-    duration: prefersReducedMotion ? 0.001 : 1.2,
+    duration: prefersReducedMotion ? 0.001 : isTouchDevice ? 0.9 : 1.2,
     smoothWheel: !prefersReducedMotion,
+    touchMultiplier: isTouchDevice ? 1 : 1.5,
+    syncTouch: false,
   });
 
   // Synchronize ScrollTrigger with Lenis scroll positions
@@ -58,7 +62,13 @@ export function initLenis(): Lenis | null {
     lenisInstance?.raf(time * 1000);
   };
   gsap.ticker.add(tickerCallback);
-  gsap.ticker.lagSmoothing(0);
+  // On touch/mobile devices, maintain safe lag smoothing (500ms max, 33ms target)
+  // to avoid sudden element teleportation or clipping when frames drop during scroll.
+  if (isTouchDevice) {
+    gsap.ticker.lagSmoothing(500, 33);
+  } else {
+    gsap.ticker.lagSmoothing(500, 33);
+  }
 
   return lenisInstance;
 }

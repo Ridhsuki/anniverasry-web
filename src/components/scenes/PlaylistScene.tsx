@@ -160,7 +160,7 @@ export function PlaylistScene(props: SceneProps) {
 
   const containerRef = useRef<HTMLElement>(null);
   const activeTrack = PLAYLIST_CONTENT.tracks[activeTrackIndex] ?? PLAYLIST_CONTENT.tracks[0];
-  const isPlaying = isPlaylistPlaying;
+  const isPlaying = isActive && isPlaylistPlaying;
 
   // Preload all playlist soundtracks on mount for instant zero-latency playback
   useEffect(() => {
@@ -185,12 +185,16 @@ export function PlaylistScene(props: SceneProps) {
     activeTrackRef.current = activeTrack;
   }, [activeTrack]);
 
-  // Cleanup on unmount ONLY: resume main BGM if custom playlist track was playing
+  // Cleanup on unmount ONLY: resume main BGM if any non-BGM track was playing
   useEffect(() => {
     return () => {
-      const currentTrackId = getTrackSoundtrackId(activeTrackRef.current);
-      if (isPlaylistPlayingRef.current && currentTrackId !== MAIN_BGM_TRACK_ID) {
-        audioManager.stop(currentTrackId);
+      // Use audioManager directly (not React state) to get the real current state
+      const state = audioManager.getState();
+      if (state.currentTrackId && state.currentTrackId !== MAIN_BGM_TRACK_ID) {
+        audioManager.stop(state.currentTrackId);
+        audioManager.resumeMainBgm(400);
+      } else if (!state.currentTrackId || !audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
+        // Ensure main BGM is playing even if it was in an intermediate state
         audioManager.resumeMainBgm(400);
       }
     };
@@ -199,11 +203,15 @@ export function PlaylistScene(props: SceneProps) {
   // Auto‑resume main BGM when leaving the Playlist scene (scene deactivation)
   useEffect(() => {
     if (!isActive) {
-      const currentTrackId = getTrackSoundtrackId(activeTrackRef.current);
-      if (isPlaylistPlayingRef.current && currentTrackId !== MAIN_BGM_TRACK_ID) {
+      // Read directly from audioManager to avoid stale React state
+      const state = audioManager.getState();
+      const currentTrackId = state.currentTrackId;
+      if (currentTrackId && currentTrackId !== MAIN_BGM_TRACK_ID) {
         audioManager.stop(currentTrackId);
         audioManager.resumeMainBgm(400);
-        setIsPlaylistPlaying(false);
+      } else if (!audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
+        // BGM not playing (e.g. paused) — resume it
+        audioManager.resumeMainBgm(400);
       }
     }
   }, [isActive]);
@@ -251,6 +259,10 @@ export function PlaylistScene(props: SceneProps) {
     setIsPlaylistPlaying(next);
     const targetId = getTrackSoundtrackId(activeTrack);
     if (next) {
+      // If switching to a non-BGM track, pause BGM first
+      if (targetId !== MAIN_BGM_TRACK_ID) {
+        audioManager.pauseMainBgm(300);
+      }
       audio.play(targetId);
       audio.playSfx("sfx-needle-drop");
     } else {
@@ -274,6 +286,15 @@ export function PlaylistScene(props: SceneProps) {
         setIsPlaylistPlaying(true);
         setProgress(0);
         const targetId = getTrackSoundtrackId(track);
+        // Pause main BGM if selecting a different non-BGM track
+        if (targetId !== MAIN_BGM_TRACK_ID) {
+          const state = audioManager.getState();
+          if (state.currentTrackId === MAIN_BGM_TRACK_ID) {
+            audioManager.pauseMainBgm(300);
+          } else if (state.currentTrackId && state.currentTrackId !== targetId) {
+            audioManager.stop(state.currentTrackId);
+          }
+        }
         audio.play(targetId);
         audio.playSfx("sfx-needle-drop");
       }
@@ -290,7 +311,13 @@ export function PlaylistScene(props: SceneProps) {
     setProgress(0);
     if (isPlaylistPlaying) {
       const nextTrack = PLAYLIST_CONTENT.tracks[nextIdx];
-      audio.play(getTrackSoundtrackId(nextTrack));
+      const nextTrackId = getTrackSoundtrackId(nextTrack);
+      const state = audioManager.getState();
+      // Stop current track before playing next
+      if (state.currentTrackId && state.currentTrackId !== nextTrackId && state.currentTrackId !== MAIN_BGM_TRACK_ID) {
+        audioManager.stop(state.currentTrackId);
+      }
+      audio.play(nextTrackId);
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -304,7 +331,13 @@ export function PlaylistScene(props: SceneProps) {
     setProgress(0);
     if (isPlaylistPlaying) {
       const prevTrack = PLAYLIST_CONTENT.tracks[prevIdx];
-      audio.play(getTrackSoundtrackId(prevTrack));
+      const prevTrackId = getTrackSoundtrackId(prevTrack);
+      const state = audioManager.getState();
+      // Stop current track before playing prev
+      if (state.currentTrackId && state.currentTrackId !== prevTrackId && state.currentTrackId !== MAIN_BGM_TRACK_ID) {
+        audioManager.stop(state.currentTrackId);
+      }
+      audio.play(prevTrackId);
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -322,13 +355,15 @@ export function PlaylistScene(props: SceneProps) {
 
   // Return to Selection Hub — restore main BGM if playlist was active
   const handleBack = useCallback(() => {
-    const currentTrackId = getTrackSoundtrackId(activeTrack);
-    if (isPlaylistPlaying && currentTrackId !== MAIN_BGM_TRACK_ID) {
+    // Use audioManager directly (not stale React state) to determine what's playing
+    const state = audioManager.getState();
+    const currentTrackId = state.currentTrackId;
+    if (currentTrackId && currentTrackId !== MAIN_BGM_TRACK_ID) {
       setIsPlaylistPlaying(false);
-      audio.stop(currentTrackId);
-      audio.resumeMainBgm(400);
-    } else {
-      audio.play(MAIN_BGM_TRACK_ID);
+      audioManager.stop(currentTrackId);
+      audioManager.resumeMainBgm(400);
+    } else if (!audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
+      audioManager.resumeMainBgm(400);
     }
     audio.playSfx("sfx-card-flip");
     if (onPrevious) {
@@ -336,17 +371,19 @@ export function PlaylistScene(props: SceneProps) {
     } else {
       goToScene("selection");
     }
-  }, [audio, isPlaylistPlaying, activeTrack, onPrevious, goToScene]);
+  }, [audio, onPrevious, goToScene]);
 
   // Advance to Gift Scene — restore main BGM if playlist was active
   const handleAdvance = useCallback(() => {
-    const currentTrackId = getTrackSoundtrackId(activeTrack);
-    if (isPlaylistPlaying && currentTrackId !== MAIN_BGM_TRACK_ID) {
+    // Use audioManager directly (not stale React state) to determine what's playing
+    const state = audioManager.getState();
+    const currentTrackId = state.currentTrackId;
+    if (currentTrackId && currentTrackId !== MAIN_BGM_TRACK_ID) {
       setIsPlaylistPlaying(false);
-      audio.stop(currentTrackId);
-      audio.resumeMainBgm(400);
-    } else {
-      audio.play(MAIN_BGM_TRACK_ID);
+      audioManager.stop(currentTrackId);
+      audioManager.resumeMainBgm(400);
+    } else if (!audioManager.getTrack(MAIN_BGM_TRACK_ID)?.playing()) {
+      audioManager.resumeMainBgm(400);
     }
     audio.playSfx("sfx-card-flip");
     if (onNext) {
@@ -354,7 +391,7 @@ export function PlaylistScene(props: SceneProps) {
     } else {
       goToScene("gift");
     }
-  }, [audio, isPlaylistPlaying, activeTrack, onNext, goToScene]);
+  }, [audio, onNext, goToScene]);
 
   // GSAP animation lifecycle
   useGSAP(

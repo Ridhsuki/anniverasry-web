@@ -49,6 +49,10 @@ export const FloatingDecoration = forwardRef<
       const element = internalRef.current;
       if (!element) return;
 
+      // Skip expensive GSAP tweens on mobile/touch devices — they cause scroll glitch
+      const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+      if (isCoarsePointer) return;
+
       let yDist = distance;
       let xDist = distance * 0.4;
       let dur = duration ?? 4;

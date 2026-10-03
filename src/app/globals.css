@@ -330,23 +330,47 @@ html:not(.lenis) {
   backface-visibility: hidden;
 }
 
-.gpu-opacity {
-  will-change: opacity;
+/* On mobile/touch devices, limit will-change promotion to avoid
+   exhausting GPU compositor layers — this is the #1 cause of
+   element glitching and disappearing during scroll on mobile. */
+@media (pointer: coarse) {
+  .gpu-accelerated {
+    transform: none;
+    will-change: auto;
+    backface-visibility: visible;
+  }
+
+  /* Prevent film grain/texture layers from triggering unnecessary
+     composite layers on mobile */
+  .cinematic-layer > div {
+    will-change: auto;
+  }
+
+  /* Suppress mix-blend-multiply on mobile (compositor-layer expensive) */
+  .cinematic-layer > div.mix-blend-multiply {
+    mix-blend-mode: normal;
+    opacity: 0.03;
+  }
+
+  /* Reduce ambient mote animation cost on mobile — use CSS animation
+     without the JS will-change overhead */
+  .animate-ambient-mote {
+    will-change: auto;
+    animation-duration: 20s !important; /* slower = fewer compositing ops */
+  }
+
+  /* Prevent blur filters from creating compositor layers on mobile */
+  .blur-\[0\.5px\],
+  .blur-sm {
+    filter: none;
+  }
 }
 
-.gpu-scale {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
 
 /* ── 8. Lenis Smooth Scroll Integration ──────────────────────── */
 html.lenis,
 html.lenis body {
   height: auto;
-}
-
-html.lenis body {
-  overflow: hidden; /* Lenis manages scroll; suppress native body scrollbar */
 }
 
 .lenis.lenis-smooth {
@@ -412,3 +436,77 @@ html.lenis body {
     cursor: none !important;
   }
 }
+
+/* ── Missing GPU helpers (kept outside mobile override) ── */
+.gpu-opacity {
+  will-change: opacity;
+}
+
+.gpu-scale {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* ── 11. Mobile scroll stability & element persistence ──────── */
+/* Prevents elements from disappearing/glitching during scroll on iOS/Android.
+   The root causes are:
+   1. Stacking context promotion conflicts with Lenis scroll
+   2. position: fixed elements repainted on each scroll frame
+   3. CSS filter/backdrop-blur forcing heavy rasterization layers */
+@media (pointer: coarse) {
+  /* Let Lenis still manage scroll but use native momentum */
+  html.lenis body {
+    /* Restore native scroll momentum on mobile */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Stabilize fixed-position layers on mobile scroll */
+  .cinematic-layer {
+    position: fixed !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Disable heavy SVG fractalNoise texture filter on mobile to eliminate raster stall */
+  .cinematic-layer > div[style*="data:image/svg+xml"] {
+    display: none !important;
+  }
+
+  .ambient-particles {
+    position: fixed !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Prevent scene containers from creating too many stacking contexts */
+  .gpu-scale {
+    will-change: auto;
+    backface-visibility: visible;
+  }
+
+  .gpu-opacity {
+    will-change: auto;
+  }
+
+  /* Stabilize sections during scroll — prevents glitch-disappear on Android */
+  section[data-scene] {
+    /* Force stable paint containment per scene */
+    contain: layout style;
+    /* Prevent transform3d from creating isolated stacking context on mobile */
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Reduce backdrop-blur on mobile — extremely expensive on Android WebView */
+  .backdrop-blur-sm,
+  .backdrop-blur,
+  .backdrop-blur-xs {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+

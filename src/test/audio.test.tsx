@@ -146,4 +146,24 @@ describe("Audio Subsystem & Interaction Flow", () => {
     audioManager.resumeMainBgm(0);
     expect(audioManager.getState().currentTrackId).toBe("soundtrack-die-with-a-smile");
   });
+
+  it("resumes main BGM seamlessly when transitioning from playlist playing a custom track to gift scene", () => {
+    AUDIO_TRACKS.forEach((track) => audioManager.registerTrack(track));
+
+    const { rerender } = renderHook(
+      ({ scene }: { scene: "playlist" | "gift" }) =>
+        useSceneAudio(scene, { autoSync: true, enabled: true }),
+      {
+        initialProps: { scene: "playlist" },
+      }
+    );
+
+    // User plays "soundtrack-blue" in the playlist
+    audioManager.play("soundtrack-blue");
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-blue");
+
+    // Advance to gift scene: should automatically restore and play main BGM
+    rerender({ scene: "gift" });
+    expect(audioManager.getState().currentTrackId).toBe("soundtrack-die-with-a-smile");
+  });
 });
