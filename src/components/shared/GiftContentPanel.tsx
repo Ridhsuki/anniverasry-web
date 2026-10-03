@@ -6,9 +6,12 @@
 
 "use client";
 
-import Image from "next/image";
-
-import { PaperCard, PhotoFrame, VintageButton } from "@/components/ui";
+import {
+  CinematicImage,
+  PaperCard,
+  PhotoFrame,
+  VintageButton,
+} from "@/components/ui";
 import { GIFT_CONTENT } from "@/data/gift";
 import { cn } from "@/utils";
 
@@ -73,7 +76,7 @@ export function GiftContentPanel({
                 className="w-full"
               >
                 <div className="relative w-full h-full min-h-[110px] sm:min-h-[120px] bg-gradient-to-br from-[#24140b] to-[#0a0503] overflow-hidden">
-                  <Image
+                  <CinematicImage
                     src={GIFT_CONTENT.metadata.photoSrc}
                     alt={GIFT_CONTENT.metadata.keepsakeTitle}
                     fill

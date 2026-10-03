@@ -6,7 +6,6 @@
 
 "use client";
 
-import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
 import {
@@ -17,6 +16,7 @@ import {
   reveal,
 } from "@/animations";
 import {
+  CinematicImage,
   FloatingDecoration,
   PaperCard,
   PhotoFrame,
@@ -208,7 +208,7 @@ function IntroPhotoCard({ photo }: { photo: IntroPhotoItem }) {
           <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(201,144,74,0.25)] pointer-events-none z-20" />
 
           {!hasError && photo.src ? (
-            <Image
+            <CinematicImage
               src={photo.src}
               alt={photo.alt}
               fill

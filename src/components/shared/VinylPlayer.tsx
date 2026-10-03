@@ -8,7 +8,6 @@
 
 "use client";
 
-import { PauseIcon, PlayIcon } from "@/components/ui/Icons";
 import type { PlaylistTrack } from "@/data/playlist";
 import { cn } from "@/utils";
 
@@ -33,7 +32,7 @@ export function VinylPlayer({
       )}
     >
       {/* Turntable Platter Base Housing */}
-      <div className="relative w-64 sm:w-72 md:w-80 aspect-square rounded-full p-2 bg-gradient-to-br from-[#1a120c] via-[#0d0704] to-[#050201] border-2 border-[#c9904a]/40 shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_0_24px_rgba(0,0,0,0.9)]">
+      <div className="relative w-56 sm:w-72 md:w-80 aspect-square rounded-full p-2 bg-gradient-to-br from-[#1a120c] via-[#0d0704] to-[#050201] border-2 border-[#c9904a]/40 shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_0_24px_rgba(0,0,0,0.9)]">
         {/* Subtle Brass Platter Edge Ring */}
         <div className="absolute inset-1.5 rounded-full border border-[#d9a85f]/30 pointer-events-none" />
 
@@ -77,7 +76,7 @@ export function VinylPlayer({
           />
 
           {/* Center Paper Label Border */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-gradient-to-br from-[#2a1708] via-[#1a0c04] to-[#0a0502] border-2 border-[#c9904a]/70 flex flex-col items-center justify-center p-2 shadow-inner">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#2a1708] via-[#1a0c04] to-[#0a0502] border-2 border-[#c9904a]/70 flex flex-col items-center justify-center p-2 shadow-inner">
             {/* Center Label Typography */}
             <div className="text-center pointer-events-none z-10 scale-90">
               <span className="font-handwriting text-gold/90 text-xs block leading-none truncate max-w-[80px]">
@@ -111,15 +110,6 @@ export function VinylPlayer({
                   strokeWidth="0.75"
                 />
               </svg>
-
-              {/* Play / Pause Symbol */}
-              <span className="absolute text-white text-xs font-bold leading-none select-none drop-shadow-md flex items-center justify-center">
-                {isPlaying ? (
-                  <PauseIcon size={12} />
-                ) : (
-                  <PlayIcon size={12} className="translate-x-0.5" />
-                )}
-              </span>
             </div>
 
             {/* Center Spindle Hole */}

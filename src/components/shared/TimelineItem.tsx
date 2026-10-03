@@ -6,10 +6,9 @@
 
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
-import { PaperCard, PhotoFrame } from "@/components/ui";
+import { CinematicImage, PaperCard, PhotoFrame } from "@/components/ui";
 import type { JourneyMilestone } from "@/data/journey";
 import { cn } from "@/utils";
 
@@ -125,7 +124,7 @@ export function TimelineItem({
 
                     {!imageError && milestone.photo.src ? (
                       // Next/Image with graceful fallback on error
-                      <Image
+                      <CinematicImage
                         src={milestone.photo.src}
                         alt={milestone.photo.alt}
                         fill

@@ -7,9 +7,7 @@
 
 "use client";
 
-import Image from "next/image";
-
-import { PhotoFrame } from "@/components/ui";
+import { CinematicImage, PhotoFrame } from "@/components/ui";
 import type { LetterPhotoMetadata } from "@/data/finalLetter";
 import { cn } from "@/utils";
 
@@ -89,7 +87,7 @@ export function LetterPaper({
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
             <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)] pointer-events-none z-20" />
             {photo.src ? (
-              <Image
+              <CinematicImage
                 src={photo.src}
                 alt={photo.alt}
                 fill

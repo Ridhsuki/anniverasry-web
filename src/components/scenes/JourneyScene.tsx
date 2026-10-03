@@ -6,7 +6,6 @@
 
 "use client";
 
-import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 
 import {
@@ -16,7 +15,11 @@ import {
   reveal,
 } from "@/animations";
 import { TimelineItem } from "@/components/shared";
-import { FloatingDecoration, PhotoFrame } from "@/components/ui";
+import {
+  CinematicImage,
+  FloatingDecoration,
+  PhotoFrame,
+} from "@/components/ui";
 import { useExperience } from "@/context/ExperienceContext";
 import { JOURNEY_CONTENT } from "@/data/journey";
 import { useAudio } from "@/hooks/useAudio";
@@ -423,7 +426,7 @@ export function JourneyScene(props: SceneProps) {
                   <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
                   <div className="absolute inset-0 shadow-[inset_0_0_24px_rgba(201,144,74,0.35)] pointer-events-none z-20" />
                   {JOURNEY_CONTENT.hero.left.photo.src ? (
-                    <Image
+                    <CinematicImage
                       src={JOURNEY_CONTENT.hero.left.photo.src}
                       alt={JOURNEY_CONTENT.hero.left.photo.alt}
                       fill
@@ -469,7 +472,7 @@ export function JourneyScene(props: SceneProps) {
                 >
                   <div className="relative w-full h-full min-h-[170px] bg-gradient-to-br from-[#24130b] to-[#0c0603] flex items-center justify-center p-2 overflow-hidden">
                     {JOURNEY_CONTENT.hero.right.photos[0]?.src ? (
-                      <Image
+                      <CinematicImage
                         src={JOURNEY_CONTENT.hero.right.photos[0].src}
                         alt={JOURNEY_CONTENT.hero.right.photos[0].alt}
                         fill
@@ -496,7 +499,7 @@ export function JourneyScene(props: SceneProps) {
                 >
                   <div className="relative w-full h-full min-h-[160px] bg-gradient-to-br from-[#2a1710] to-[#0d0704] flex flex-col items-center justify-center p-2 overflow-hidden">
                     {JOURNEY_CONTENT.hero.right.photos[1]?.src ? (
-                      <Image
+                      <CinematicImage
                         src={JOURNEY_CONTENT.hero.right.photos[1].src}
                         alt={JOURNEY_CONTENT.hero.right.photos[1].alt}
                         fill

@@ -63,8 +63,8 @@ export const AUDIO_TRACKS: AudioTrack[] = [
 
   // ── Music Room Playlist Tracks ────────────────────────────────
   {
-    id: "soundtrack-risk-it-all",
-    src: ["/audio/bgm/soundtrack-risk-it-all.mp3", "/audio/soundtrack-risk-it-all.mp3"],
+    id: "soundtrack-blue",
+    src: ["/audio/bgm/soundtrack-blue.mp3", "/audio/soundtrack-blue.mp3"],
     loop: false,
     volume: 0.8,
   },
@@ -150,7 +150,7 @@ export const TRACK_IDS = {
   VINYL: "soundtrack-vinyl",
   GIFT: "soundtrack-gift-anticipation",
   FINAL_LETTER: "soundtrack-final-letter",
-  RISK_IT_ALL: "soundtrack-risk-it-all",
+  BLUE: "soundtrack-blue",
   UNTIL_I_FOUND_YOU: "soundtrack-until-i-found-you",
   GOLDEN_HOUR: "soundtrack-golden-hour",
   DIE_WITH_A_SMILE: "soundtrack-die-with-a-smile",

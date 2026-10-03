@@ -55,14 +55,14 @@ export function AudioControls({
   return (
     <div
       className={cn(
-        "audio-controls w-full max-w-md mx-auto flex flex-col items-center gap-3 p-3 sm:p-4 rounded-sm select-none",
+        "audio-controls w-full max-w-md mx-auto flex flex-col items-center gap-2.5 sm:gap-3 p-2.5 sm:p-4 rounded-sm select-none",
         "bg-[#1c080d]/80 border border-[#c9904a]/30 shadow-md backdrop-blur-xs",
         className
       )}
     >
       {/* ── 1. Progress Bar & Elapsed Time ────────────────────── */}
-      <div className="w-full flex items-center gap-2.5">
-        <span className="font-serif text-[0.65rem] sm:text-xs text-gold/70 w-8 text-right font-medium">
+      <div className="w-full flex items-center gap-2 sm:gap-2.5">
+        <span className="font-serif text-[0.65rem] sm:text-xs text-gold/70 w-7 sm:w-8 text-right font-medium">
           {timeFormatted}
         </span>
 
@@ -88,15 +88,15 @@ export function AudioControls({
           />
         </div>
 
-        <span className="font-serif text-[0.65rem] sm:text-xs text-gold/70 w-8 text-left font-medium">
+        <span className="font-serif text-[0.65rem] sm:text-xs text-gold/70 w-7 sm:w-8 text-left font-medium">
           {track.duration}
         </span>
       </div>
 
       {/* ── 2. Playback Action Buttons ────────────────────────── */}
-      <div className="w-full flex items-center justify-between px-2">
+      <div className="w-full flex items-center justify-between gap-1 sm:gap-2 px-1 sm:px-2">
         {/* Track Info Preview */}
-        <div className="flex flex-col text-left min-w-0 max-w-[120px] sm:max-w-[150px]">
+        <div className="flex flex-col text-left min-w-0 max-w-[80px] xs:max-w-[110px] sm:max-w-[150px]">
           <span className="font-serif text-xs font-semibold text-[#fdf8f0] truncate leading-tight">
             {track.title}
           </span>
@@ -106,15 +106,15 @@ export function AudioControls({
         </div>
 
         {/* Center Control Group: Prev, Play, Next */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           {/* Previous Track */}
           <button
             type="button"
             aria-label="Previous track"
             onClick={onPrevTrack}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-gold/80 hover:text-gold hover:bg-[#380e18] transition-all active:scale-90 cursor-pointer"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-gold/80 hover:text-gold hover:bg-[#380e18] transition-all active:scale-90 cursor-pointer"
           >
-            <PrevTrackIcon size={14} />
+            <PrevTrackIcon size={12} className="sm:w-[14px] sm:h-[14px]" />
           </button>
 
           {/* Main Play / Pause Button */}
@@ -122,12 +122,12 @@ export function AudioControls({
             type="button"
             aria-label={isPlaying ? "Pause track" : "Play track"}
             onClick={onTogglePlay}
-            className="w-10 h-10 rounded-full bg-gradient-to-br from-[#d9a85f] via-[#fde68a] to-[#c9904a] text-[#1c080d] flex items-center justify-center font-bold text-sm shadow-[0_2px_12px_rgba(246,201,78,0.35)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#d9a85f] via-[#fde68a] to-[#c9904a] text-[#1c080d] flex items-center justify-center font-bold text-sm shadow-[0_2px_12px_rgba(246,201,78,0.35)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
           >
             {isPlaying ? (
-              <PauseIcon size={14} />
+              <PauseIcon size={13} className="sm:w-[14px] sm:h-[14px]" />
             ) : (
-              <PlayIcon size={14} className="translate-x-0.5" />
+              <PlayIcon size={13} className="translate-x-0.5 sm:w-[14px] sm:h-[14px]" />
             )}
           </button>
 
@@ -136,24 +136,24 @@ export function AudioControls({
             type="button"
             aria-label="Next track"
             onClick={onNextTrack}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-gold/80 hover:text-gold hover:bg-[#380e18] transition-all active:scale-90 cursor-pointer"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-gold/80 hover:text-gold hover:bg-[#380e18] transition-all active:scale-90 cursor-pointer"
           >
-            <NextTrackIcon size={14} />
+            <NextTrackIcon size={12} className="sm:w-[14px] sm:h-[14px]" />
           </button>
         </div>
 
         {/* Volume & Mute Controls */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           <button
             type="button"
             aria-label={isMuted ? "Unmute audio" : "Mute audio"}
             onClick={onToggleMute}
-            className="text-xs text-gold/70 hover:text-gold transition-colors cursor-pointer p-1"
+            className="text-xs text-gold/70 hover:text-gold transition-colors cursor-pointer p-0.5 sm:p-1"
           >
             {isMuted || volume === 0 ? (
-              <VolumeMuteIcon size={16} />
+              <VolumeMuteIcon size={15} className="sm:w-[16px] sm:h-[16px]" />
             ) : (
-              <VolumeHighIcon size={16} />
+              <VolumeHighIcon size={15} className="sm:w-[16px] sm:h-[16px]" />
             )}
           </button>
 
@@ -166,7 +166,7 @@ export function AudioControls({
             value={isMuted ? 0 : volume}
             onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
             aria-label="Volume slider"
-            className="w-14 sm:w-16 h-1 accent-gold bg-[#3a121b] rounded-full cursor-pointer"
+            className="w-11 sm:w-16 h-1 accent-gold bg-[#3a121b] rounded-full cursor-pointer"
           />
         </div>
       </div>

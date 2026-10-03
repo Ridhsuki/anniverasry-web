@@ -7,7 +7,6 @@
 
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
@@ -19,6 +18,7 @@ import {
 import { AudioControls, TrackItem, VinylPlayer } from "@/components/shared";
 import {
   BlossomIcon,
+  CinematicImage,
   FloatingDecoration,
   PaperCard,
   PhotoFrame,
@@ -29,6 +29,7 @@ import { useExperience } from "@/context/ExperienceContext";
 import { PLAYLIST_CONTENT, type PlaylistTrack } from "@/data/playlist";
 import { useAudio } from "@/hooks/useAudio";
 import { useGSAP } from "@/hooks/useGSAP";
+import { audioManager } from "@/lib/audio";
 import type { SceneProps } from "@/types/scenes";
 import { cn } from "@/utils";
 
@@ -122,22 +123,26 @@ function GoldenButterfly({ className }: { className?: string }) {
   );
 }
 
+const getTrackSoundtrackId = (track: PlaylistTrack): string => {
+  return `soundtrack-${track.id.replace("track-", "")}`;
+};
+
 /** Rose Petals Frame Border Pattern around Love Letter */
 function RosePetalBorder() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute -inset-3.5 sm:-inset-4.5 rounded-lg border-2 border-dashed border-rose/30 flex items-center justify-center select-none z-20"
+      className="pointer-events-none absolute -inset-2.5 sm:-inset-4 rounded-lg border border-dashed border-rose/30 flex items-center justify-center select-none z-20"
     >
       {/* Decorative Corner & Flank Rose Petals */}
-      <div className="absolute -top-3.5 -left-3.5"><RoseIcon size={22} /></div>
-      <div className="absolute -top-2.5 left-1/2 -translate-x-1/2"><RosePetalIcon size={16} /></div>
-      <div className="absolute -top-3.5 -right-3.5"><RoseIcon size={22} /></div>
-      <div className="absolute top-1/2 -left-2.5 -translate-y-1/2"><RosePetalIcon size={16} /></div>
-      <div className="absolute top-1/2 -right-2.5 -translate-y-1/2"><RosePetalIcon size={16} /></div>
-      <div className="absolute -bottom-3.5 -left-3.5"><RoseIcon size={22} /></div>
-      <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2"><RosePetalIcon size={16} /></div>
-      <div className="absolute -bottom-3.5 -right-3.5"><RoseIcon size={22} /></div>
+      <div className="absolute -top-2.5 -left-2.5 sm:-top-3.5 sm:-left-3.5"><RoseIcon size={18} /></div>
+      <div className="absolute -top-2 left-1/2 -translate-x-1/2"><RosePetalIcon size={14} /></div>
+      <div className="absolute -top-2.5 -right-2.5 sm:-top-3.5 sm:-right-3.5"><RoseIcon size={18} /></div>
+      <div className="absolute top-1/2 -left-2 -translate-y-1/2"><RosePetalIcon size={14} /></div>
+      <div className="absolute top-1/2 -right-2 -translate-y-1/2"><RosePetalIcon size={14} /></div>
+      <div className="absolute -bottom-2.5 -left-2.5 sm:-bottom-3.5 sm:-left-3.5"><RoseIcon size={18} /></div>
+      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2"><RosePetalIcon size={14} /></div>
+      <div className="absolute -bottom-2.5 -right-2.5 sm:-bottom-3.5 sm:-right-3.5"><RoseIcon size={18} /></div>
     </div>
   );
 }
@@ -149,52 +154,79 @@ export function PlaylistScene(props: SceneProps) {
 
   // Active track state
   const [activeTrackIndex, setActiveTrackIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [userPlaybackOverride, setUserPlaybackOverride] = useState<boolean | null>(null);
   const [progress, setProgress] = useState(0.15); // Initial progress preview
-  const [volume, setVolume] = useState(0.75);
-  const [isMuted, setIsMuted] = useState(false);
 
   const containerRef = useRef<HTMLElement>(null);
   const activeTrack = PLAYLIST_CONTENT.tracks[activeTrackIndex] ?? PLAYLIST_CONTENT.tracks[0];
 
-  // Simulated playback timer when active
+  // Derive isPlaying: if user interacted, respect override; otherwise follow scene audio
+  const isPlaying =
+    userPlaybackOverride !== null
+      ? userPlaybackOverride
+      : (isActive && audio.isPlaying);
+
+  // Sync progress with Howler track position when active
   useEffect(() => {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 1) {
-          // Loop to next track or rewind
-          return 0;
+      const currentTrackId = audio.currentTrackId ?? getTrackSoundtrackId(activeTrack);
+      const howl = audioManager.getTrack(currentTrackId);
+      if (howl && howl.playing()) {
+        const seek = howl.seek();
+        const dur = howl.duration();
+        if (typeof seek === "number" && dur > 0) {
+          setProgress(Math.min(1, Math.max(0, seek / dur)));
+          return;
         }
-        return prev + 0.01;
-      });
-    }, 1000);
+      }
+      setProgress((prev) => (prev >= 1 ? 0 : prev + 0.01));
+    }, 500);
 
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, activeTrack, audio.currentTrackId]);
 
-  // Toggle Play / Pause
-  const handleTogglePlay = useCallback(() => {
-    setIsPlaying((prev) => {
-      const next = !prev;
-      if (next) {
-        audio.playSfx("sfx-needle-drop");
-      } else {
-        audio.playSfx("sfx-card-flip");
+  // Seek handler
+  const handleSeek = useCallback(
+    (newProgress: number) => {
+      setProgress(newProgress);
+      const currentTrackId = audio.currentTrackId ?? getTrackSoundtrackId(activeTrack);
+      const howl = audioManager.getTrack(currentTrackId);
+      if (howl) {
+        const dur = howl.duration();
+        if (dur > 0) {
+          howl.seek(newProgress * dur);
+        }
       }
-      return next;
-    });
-  }, [audio]);
+    },
+    [audio.currentTrackId, activeTrack]
+  );
 
-  // Select Track
+  // Toggle Play / Pause with actual audio playback
+  const handleTogglePlay = useCallback(() => {
+    const next = !isPlaying;
+    setUserPlaybackOverride(next);
+    if (next) {
+      const targetId = getTrackSoundtrackId(activeTrack);
+      audio.play(targetId);
+      audio.playSfx("sfx-needle-drop");
+    } else {
+      audio.pause();
+      audio.playSfx("sfx-card-flip");
+    }
+  }, [audio, activeTrack, isPlaying]);
+
+  // Select Track with real crossfade audio
   const handleSelectTrack = useCallback(
     (track: PlaylistTrack) => {
       const idx = PLAYLIST_CONTENT.tracks.findIndex((t) => t.id === track.id);
       if (idx !== -1) {
         setActiveTrackIndex(idx);
-        setIsPlaying(true);
+        setUserPlaybackOverride(true);
         setProgress(0);
+        const targetId = getTrackSoundtrackId(track);
+        audio.crossfade(audio.currentTrackId, targetId, 600);
         audio.playSfx("sfx-needle-drop");
       }
     },
@@ -204,30 +236,41 @@ export function PlaylistScene(props: SceneProps) {
   // Next Track
   const handleNextTrack = useCallback(() => {
     audio.playSfx("sfx-card-flip");
-    setActiveTrackIndex((prev) => (prev + 1) % PLAYLIST_CONTENT.tracks.length);
+    const nextIdx = (activeTrackIndex + 1) % PLAYLIST_CONTENT.tracks.length;
+    setActiveTrackIndex(nextIdx);
     setProgress(0);
-  }, [audio]);
+    if (isPlaying) {
+      setUserPlaybackOverride(true);
+      const nextTrack = PLAYLIST_CONTENT.tracks[nextIdx];
+      audio.crossfade(audio.currentTrackId, getTrackSoundtrackId(nextTrack), 600);
+    }
+  }, [audio, activeTrackIndex, isPlaying]);
 
   // Prev Track
   const handlePrevTrack = useCallback(() => {
     audio.playSfx("sfx-card-flip");
-    setActiveTrackIndex((prev) =>
-      prev === 0 ? PLAYLIST_CONTENT.tracks.length - 1 : prev - 1
-    );
+    const prevIdx =
+      activeTrackIndex === 0 ? PLAYLIST_CONTENT.tracks.length - 1 : activeTrackIndex - 1;
+    setActiveTrackIndex(prevIdx);
     setProgress(0);
-  }, [audio]);
+    if (isPlaying) {
+      setUserPlaybackOverride(true);
+      const prevTrack = PLAYLIST_CONTENT.tracks[prevIdx];
+      audio.crossfade(audio.currentTrackId, getTrackSoundtrackId(prevTrack), 600);
+    }
+  }, [audio, activeTrackIndex, isPlaying]);
 
   // Volume & Mute handlers
-  const handleVolumeChange = useCallback((newVol: number) => {
-    setVolume(newVol);
-    if (newVol > 0 && isMuted) {
-      setIsMuted(false);
-    }
-  }, [isMuted]);
+  const handleVolumeChange = useCallback(
+    (newVol: number) => {
+      audio.setVolume(newVol);
+    },
+    [audio]
+  );
 
   const handleToggleMute = useCallback(() => {
-    setIsMuted((prev) => !prev);
-  }, []);
+    audio.toggleMute();
+  }, [audio]);
 
   // Return to Selection Hub
   const handleBack = useCallback(() => {
@@ -369,10 +412,10 @@ export function PlaylistScene(props: SceneProps) {
       </header>
 
       {/* ── 3. Main Stage: Love Letter, Vinyl Turntable, Altar ── */}
-      <main className="relative z-10 w-full max-w-6xl mx-auto my-6 md:my-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-start justify-items-center">
+      <main className="relative z-10 w-full max-w-6xl mx-auto my-4 sm:my-6 md:my-10 px-1 sm:px-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-8 items-start justify-items-center">
           {/* ── Left Feature: Love Letter with Rose Petal Border ─ */}
-          <div className="playlist-left-card lg:col-span-4 w-full max-w-md">
+          <div className="playlist-left-card lg:col-span-4 w-full max-w-md px-1 sm:px-0">
             <div className="relative">
               <RosePetalBorder />
               <PaperCard
@@ -410,7 +453,7 @@ export function PlaylistScene(props: SceneProps) {
           </div>
 
           {/* ── Center Feature: Vinyl Player & Playback Bar ─────── */}
-          <div className="playlist-center-turntable lg:col-span-4 w-full flex flex-col items-center justify-center gap-6">
+          <div className="playlist-center-turntable lg:col-span-4 w-full max-w-md flex flex-col items-center justify-center gap-4 sm:gap-6 px-1 sm:px-0">
             <VinylPlayer
               track={activeTrack}
               isPlaying={isPlaying}
@@ -421,23 +464,23 @@ export function PlaylistScene(props: SceneProps) {
             <AudioControls
               track={activeTrack}
               isPlaying={isPlaying}
-              isMuted={isMuted}
-              volume={volume}
+              isMuted={audio.isMuted}
+              volume={audio.volume}
               progress={progress}
               onTogglePlay={handleTogglePlay}
               onNextTrack={handleNextTrack}
               onPrevTrack={handlePrevTrack}
               onToggleMute={handleToggleMute}
               onVolumeChange={handleVolumeChange}
-              onSeek={(newProg) => setProgress(newProg)}
+              onSeek={handleSeek}
               className="w-full"
             />
           </div>
 
           {/* ── Right Feature: Photographic Altar & Track List ─── */}
-          <div className="playlist-right-altar lg:col-span-4 w-full max-w-md flex flex-col items-center gap-6">
+          <div className="playlist-right-altar lg:col-span-4 w-full max-w-md flex flex-col items-center gap-5 sm:gap-6 px-1 sm:px-0">
             {/* Gilded Baroque Photo Altar */}
-            <div className="relative w-52 sm:w-60 drop-shadow-[0_12px_28px_rgba(0,0,0,0.7)]">
+            <div className="relative w-44 sm:w-56 drop-shadow-[0_12px_28px_rgba(0,0,0,0.7)]">
               <PhotoFrame
                 variant="filigree"
                 rotation={-2}
@@ -446,11 +489,11 @@ export function PlaylistScene(props: SceneProps) {
                 date={PLAYLIST_CONTENT.photoAltar.date}
                 className="w-full"
               >
-                <div className="relative w-full h-full min-h-[170px] bg-gradient-to-br from-[#24140b] via-[#160b06] to-[#0a0503] flex flex-col items-center justify-center p-2 overflow-hidden">
+                <div className="relative w-full h-full min-h-[160px] sm:min-h-[170px] bg-gradient-to-br from-[#24140b] via-[#160b06] to-[#0a0503] flex flex-col items-center justify-center p-2 overflow-hidden">
                   <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
                   <div className="absolute inset-0 shadow-[inset_0_0_18px_rgba(201,144,74,0.35)] pointer-events-none z-20" />
                   {PLAYLIST_CONTENT.photoAltar.photoSrc ? (
-                    <Image
+                    <CinematicImage
                       src={PLAYLIST_CONTENT.photoAltar.photoSrc}
                       alt={PLAYLIST_CONTENT.photoAltar.photoAlt}
                       fill

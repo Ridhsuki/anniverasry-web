@@ -8,10 +8,9 @@
 "use client";
 
 import { gsap } from "gsap";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { PaperCard } from "@/components/ui/PaperCard";
+import { CinematicImage, PaperCard } from "@/components/ui";
 import type { GalleryPhotoItem } from "@/data/gallery";
 import { useGSAP } from "@/hooks/useGSAP";
 import { cn } from "@/utils";
@@ -183,7 +182,7 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
           {/* Enlarged Photo Container */}
           <div className="relative w-full aspect-[4/3] rounded-xs overflow-hidden bg-[#160b06] shadow-inner mb-4">
             {!imageError && photo.src ? (
-              <Image
+              <CinematicImage
                 src={photo.src}
                 alt={photo.alt}
                 fill

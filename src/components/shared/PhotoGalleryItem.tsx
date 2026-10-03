@@ -7,10 +7,9 @@
 
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
-import { PhotoFrame } from "@/components/ui";
+import { CinematicImage, PhotoFrame } from "@/components/ui";
 import type { GalleryPhotoItem } from "@/data/gallery";
 import { cn } from "@/utils";
 
@@ -105,7 +104,7 @@ export function PhotoGalleryItem({
 
           {!imageError && photo.src ? (
             // Photographic memory image
-            <Image
+            <CinematicImage
               src={photo.src}
               alt={photo.alt}
               fill
