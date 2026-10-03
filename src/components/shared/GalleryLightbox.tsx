@@ -199,30 +199,33 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
             )}
           </div>
 
-          {/* Title & Date */}
-          <div className="lightbox-meta-item flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
-            <h3 className="font-serif text-xl sm:text-2xl text-[#2a1708] font-bold">
-              {photo.caption}
-            </h3>
-            <span className="font-serif text-xs text-[#6e3712] tracking-wider uppercase font-semibold">
-              {photo.date}
-            </span>
-          </div>
-
-          {/* Story Narrative */}
-          {photo.storySnippet && (
-            <p className="lightbox-meta-item font-serif text-sm text-[#3d2412] leading-relaxed mb-3">
-              {photo.storySnippet}
-            </p>
-          )}
-
-          {/* Location Badge */}
-          {photo.location && (
-            <div className="lightbox-meta-item flex items-center gap-1.5 text-xs text-[#8c4918] font-sans">
-              <LocationPinIcon className="text-[#8c4918]" />
-              <span className="tracking-wide font-medium">{photo.location}</span>
+          {/* Metadata & Narrative Content Inner Container with breathing room */}
+          <div className="paper-content-inner px-1.5 sm:px-3 pt-1">
+            {/* Title & Date */}
+            <div className="lightbox-meta-item flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
+              <h3 className="font-serif text-xl sm:text-2xl text-[#2a1708] font-bold">
+                {photo.caption}
+              </h3>
+              <span className="font-serif text-xs text-[#6e3712] tracking-wider uppercase font-semibold">
+                {photo.date}
+              </span>
             </div>
-          )}
+
+            {/* Story Narrative */}
+            {photo.storySnippet && (
+              <p className="lightbox-meta-item font-serif text-sm text-[#3d2412] leading-[1.8] mb-3">
+                {photo.storySnippet}
+              </p>
+            )}
+
+            {/* Location Badge */}
+            {photo.location && (
+              <div className="lightbox-meta-item flex items-center gap-1.5 text-xs text-[#8c4918] font-sans pb-1">
+                <LocationPinIcon className="text-[#8c4918]" />
+                <span className="tracking-wide font-medium">{photo.location}</span>
+              </div>
+            )}
+          </div>
         </PaperCard>
       </div>
     </div>

@@ -72,60 +72,63 @@ export function LetterPaper({
         className="pointer-events-none absolute inset-3.5 sm:inset-5 border border-[#d9a85f]/15 rounded-xs"
       />
 
-      {/* ── 3. Embedded Corner Keepsake Polaroid Photo ────────── */}
-      <div className="sm:float-right mx-auto sm:mx-0 sm:ml-6 mb-5 w-28 sm:w-36 md:w-40 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] flex justify-center">
-        <PhotoFrame
-          variant="polaroid"
-          rotation={photo.rotation}
-          aspectRatio="portrait"
-          tapeStyle="top-center"
-          caption={photo.caption}
-          date={photo.date}
-          className="w-full"
-        >
-          <div className="relative w-full h-full min-h-[110px] sm:min-h-[130px] bg-gradient-to-br from-[#2a1710] to-[#0a0503] flex flex-col items-center justify-center p-2 text-center overflow-hidden">
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
-            <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)] pointer-events-none z-20" />
-            {photo.src ? (
-              <CinematicImage
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                sizes="180px"
-                loading="lazy"
-                quality={85}
-                className="relative z-10 w-full h-full object-cover rounded-xs"
-              />
-            ) : (
-              <>
-                <span className="text-gold/80 text-base mb-0.5">♥</span>
-                <span className="font-handwriting text-gold text-xs sm:text-sm tracking-wide line-clamp-2">
-                  {photo.caption}
-                </span>
-              </>
-            )}
-          </div>
-        </PhotoFrame>
+      {/* ── 3. Inner Editorial Content Stage ─────────────────── */}
+      <div className="paper-content-inner px-1.5 sm:px-4 md:px-6">
+        {/* Embedded Corner Keepsake Polaroid Photo */}
+        <div className="sm:float-right mx-auto sm:mx-0 sm:ml-6 mb-5 w-28 sm:w-36 md:w-40 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] flex justify-center">
+          <PhotoFrame
+            variant="polaroid"
+            rotation={photo.rotation}
+            aspectRatio="portrait"
+            tapeStyle="top-center"
+            caption={photo.caption}
+            date={photo.date}
+            className="w-full"
+          >
+            <div className="relative w-full h-full min-h-[110px] sm:min-h-[130px] bg-gradient-to-br from-[#2a1710] to-[#0a0503] flex flex-col items-center justify-center p-2 text-center overflow-hidden">
+              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
+              <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)] pointer-events-none z-20" />
+              {photo.src ? (
+                <CinematicImage
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="180px"
+                  loading="lazy"
+                  quality={85}
+                  className="relative z-10 w-full h-full object-cover rounded-xs"
+                />
+              ) : (
+                <>
+                  <span className="text-gold/80 text-base mb-0.5">♥</span>
+                  <span className="font-handwriting text-gold text-xs sm:text-sm tracking-wide line-clamp-2">
+                    {photo.caption}
+                  </span>
+                </>
+              )}
+            </div>
+          </PhotoFrame>
+        </div>
+
+        {/* Handwritten Salutation */}
+        <header className="relative z-10 mb-6 sm:mb-8">
+          <h2 className="letter-greeting font-handwriting text-2xl sm:text-3xl md:text-4xl text-[#3b180d] font-normal leading-tight tracking-wide drop-shadow-xs">
+            {greeting}
+          </h2>
+        </header>
+
+        {/* Letter Paragraphs Flow */}
+        <section className="relative z-10 flex flex-col gap-4 sm:gap-6 font-serif text-sm sm:text-base leading-[1.9] sm:leading-[2.1] text-[#331c0e] text-justify tracking-wide opacity-95">
+          {paragraphs.map((p, idx) => (
+            <p key={idx} className="letter-paragraph indent-5 sm:indent-8">
+              {p}
+            </p>
+          ))}
+        </section>
+
+        {/* Children Slot (SignatureBlock & Closing) */}
+        <div className="relative z-10 mt-8 sm:mt-10 clear-both">{children}</div>
       </div>
-
-      {/* ── 4. Handwritten Salutation ─────────────────────────── */}
-      <header className="relative z-10 mb-6 sm:mb-8">
-        <h2 className="letter-greeting font-handwriting text-2xl sm:text-3xl md:text-4xl text-[#3b180d] font-normal leading-tight tracking-wide drop-shadow-xs">
-          {greeting}
-        </h2>
-      </header>
-
-      {/* ── 5. Letter Paragraphs Flow ─────────────────────────── */}
-      <section className="relative z-10 flex flex-col gap-4 sm:gap-6 font-serif text-sm sm:text-base leading-[1.8] sm:leading-[1.9] text-[#331c0e] text-justify tracking-wide opacity-95">
-        {paragraphs.map((p, idx) => (
-          <p key={idx} className="letter-paragraph indent-6 sm:indent-8">
-            {p}
-          </p>
-        ))}
-      </section>
-
-      {/* ── 6. Children Slot (SignatureBlock & Closing) ───────── */}
-      <div className="relative z-10 mt-8 sm:mt-10 clear-both">{children}</div>
     </article>
   );
 }

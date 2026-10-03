@@ -277,7 +277,7 @@ export function IntroScene(props: SceneProps) {
         ease: "power2.out",
       });
 
-      // 2. Typographic headline dramatic expansion (paper stays stable in place)
+      // 2. Typographic headline dramatic reveal (paper remains completely static in envelope)
       dramaticReveal(".intro-headline-text", {
         duration: 1.5,
         delay: 0.3,
@@ -285,10 +285,10 @@ export function IntroScene(props: SceneProps) {
         trackingEnd: "0.02em",
       });
 
-      // 3. Subtle upward fade-in for letter text elements
+      // 3. Pure opacity fade-in for letter text elements (strictly static, zero movement)
       reveal(".intro-letter-body", {
         direction: "up",
-        distance: 12,
+        distance: 0,
         duration: 1.0,
         delay: 0.45,
         stagger: 0.1,

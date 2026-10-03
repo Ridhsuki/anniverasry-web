@@ -161,6 +161,17 @@ export function PlaylistScene(props: SceneProps) {
   const activeTrack = PLAYLIST_CONTENT.tracks[activeTrackIndex] ?? PLAYLIST_CONTENT.tracks[0];
   const isPlaying = isPlaylistPlaying;
 
+  // Preload all playlist soundtracks on mount for instant zero-latency playback
+  useEffect(() => {
+    PLAYLIST_CONTENT.tracks.forEach((t) => {
+      const trackId = getTrackSoundtrackId(t);
+      const howl = audioManager.getTrack(trackId);
+      if (howl && howl.state() === "unloaded") {
+        howl.load();
+      }
+    });
+  }, []);
+
   // Cleanup on unmount or scene deactivation: resume main BGM if playlist track was playing
   useEffect(() => {
     return () => {
@@ -210,6 +221,7 @@ export function PlaylistScene(props: SceneProps) {
 
   // Toggle Play / Pause with actual audio playback & continuous main BGM handover
   const handleTogglePlay = useCallback(() => {
+    audio.unlockAudio();
     const next = !isPlaylistPlaying;
     setIsPlaylistPlaying(next);
     const targetId = getTrackSoundtrackId(activeTrack);
@@ -227,6 +239,7 @@ export function PlaylistScene(props: SceneProps) {
   // Select Track with real crossfade audio
   const handleSelectTrack = useCallback(
     (track: PlaylistTrack) => {
+      audio.unlockAudio();
       const idx = PLAYLIST_CONTENT.tracks.findIndex((t) => t.id === track.id);
       if (idx !== -1) {
         setActiveTrackIndex(idx);
@@ -243,6 +256,7 @@ export function PlaylistScene(props: SceneProps) {
 
   // Next Track
   const handleNextTrack = useCallback(() => {
+    audio.unlockAudio();
     audio.playSfx("sfx-card-flip");
     const nextIdx = (activeTrackIndex + 1) % PLAYLIST_CONTENT.tracks.length;
     setActiveTrackIndex(nextIdx);
@@ -255,6 +269,7 @@ export function PlaylistScene(props: SceneProps) {
 
   // Prev Track
   const handlePrevTrack = useCallback(() => {
+    audio.unlockAudio();
     audio.playSfx("sfx-card-flip");
     const prevIdx =
       activeTrackIndex === 0 ? PLAYLIST_CONTENT.tracks.length - 1 : activeTrackIndex - 1;
@@ -416,14 +431,16 @@ export function PlaylistScene(props: SceneProps) {
           </p>
         </div>
 
-        {/* Rectangular-Pill "BACK ◂" Button with Gold Inset Border */}
+        {/* Minimalist Cinematic Gold "BACK ◂" Button with min 44px touch target */}
         <button
           type="button"
           aria-label="Back to selection hub"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.65rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3.5 sm:px-5 md:px-6 py-2 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="group relative shrink-0 inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 font-serif text-xs sm:text-sm font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase text-gold hover:text-[#fff9eb] transition-all duration-300 active:scale-95 cursor-pointer bg-transparent border-0 shadow-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 focus-visible:rounded-xs"
         >
-          {PLAYLIST_CONTENT.backButtonLabel}
+          <span className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+            {PLAYLIST_CONTENT.backButtonLabel}
+          </span>
         </button>
       </header>
 
@@ -441,28 +458,30 @@ export function PlaylistScene(props: SceneProps) {
                 padding="md"
                 className="w-full bg-gradient-to-b from-[#fdf8f0] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/40 text-[#2d1f10]"
               >
-                <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
-                  <span className="font-serif text-xs tracking-widest text-[#783e15] uppercase font-semibold">
-                    {PLAYLIST_CONTENT.letter.title}
-                  </span>
-                  <span className="text-rose text-xs">♥</span>
-                </div>
+                <div className="paper-content-inner px-2.5 sm:px-4 md:px-5 py-1">
+                  <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
+                    <span className="font-serif text-xs tracking-widest text-[#783e15] uppercase font-semibold">
+                      {PLAYLIST_CONTENT.letter.title}
+                    </span>
+                    <span className="text-rose text-xs">♥</span>
+                  </div>
 
-                <p className="font-handwriting text-lg sm:text-xl text-[#4a1c0d] font-medium leading-snug mb-3">
-                  &ldquo;{PLAYLIST_CONTENT.letter.salutation}&rdquo;
-                </p>
+                  <p className="font-handwriting text-lg sm:text-xl text-[#4a1c0d] font-medium leading-snug mb-3">
+                    &ldquo;{PLAYLIST_CONTENT.letter.salutation}&rdquo;
+                  </p>
 
-                <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-relaxed text-justify opacity-95">
-                  {PLAYLIST_CONTENT.letter.body}
-                </p>
+                  <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-[1.85] sm:leading-[2.0] text-justify opacity-95">
+                    {PLAYLIST_CONTENT.letter.body}
+                  </p>
 
-                <div className="mt-4 pt-3 border-t border-[#c9904a]/25 flex flex-col items-end text-right">
-                  <span className="font-handwriting text-sm sm:text-base text-[#6b3512] italic">
-                    {PLAYLIST_CONTENT.letter.closing}
-                  </span>
-                  <span className="font-serif text-[0.65rem] sm:text-xs text-[#4a240f] tracking-wider uppercase font-semibold mt-0.5">
-                    {PLAYLIST_CONTENT.letter.signature}
-                  </span>
+                  <div className="mt-4 pt-3 border-t border-[#c9904a]/25 flex flex-col items-end text-right">
+                    <span className="font-handwriting text-sm sm:text-base text-[#6b3512] italic">
+                      {PLAYLIST_CONTENT.letter.closing}
+                    </span>
+                    <span className="font-serif text-[0.65rem] sm:text-xs text-[#4a240f] tracking-wider uppercase font-semibold mt-0.5">
+                      {PLAYLIST_CONTENT.letter.signature}
+                    </span>
+                  </div>
                 </div>
               </PaperCard>
             </div>

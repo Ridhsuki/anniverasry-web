@@ -560,7 +560,7 @@ export function SelectionScene(props: SceneProps) {
       {/* ── 3. Four Thematic Interactive Artifacts Deck ───────── */}
       <div className="relative z-10 w-full max-w-6xl mx-auto my-auto py-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3.5 sm:gap-8 lg:gap-10 items-end justify-items-center px-1 sm:px-0">
-          {SELECTION_CONTENT.artifacts.map((artifact) => {
+          {SELECTION_CONTENT.artifacts.map((artifact, index) => {
             const isSelected = selectedId === artifact.id;
 
             return (
@@ -570,15 +570,39 @@ export function SelectionScene(props: SceneProps) {
                 aria-label={artifact.ariaLabel}
                 onClick={() => handleSelectArtifact(artifact.targetScene, artifact.id)}
                 className={cn(
-                  "selection-artifact-card group relative flex flex-col items-center justify-end text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm cursor-pointer gpu-accelerated transition-transform duration-300 ease-out",
+                  "selection-artifact-card group relative flex flex-col items-center justify-end text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509] rounded-sm cursor-pointer gpu-accelerated transition-transform duration-300 ease-out p-1 sm:p-2",
                   isSelected && "scale-105"
                 )}
               >
-                {/* Subtle specular glint overlay across artifact card on hover */}
+                {/* Subtle vintage plinth with filigree corners & fine border */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -inset-2 bg-gradient-to-tr from-transparent via-gold/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"
-                />
+                  className="pointer-events-none absolute inset-x-0.5 bottom-12 top-0 rounded-md bg-gradient-to-b from-[#3a151e]/25 via-[#230910]/35 to-[#120407]/50 border border-gold/25 shadow-[0_12px_28px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-300 group-hover:border-gold/50 group-hover:shadow-[0_16px_36px_rgba(0,0,0,0.8),0_0_24px_rgba(246,201,78,0.2)]"
+                >
+                  {/* Subtle parchment fiber pattern */}
+                  <div className="absolute inset-0 bg-[radial-gradient(#c9904a_0.75px,transparent_0.75px)] [background-size:12px_12px] opacity-15 pointer-events-none" />
+
+                  {/* Ornate corner hairline notches */}
+                  <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t border-l border-gold/40" />
+                  <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t border-r border-gold/40" />
+                  <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b border-l border-gold/40" />
+                  <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b border-r border-gold/40" />
+
+                  {/* Chapter Roman Numeral Badge */}
+                  <div className="absolute top-2 left-2.5 flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                    <span className="font-serif text-[0.6rem] font-bold tracking-widest text-gold/80 uppercase">
+                      {["CH. I", "CH. II", "CH. III", "CH. IV"][index] ?? `CH. ${index + 1}`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Dynamic Specular Glint Sweep across card on hover */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0.5 bottom-12 top-0 overflow-hidden rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                >
+                  <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-[300%] transition-transform duration-1000 ease-out" />
+                </div>
 
                 {/* Vertical Light Beam aura behind each artifact */}
                 <div
@@ -608,8 +632,14 @@ export function SelectionScene(props: SceneProps) {
                   className="pointer-events-none absolute bottom-14 left-1/4 w-1.5 h-1.5 rounded-full bg-[#f5d089]/40 blur-[0.6px] animate-[pulse_3.5s_ease-in-out_infinite_0.5s]"
                 />
 
+                {/* Soft Contact Depth Shadow under Artifact */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-14 w-28 sm:w-36 h-3 bg-[radial-gradient(ellipse,_rgba(0,0,0,0.75)_0%,_transparent_75%)] blur-[2px] transition-all duration-300 group-hover:scale-90 group-hover:opacity-50"
+                />
+
                 {/* Skeuomorphic Physical Artifact Representation */}
-                <div className="transition-transform duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-105 group-active:scale-95 drop-shadow-[0_10px_25px_rgba(0,0,0,0.65)]">
+                <div className="relative z-10 transition-transform duration-300 ease-out group-hover:-translate-y-2.5 group-hover:scale-105 group-active:scale-95 drop-shadow-[0_10px_25px_rgba(0,0,0,0.65)]">
                   {artifact.id === "artifact-journey" && <CameraArtifact />}
                   {artifact.id === "artifact-moment" && <PocketWatchArtifact />}
                   {artifact.id === "artifact-playlist" && <VinylArtifact />}
@@ -617,7 +647,7 @@ export function SelectionScene(props: SceneProps) {
                 </div>
 
                 {/* Script Chapter Title & Underline Bar */}
-                <div className="mt-4 flex flex-col items-center">
+                <div className="relative z-10 mt-4 flex flex-col items-center">
                   <span className="font-handwriting text-2xl sm:text-3xl md:text-4xl text-[#fdf8f0] font-normal tracking-wide transition-colors duration-300 group-hover:text-gold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
                     {artifact.label}
                   </span>

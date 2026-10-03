@@ -105,11 +105,11 @@ export const PhotoFrame = forwardRef<HTMLDivElement, PhotoFrameProps>(
 
         {/* Caption & date slot */}
         {(caption || date) && (
-          <div className="mt-2.5 text-center">
+          <div className="mt-2.5 text-center px-2 sm:px-3">
             {caption && (
               <p
                 className={cn(
-                  "font-handwriting text-base md:text-lg leading-tight tracking-wide",
+                  "font-handwriting text-base md:text-lg leading-tight tracking-wide break-words px-1",
                   variant === "polaroid" ? "text-[#2d1f10]" : "text-[#e8c48a]"
                 )}
               >
@@ -119,7 +119,7 @@ export const PhotoFrame = forwardRef<HTMLDivElement, PhotoFrameProps>(
             {date && (
               <p
                 className={cn(
-                  "mt-0.5 text-[0.65rem] tracking-widest uppercase font-sans opacity-70",
+                  "mt-0.5 text-[0.65rem] tracking-widest uppercase font-sans opacity-70 break-words",
                   variant === "polaroid" ? "text-[#5c4020]" : "text-[#c4a06e]"
                 )}
               >

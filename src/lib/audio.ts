@@ -35,6 +35,7 @@ export interface AudioManagerState {
 // ── AudioManager Singleton ─────────────────────────────────────
 class AudioManager {
   private tracks: Map<string, Howl> = new Map();
+  private trackVolumes: Map<string, number> = new Map();
   private currentTrackId: string | null = null;
   private pausedMainBgmTrackId: string | null = null;
   private _isMuted: boolean = false;
@@ -53,6 +54,7 @@ class AudioManager {
     const isSfx = track.id.startsWith("sfx-");
     const useHtml5 = track.html5 ?? !isSfx;
     const shouldPreload = track.preload ?? false;
+    const targetVolume = track.volume ?? this._volume;
 
     // Multi-source array in Howler is strictly intended for format negotiation (e.g. webm, mp3).
     // Deduplicate identical file extensions to ensure Howler does not combine duplicate URLs.
@@ -70,7 +72,7 @@ class AudioManager {
     const howl = new Howl({
       src: sanitizedSrc.length > 0 ? sanitizedSrc : track.src,
       loop: track.loop ?? false,
-      volume: track.volume ?? this._volume,
+      volume: targetVolume,
       autoplay: false,
       preload: shouldPreload,
       html5: useHtml5,
@@ -85,6 +87,7 @@ class AudioManager {
     });
 
     this.tracks.set(track.id, howl);
+    this.trackVolumes.set(track.id, targetVolume);
   }
 
   /**
@@ -113,6 +116,13 @@ class AudioManager {
       howl.load();
     }
 
+    // Restore volume if track was previously faded out to 0
+    const defaultVol = this.trackVolumes.get(trackId) ?? this._volume;
+    const currentVol = howl.volume() as number;
+    if (typeof currentVol === "number" && currentVol <= 0.05) {
+      howl.volume(defaultVol);
+    }
+
     // Switch tracks: if switching away from main BGM, pause it instead of stopping,
     // preserving its exact seek position for later resumption.
     if (this.currentTrackId && this.currentTrackId !== trackId) {
@@ -126,6 +136,16 @@ class AudioManager {
     this.currentTrackId = trackId;
     if (trackId === MAIN_BGM_TRACK_ID) {
       this.pausedMainBgmTrackId = null;
+    }
+
+    howl.off("fade");
+
+    if (howl.state() === "loading") {
+      howl.once("load", () => {
+        if (this.currentTrackId === trackId && !howl.playing()) {
+          howl.play();
+        }
+      });
     }
 
     if (!howl.playing()) {
@@ -142,7 +162,12 @@ class AudioManager {
   stop(trackId?: string): void {
     const id = trackId ?? this.currentTrackId;
     if (!id) return;
-    this.tracks.get(id)?.stop();
+    const howl = this.tracks.get(id);
+    if (!howl) return;
+    howl.off("fade");
+    howl.stop();
+    const defaultVol = this.trackVolumes.get(id) ?? this._volume;
+    howl.volume(defaultVol);
     if (id === this.currentTrackId) {
       this.currentTrackId = null;
     }
@@ -207,7 +232,8 @@ class AudioManager {
       howl.load();
     }
     const currentVol = howl.playing() ? (howl.volume() as number) : 0;
-    const targetVol = targetVolume !== undefined ? targetVolume : this._volume;
+    const targetVol =
+      targetVolume !== undefined ? targetVolume : (this.trackVolumes.get(trackId) ?? this._volume);
     if (!howl.playing()) {
       howl.volume(0);
       howl.play();
@@ -224,6 +250,8 @@ class AudioManager {
     howl.once("fade", () => {
       if ((howl.volume() as number) === 0) {
         howl.stop();
+        const defaultVol = this.trackVolumes.get(trackId) ?? this._volume;
+        howl.volume(defaultVol);
       }
     });
   }
@@ -242,7 +270,8 @@ class AudioManager {
       }
     }
     this.currentTrackId = toTrackId;
-    this.fadeIn(toTrackId, durationMs, targetVolume);
+    const targetVol = targetVolume ?? this.trackVolumes.get(toTrackId) ?? this._volume;
+    this.fadeIn(toTrackId, durationMs, targetVol);
   }
 
   playSfx(sfxId: string): void {

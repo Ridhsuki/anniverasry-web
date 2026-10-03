@@ -182,14 +182,16 @@ export function FinalLetterScene(props: SceneProps) {
           </p>
         </div>
 
-        {/* Top Right "BACK ◂" Button */}
+        {/* Top Right Minimalist Cinematic Gold "BACK ◂" Button */}
         <button
           type="button"
           aria-label="Back to gift keepsake"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.65rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3.5 sm:px-5 md:px-6 py-2 sm:py-2.5 min-h-[44px] min-w-[44px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="group relative shrink-0 inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-3 sm:px-4 py-2 font-serif text-xs sm:text-sm font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase text-gold hover:text-[#fff9eb] transition-all duration-300 active:scale-95 cursor-pointer bg-transparent border-0 shadow-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/60 focus-visible:rounded-xs"
         >
-          {FINAL_LETTER_CONTENT.backButtonLabel}
+          <span className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+            {FINAL_LETTER_CONTENT.backButtonLabel}
+          </span>
         </button>
       </header>
 

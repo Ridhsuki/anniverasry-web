@@ -94,97 +94,99 @@ export function TimelineItem({
             padding="sm"
             className="w-full border-[#c9904a]/35"
           >
-            {/* Header: Chapter Tag & Date */}
-            <div className="flex items-center justify-between border-b border-[#c9904a]/25 pb-2.5 mb-3">
-              <span className="font-serif text-[0.65rem] sm:text-xs tracking-widest text-[#783e15] font-semibold uppercase px-2 py-0.5 rounded-xs bg-[#c9904a]/15 border border-[#c9904a]/30">
-                {milestone.chapter}
-              </span>
-              <span className="font-serif text-[0.7rem] sm:text-xs tracking-wider text-[#54290e] font-medium">
-                {milestone.date}
-              </span>
-            </div>
-
-            {/* Layout: Content + Photograph */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
-              {/* Photo Frame Container */}
-              <div className="w-full sm:w-40 md:w-44 shrink-0 mx-auto sm:mx-0">
-                <PhotoFrame
-                  variant={milestone.photo.frameVariant}
-                  rotation={milestone.photo.rotation}
-                  aspectRatio={milestone.photo.aspectRatio}
-                  tapeStyle={milestone.photo.tapeStyle}
-                  caption={milestone.photo.caption}
-                  date={milestone.photo.date}
-                  className="w-full shadow-md"
-                >
-                  <div className="relative w-full h-full min-h-[130px] sm:min-h-[140px] bg-gradient-to-br from-[#2a1710] via-[#1a0e08] to-[#0d0704] flex flex-col items-center justify-center p-2.5 overflow-hidden">
-                    {/* Background Vintage Texture */}
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
-                    <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)]" />
-
-                    {!imageError && milestone.photo.src ? (
-                      // Next/Image with graceful fallback on error
-                      <CinematicImage
-                        src={milestone.photo.src}
-                        alt={milestone.photo.alt}
-                        fill
-                        sizes="(max-width: 640px) 100vw, 180px"
-                        loading="lazy"
-                        quality={85}
-                        onError={() => setImageError(true)}
-                        className="relative z-10 w-full h-full object-cover rounded-xs"
-                      />
-                    ) : (
-                      /* Artistic Skeuomorphic Photographic Fallback */
-                      <div className="relative z-10 flex flex-col items-center gap-1 text-center p-2">
-                        <span className="text-gold/70 text-base">✦</span>
-                        <span className="font-handwriting text-gold/80 text-xs sm:text-sm tracking-wide line-clamp-2">
-                          {milestone.photo.alt}
-                        </span>
-                        <span className="font-sans text-[0.55rem] text-gold/50 tracking-widest uppercase">
-                          {milestone.photo.date ?? milestone.date}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </PhotoFrame>
+            <div className="paper-content-inner px-1 sm:px-2 py-0.5">
+              {/* Header: Chapter Tag & Date */}
+              <div className="flex items-center justify-between border-b border-[#c9904a]/25 pb-2.5 mb-3">
+                <span className="font-serif text-[0.65rem] sm:text-xs tracking-widest text-[#783e15] font-semibold uppercase px-2 py-0.5 rounded-xs bg-[#c9904a]/15 border border-[#c9904a]/30">
+                  {milestone.chapter}
+                </span>
+                <span className="font-serif text-[0.7rem] sm:text-xs tracking-wider text-[#54290e] font-medium">
+                  {milestone.date}
+                </span>
               </div>
 
-              {/* Memory Story Details */}
-              <div className="flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-serif text-lg sm:text-xl md:text-2xl text-[#2a1708] font-bold tracking-tight leading-snug">
-                    {milestone.title}
-                  </h3>
-                  <p className="font-handwriting text-base sm:text-lg text-rose/90 mt-0.5">
-                    {milestone.subtitle}
-                  </p>
-                  <p className="font-serif text-xs sm:text-sm text-[#3d2412] leading-relaxed mt-2.5 opacity-90">
-                    {milestone.description}
-                  </p>
+              {/* Layout: Content + Photograph */}
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
+                {/* Photo Frame Container */}
+                <div className="w-full sm:w-40 md:w-44 shrink-0 mx-auto sm:mx-0">
+                  <PhotoFrame
+                    variant={milestone.photo.frameVariant}
+                    rotation={milestone.photo.rotation}
+                    aspectRatio={milestone.photo.aspectRatio}
+                    tapeStyle={milestone.photo.tapeStyle}
+                    caption={milestone.photo.caption}
+                    date={milestone.photo.date}
+                    className="w-full shadow-md"
+                  >
+                    <div className="relative w-full h-full min-h-[130px] sm:min-h-[140px] bg-gradient-to-br from-[#2a1710] via-[#1a0e08] to-[#0d0704] flex flex-col items-center justify-center p-2.5 overflow-hidden">
+                      {/* Background Vintage Texture */}
+                      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_16px_rgba(201,144,74,0.3)]" />
+
+                      {!imageError && milestone.photo.src ? (
+                        // Next/Image with graceful fallback on error
+                        <CinematicImage
+                          src={milestone.photo.src}
+                          alt={milestone.photo.alt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 180px"
+                          loading="lazy"
+                          quality={85}
+                          onError={() => setImageError(true)}
+                          className="relative z-10 w-full h-full object-cover rounded-xs"
+                        />
+                      ) : (
+                        /* Artistic Skeuomorphic Photographic Fallback */
+                        <div className="relative z-10 flex flex-col items-center gap-1 text-center p-2">
+                          <span className="text-gold/70 text-base">✦</span>
+                          <span className="font-handwriting text-gold/80 text-xs sm:text-sm tracking-wide line-clamp-2">
+                            {milestone.photo.alt}
+                          </span>
+                          <span className="font-sans text-[0.55rem] text-gold/50 tracking-widest uppercase">
+                            {milestone.photo.date ?? milestone.date}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </PhotoFrame>
                 </div>
 
-                {/* Romantic song quote & tags */}
-                {milestone.quote && (
-                  <div className="mt-3.5 pt-2 border-l-2 border-[#c9904a]/60 pl-3 bg-[#c9904a]/5 py-1 rounded-r-xs">
-                    <p className="font-handwriting text-sm sm:text-base text-[#5c2409] italic">
-                      &ldquo;{milestone.quote}&rdquo;
+                {/* Memory Story Details */}
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-serif text-lg sm:text-xl md:text-2xl text-[#2a1708] font-bold tracking-tight leading-snug">
+                      {milestone.title}
+                    </h3>
+                    <p className="font-handwriting text-base sm:text-lg text-rose/90 mt-0.5">
+                      {milestone.subtitle}
+                    </p>
+                    <p className="font-serif text-xs sm:text-sm text-[#3d2412] leading-relaxed mt-2.5 opacity-90">
+                      {milestone.description}
                     </p>
                   </div>
-                )}
 
-                {milestone.tags && milestone.tags.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {milestone.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[0.6rem] font-sans tracking-wider text-[#6b3512] bg-[#e8c48a]/35 px-1.5 py-0.5 rounded-xs"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                  {/* Romantic song quote & tags */}
+                  {milestone.quote && (
+                    <div className="mt-3.5 pt-2 border-l-2 border-[#c9904a]/60 pl-3 bg-[#c9904a]/5 py-1 rounded-r-xs">
+                      <p className="font-handwriting text-sm sm:text-base text-[#5c2409] italic">
+                        &ldquo;{milestone.quote}&rdquo;
+                      </p>
+                    </div>
+                  )}
+
+                  {milestone.tags && milestone.tags.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {milestone.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[0.6rem] font-sans tracking-wider text-[#6b3512] bg-[#e8c48a]/35 px-1.5 py-0.5 rounded-xs"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </PaperCard>

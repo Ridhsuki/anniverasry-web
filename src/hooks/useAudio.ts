@@ -29,6 +29,7 @@ interface UseAudioReturn extends AudioManagerState {
   toggleMute: () => void;
   setVolume: (volume: number) => void;
   registerTrack: (track: AudioTrack) => void;
+  unlockAudio: () => void;
 }
 
 /**
@@ -122,6 +123,10 @@ export function useAudio(): UseAudioReturn {
     audioManager.registerTrack(track);
   }, []);
 
+  const unlockAudio = useCallback(() => {
+    audioManager.unlockAudio();
+  }, []);
+
   return {
     ...state,
     play,
@@ -136,5 +141,6 @@ export function useAudio(): UseAudioReturn {
     toggleMute,
     setVolume,
     registerTrack,
+    unlockAudio,
   };
 }
