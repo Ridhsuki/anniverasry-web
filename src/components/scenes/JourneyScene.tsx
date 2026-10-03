@@ -503,55 +503,55 @@ export function JourneyScene(props: SceneProps) {
         >
           <div className="paper-content-inner px-2 py-1 text-center">
             {/* Header: Date & Tag */}
-            <div className="flex items-center justify-between border-b border-[#c9904a]/25 pb-2 mb-3">
-              <span className="font-serif text-xs text-gold/90 font-semibold tracking-widest uppercase">
+            <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
+              <span className="font-serif text-xs text-[#80141e] font-bold tracking-widest uppercase">
                 {activeMobileMilestone.chapter}
               </span>
-              <span className="font-serif text-xs text-[#c9904a]/80">
+              <span className="font-serif text-xs text-[#783e15] font-semibold">
                 {activeMobileMilestone.date}
               </span>
             </div>
 
             {/* Title */}
-            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#fdf8f0] mb-1 drop-shadow-sm">
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#2d1c10] mb-1 drop-shadow-xs">
               {activeMobileMilestone.title}
             </h3>
 
             {/* Subtitle */}
             {activeMobileMilestone.subtitle && (
-              <p className="font-handwriting text-sm sm:text-base text-gold/85 mb-3">
+              <p className="font-handwriting text-sm sm:text-base text-[#80141e] mb-3">
                 ❦ {activeMobileMilestone.subtitle}
               </p>
             )}
 
             {/* Story description */}
-            <p className="font-serif text-xs sm:text-sm text-[#f4e4cf]/95 leading-relaxed mb-4 text-left sm:text-center">
+            <p className="font-serif text-xs sm:text-sm text-[#331c0e] leading-relaxed mb-4 text-left sm:text-center">
               {activeMobileMilestone.description}
             </p>
 
             {/* Romantic quote if present */}
             {activeMobileMilestone.quote && (
-              <p className="italic font-serif text-[0.75rem] text-gold/75 border-t border-[#c9904a]/20 pt-2 mb-3">
+              <p className="italic font-serif text-[0.75rem] text-[#61361b] border-t border-[#c9904a]/30 pt-2 mb-3">
                 &ldquo;{activeMobileMilestone.quote}&rdquo;
               </p>
             )}
 
             {/* Card Prev/Next Controls */}
-            <div className="flex items-center justify-between w-full pt-3 border-t border-[#c9904a]/20">
+            <div className="flex items-center justify-between w-full pt-3 border-t border-[#c9904a]/30">
               <button
                 type="button"
                 onClick={prevMobileMilestone}
-                className="px-3 py-1.5 rounded-sm bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
+                className="px-3.5 py-1.5 rounded-sm bg-[#2b1016] border border-[#c9904a]/50 text-[#fde68a] text-xs font-serif hover:bg-[#380e18] active:scale-95 transition-all shadow-xs cursor-pointer"
               >
                 ‹ Sebelumnya
               </button>
-              <span className="font-serif text-xs text-gold/75 font-semibold">
+              <span className="font-serif text-xs text-[#5c3016] font-semibold">
                 {mobileMilestoneIndex + 1} / {JOURNEY_CONTENT.milestones.length}
               </span>
               <button
                 type="button"
                 onClick={nextMobileMilestone}
-                className="px-3 py-1.5 rounded-sm bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
+                className="px-3.5 py-1.5 rounded-sm bg-[#2b1016] border border-[#c9904a]/50 text-[#fde68a] text-xs font-serif hover:bg-[#380e18] active:scale-95 transition-all shadow-xs cursor-pointer"
               >
                 Selanjutnya ›
               </button>
@@ -730,7 +730,7 @@ export function JourneyScene(props: SceneProps) {
       </section>
 
       {/* ── 5. Bottom Navigation Action Footer ────────────────── */}
-      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-8 mb-4 sm:mb-6 pb-[max(2.25rem,calc(env(safe-area-inset-bottom)+1rem))]">
         <button
           type="button"
           aria-label="Advance to the Moments photo gallery"

@@ -114,8 +114,8 @@ class AudioManager {
 
     const isSfx = trackId.startsWith("sfx-");
     const defaultVol = this.trackVolumes.get(trackId) ?? this._volume;
-    // SFX plays immediately without fading; musical tracks swell gently over 600ms by default
-    const effectiveFade = isSfx ? 0 : (fadeDurationMs ?? 600);
+    // SFX plays immediately without fading; musical tracks swell gently over 800ms by default
+    const effectiveFade = isSfx ? 0 : (fadeDurationMs ?? 800);
 
     // If the requested track is already active and playing, simply ensure target volume and return
     if (this.currentTrackId === trackId && howl.playing()) {
@@ -128,18 +128,27 @@ class AudioManager {
       howl.load();
     }
 
-    // Switch tracks: if switching away from main BGM, pause it cleanly,
-    // preserving its exact seek position. If switching from any other track, stop it.
+    // Switch tracks: smoothly fade out previous track instead of hard-cutting
     if (this.currentTrackId && this.currentTrackId !== trackId) {
-      if (this.currentTrackId === MAIN_BGM_TRACK_ID) {
-        const mainHowl = this.tracks.get(MAIN_BGM_TRACK_ID);
-        if (mainHowl) {
-          mainHowl.off("fade");
-          mainHowl.pause();
+      const prevId = this.currentTrackId;
+      const prevHowl = this.tracks.get(prevId);
+      if (prevId === MAIN_BGM_TRACK_ID) {
+        this.pauseMainBgm(400);
+      } else if (prevHowl) {
+        if (prevHowl.playing()) {
+          const cur = (prevHowl.volume() as number) || this._volume;
+          prevHowl.off("fade");
+          prevHowl.fade(cur, 0, 400);
+          prevHowl.once("fade", () => {
+            if (this.currentTrackId !== prevId) {
+              prevHowl.stop();
+              const def = this.trackVolumes.get(prevId) ?? this._volume;
+              prevHowl.volume(def);
+            }
+          });
+        } else {
+          this.stop(prevId);
         }
-        this.pausedMainBgmTrackId = MAIN_BGM_TRACK_ID;
-      } else {
-        this.stop(this.currentTrackId);
       }
     }
 
@@ -152,19 +161,28 @@ class AudioManager {
 
     const startPlayback = () => {
       if (effectiveFade > 0 && !isSfx) {
-        const startVol = Math.min(0.04, defaultVol * 0.1);
-        howl.volume(startVol);
+        howl.volume(0);
+
+        let fadeStarted = false;
+        const triggerFade = () => {
+          if (fadeStarted) return;
+          fadeStarted = true;
+          howl.off("fade");
+          howl.fade(0, defaultVol, effectiveFade);
+          howl.once("fade", () => {
+            if (!this._isMuted && this.currentTrackId === trackId) {
+              howl.volume(defaultVol);
+            }
+          });
+        };
+
+        howl.once("play", triggerFade);
         if (!howl.playing()) {
           howl.play();
         }
-        howl.fade(startVol, defaultVol, effectiveFade);
-
-        // Safety fallback: guarantee target volume is reached even if fade interval stutters
-        setTimeout(() => {
-          if (howl.playing() && !this._isMuted) {
-            howl.volume(defaultVol);
-          }
-        }, effectiveFade + 50);
+        if (howl.playing()) {
+          triggerFade();
+        }
       } else {
         howl.volume(defaultVol);
         if (!howl.playing()) {
@@ -264,11 +282,22 @@ class AudioManager {
   /**
    * Resume continuous main BGM from its exact previous seek position with a gentle swell.
    */
-  resumeMainBgm(fadeDurationMs: number = 600): void {
+  resumeMainBgm(fadeDurationMs: number = 800): void {
     const mainTrackId = this.pausedMainBgmTrackId || MAIN_BGM_TRACK_ID;
-    // Stop any temporary track (e.g. playlist vinyl track) immediately to avoid audio clashes
+    // Fade out and stop any temporary track (e.g. playlist vinyl track) smoothly
     if (this.currentTrackId && this.currentTrackId !== mainTrackId) {
-      this.stop(this.currentTrackId);
+      const tempId = this.currentTrackId;
+      const tempHowl = this.tracks.get(tempId);
+      if (tempHowl && tempHowl.playing()) {
+        const cur = (tempHowl.volume() as number) || this._volume;
+        tempHowl.off("fade");
+        tempHowl.fade(cur, 0, 400);
+        tempHowl.once("fade", () => {
+          tempHowl.stop();
+          const def = this.trackVolumes.get(tempId) ?? this._volume;
+          tempHowl.volume(def);
+        });
+      }
     }
     const howl = this.tracks.get(mainTrackId);
     if (!howl) return;
@@ -283,20 +312,28 @@ class AudioManager {
 
     const startPlayback = () => {
       if (fadeDurationMs > 0) {
-        // Start from soft quiet volume floor and gently swell to target volume
-        const startVol = Math.min(0.04, targetVol * 0.1);
-        howl.volume(startVol);
+        howl.volume(0);
+
+        let fadeStarted = false;
+        const triggerFade = () => {
+          if (fadeStarted) return;
+          fadeStarted = true;
+          howl.off("fade");
+          howl.fade(0, targetVol, fadeDurationMs);
+          howl.once("fade", () => {
+            if (!this._isMuted && this.currentTrackId === mainTrackId) {
+              howl.volume(targetVol);
+            }
+          });
+        };
+
+        howl.once("play", triggerFade);
         if (!howl.playing()) {
           howl.play();
         }
-        howl.fade(startVol, targetVol, fadeDurationMs);
-
-        // Safety fallback: guarantee target volume is reached even if fade interval stutters
-        setTimeout(() => {
-          if (howl.playing() && !this._isMuted) {
-            howl.volume(targetVol);
-          }
-        }, fadeDurationMs + 50);
+        if (howl.playing()) {
+          triggerFade();
+        }
       } else {
         howl.volume(targetVol);
         if (!howl.playing()) {

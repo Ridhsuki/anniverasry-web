@@ -251,18 +251,14 @@ export function PlaylistScene(props: SceneProps) {
     setIsPlaylistPlaying(next);
     const targetId = getTrackSoundtrackId(activeTrack);
     if (next) {
-      // If switching to a non-BGM track, pause BGM first
-      if (targetId !== MAIN_BGM_TRACK_ID) {
-        audioManager.pauseMainBgm(300);
-      }
-      audio.play(targetId, 600);
+      audio.play(targetId, 800);
       audio.playSfx("sfx-needle-drop");
     } else {
       if (targetId === MAIN_BGM_TRACK_ID) {
-        audio.pause(targetId, 300);
+        audio.pause(targetId, 400);
       } else {
-        audio.stop(targetId);
-        audio.resumeMainBgm(600);
+        audio.fadeOut(targetId, 400);
+        audio.resumeMainBgm(800);
       }
       audio.playSfx("sfx-card-flip");
     }
@@ -278,16 +274,8 @@ export function PlaylistScene(props: SceneProps) {
         setIsPlaylistPlaying(true);
         setProgress(0);
         const targetId = getTrackSoundtrackId(track);
-        // Pause main BGM if selecting a different non-BGM track
-        if (targetId !== MAIN_BGM_TRACK_ID) {
-          const state = audioManager.getState();
-          if (state.currentTrackId === MAIN_BGM_TRACK_ID) {
-            audioManager.pauseMainBgm(300);
-          } else if (state.currentTrackId && state.currentTrackId !== targetId) {
-            audioManager.stop(state.currentTrackId);
-          }
-        }
-        audio.play(targetId, 600);
+        // Play automatically crossfades out the current track and fades in the target smoothly
+        audio.play(targetId, 800);
         audio.playSfx("sfx-needle-drop");
       }
     },
@@ -304,12 +292,7 @@ export function PlaylistScene(props: SceneProps) {
     if (isPlaylistPlaying) {
       const nextTrack = PLAYLIST_CONTENT.tracks[nextIdx];
       const nextTrackId = getTrackSoundtrackId(nextTrack);
-      const state = audioManager.getState();
-      // Stop current track before playing next
-      if (state.currentTrackId && state.currentTrackId !== nextTrackId && state.currentTrackId !== MAIN_BGM_TRACK_ID) {
-        audioManager.stop(state.currentTrackId);
-      }
-      audio.play(nextTrackId);
+      audio.play(nextTrackId, 800);
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -324,12 +307,7 @@ export function PlaylistScene(props: SceneProps) {
     if (isPlaylistPlaying) {
       const prevTrack = PLAYLIST_CONTENT.tracks[prevIdx];
       const prevTrackId = getTrackSoundtrackId(prevTrack);
-      const state = audioManager.getState();
-      // Stop current track before playing prev
-      if (state.currentTrackId && state.currentTrackId !== prevTrackId && state.currentTrackId !== MAIN_BGM_TRACK_ID) {
-        audioManager.stop(state.currentTrackId);
-      }
-      audio.play(prevTrackId);
+      audio.play(prevTrackId, 800);
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -632,7 +610,7 @@ export function PlaylistScene(props: SceneProps) {
       </main>
 
       {/* ── 4. Footer & Advance CTA ──────────────────────────── */}
-      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-8 mb-4 sm:mb-6 pb-[max(2.25rem,calc(env(safe-area-inset-bottom)+1rem))]">
         <button
           type="button"
           aria-label="Advance to the gift unboxing experience"

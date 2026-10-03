@@ -57,8 +57,8 @@ export interface JourneySceneContent {
 }
 
 export const JOURNEY_CONTENT: JourneySceneContent = {
-  title: "Our Journey: Bruno Mars - 'Risk It All'",
-  subtitle: "Our Story - Journey, Moment, Playlist, Gift",
+  title: "Our Romantic Journey",
+  subtitle: "Nayyy & Keillaa • Yung Kai - 'Blue'",
   backButtonLabel: "BACK ◂",
   advanceButtonLabel: "VIEW OUR MOMENTS ❯",
   timelineHeading: "Chronicles of Our Love",
@@ -66,14 +66,14 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
   hero: {
     left: {
       headline: "Our Journey",
-      subtitle: "Bruno Mars - 'Risk It All'",
+      subtitle: "Yung Kai - 'Blue'",
       description:
         "Sebuah perjalanan rasa yang dimulai dari tatap mata sederhana, tumbuh menjadi komitmen terindah.",
       photo: {
         id: "hero-photo-couple",
         src: "/images/journey/photo-journey-hero-left.webp",
         alt: "Nayyy & Keillaa in Baroque Gilded Frame",
-        caption: "Risk It All For You",
+        caption: "Forever With You",
         date: "26-09-26",
         frameVariant: "filigree",
         aspectRatio: "portrait",
@@ -83,8 +83,8 @@ export const JOURNEY_CONTENT: JourneySceneContent = {
     },
     right: {
       soundtrackLabel: "Our Soundtrack",
-      songTitle: "Risk It All",
-      artist: "Bruno Mars",
+      songTitle: "Blue",
+      artist: "Yung Kai",
       notesDescription: "Melodi cinta yang selalu berdenting di hati kita.",
       photos: [
         {

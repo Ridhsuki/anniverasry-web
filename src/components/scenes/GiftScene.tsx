@@ -246,7 +246,7 @@ export function GiftScene(props: SceneProps) {
       </main>
 
       {/* ── 4. Bottom Footer: "tap to lanjut" CTA ─────────────── */}
-      <footer className="relative z-30 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <footer className="relative z-30 w-full max-w-md mx-auto flex flex-col items-center text-center mt-8 mb-4 sm:mb-6 pb-[max(2.25rem,calc(env(safe-area-inset-bottom)+1rem))]">
         {!isOpened ? (
           <button
             type="button"
