@@ -137,34 +137,46 @@ class AudioManager {
   }
 
   // ── Fade Controls ────────────────────────────────────────────
-  fadeIn(trackId: string, durationMs: number = 2000): void {
+  fadeIn(trackId: string, durationMs: number = 2000, targetVolume?: number): void {
     const howl = this.tracks.get(trackId);
     if (!howl) return;
+    howl.off("fade");
     if (howl.state() === "unloaded") {
       howl.load();
     }
-    howl.volume(0);
-    if (!howl.playing()) howl.play();
-    howl.fade(0, this._volume, durationMs);
+    const currentVol = howl.playing() ? (howl.volume() as number) : 0;
+    const targetVol = targetVolume !== undefined ? targetVolume : this._volume;
+    if (!howl.playing()) {
+      howl.volume(0);
+      howl.play();
+    }
+    howl.fade(currentVol, targetVol, durationMs);
   }
 
   fadeOut(trackId: string, durationMs: number = 2000): void {
     const howl = this.tracks.get(trackId);
     if (!howl) return;
-    howl.fade(howl.volume() as number, 0, durationMs);
-    howl.once("fade", () => howl.stop());
+    howl.off("fade");
+    const currentVol = howl.volume() as number;
+    howl.fade(currentVol, 0, durationMs);
+    howl.once("fade", () => {
+      if ((howl.volume() as number) === 0) {
+        howl.stop();
+      }
+    });
   }
 
   crossfade(
     fromTrackId: string | null,
     toTrackId: string,
-    durationMs: number = 1500
+    durationMs: number = 1500,
+    targetVolume?: number
   ): void {
     if (fromTrackId && fromTrackId !== toTrackId) {
       this.fadeOut(fromTrackId, durationMs);
     }
     this.currentTrackId = toTrackId;
-    this.fadeIn(toTrackId, durationMs);
+    this.fadeIn(toTrackId, durationMs, targetVolume);
   }
 
   playSfx(sfxId: string): void {

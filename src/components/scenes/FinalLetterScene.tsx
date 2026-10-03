@@ -77,9 +77,6 @@ export function FinalLetterScene(props: SceneProps) {
     () => {
       if (!isActive) return;
 
-      // Play soft paper unfold SFX on active entry
-      audio.playSfx("sfx-parchment-unfold");
-
       // 1. Headline dramatic typographic expansion
       dramaticReveal(".final-letter-title", {
         duration: 1.4,
@@ -98,7 +95,7 @@ export function FinalLetterScene(props: SceneProps) {
       reveal(".letter-paragraph", {
         direction: "up",
         distance: 20,
-        stagger: 0.16,
+        stagger: 0.12,
         duration: 1.0,
         delay: 0.4,
         ease: "power2.out",
@@ -147,7 +144,7 @@ export function FinalLetterScene(props: SceneProps) {
       aria-hidden={!isActive}
       className={cn(
         "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-14 select-none",
-        "bg-[radial-gradient(ellipse_at_center,_#4a0b16_0%,_#28030b_50%,_#0d0103_100%)]",
+        "bg-scene-stage",
         className
       )}
     >
@@ -190,7 +187,7 @@ export function FinalLetterScene(props: SceneProps) {
           type="button"
           aria-label="Back to gift keepsake"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-2 min-h-[40px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {FINAL_LETTER_CONTENT.backButtonLabel}
         </button>

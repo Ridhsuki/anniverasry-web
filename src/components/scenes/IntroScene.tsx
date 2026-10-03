@@ -321,7 +321,7 @@ export function IntroScene(props: SceneProps) {
       aria-hidden={!isActive}
       className={cn(
         "relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 py-8 md:py-12 select-none",
-        "bg-[radial-gradient(ellipse_at_center,_#4a0d18_0%,_#240409_55%,_#0d0103_100%)]",
+        "bg-scene-stage",
         className
       )}
     >
@@ -390,7 +390,12 @@ export function IntroScene(props: SceneProps) {
             />
 
             {/* ── Layer 2: Protruding Deckle-Edged Letter ── */}
-            <div className="intro-envelope-letter relative z-10 -mb-14 sm:-mb-16 px-2 sm:px-3">
+            <div
+              className={cn(
+                "intro-envelope-letter relative z-10 -mb-14 sm:-mb-16 px-2 sm:px-3 transition-transform duration-500 ease-out",
+                isOpening && "-translate-y-6 sm:-translate-y-8"
+              )}
+            >
               <PaperCard
                 variant="deckle"
                 shadow="xl"

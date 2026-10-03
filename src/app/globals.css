@@ -185,6 +185,10 @@ html:not(.lenis) {
   pointer-events: none;
 }
 
+.bg-scene-stage {
+  background: var(--gradient-scene-stage);
+}
+
 /* ── Cinematic Reveal Light Bloom ───────────────────────────── */
 @keyframes cinematicBloomExpand {
   0% {

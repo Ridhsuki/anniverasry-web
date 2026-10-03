@@ -396,7 +396,7 @@ export function SelectionScene(props: SceneProps) {
       aria-hidden={!isActive}
       className={cn(
         "relative min-h-screen w-full flex flex-col items-center justify-between overflow-hidden px-4 py-8 md:py-14 select-none",
-        "bg-[radial-gradient(ellipse_at_center,_#520f1c_0%,_#2e050c_50%,_#0d0103_100%)]",
+        "bg-scene-stage",
         className
       )}
     >

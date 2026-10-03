@@ -62,7 +62,17 @@ export function useSceneAudio(
               mapping.crossfadeDurationMs ??
               AUDIO_DEFAULTS.defaultCrossfadeDurationMs;
 
-            audio.crossfade(currentTrack, targetTrack, crossfadeDuration);
+            const targetVolume =
+              mapping.volumeMultiplier !== undefined
+                ? audio.volume * mapping.volumeMultiplier
+                : audio.volume;
+
+            audio.crossfade(
+              currentTrack,
+              targetTrack,
+              crossfadeDuration,
+              targetVolume
+            );
           }
         }
       }

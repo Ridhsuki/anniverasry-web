@@ -15,12 +15,13 @@ interface UseAudioReturn extends AudioManagerState {
   play: (trackId: string) => void;
   pause: (trackId?: string) => void;
   stop: (trackId?: string) => void;
-  fadeIn: (trackId: string, durationMs?: number) => void;
+  fadeIn: (trackId: string, durationMs?: number, targetVolume?: number) => void;
   fadeOut: (trackId: string, durationMs?: number) => void;
   crossfade: (
     fromTrackId: string | null,
     toTrackId: string,
-    durationMs?: number
+    durationMs?: number,
+    targetVolume?: number
   ) => void;
   playSfx: (sfxId: string) => void;
   toggleMute: () => void;
@@ -68,8 +69,8 @@ export function useAudio(): UseAudioReturn {
     setState(audioManager.getState());
   }, []);
 
-  const fadeIn = useCallback((trackId: string, durationMs?: number) => {
-    audioManager.fadeIn(trackId, durationMs);
+  const fadeIn = useCallback((trackId: string, durationMs?: number, targetVolume?: number) => {
+    audioManager.fadeIn(trackId, durationMs, targetVolume);
     setState(audioManager.getState());
   }, []);
 
@@ -79,8 +80,13 @@ export function useAudio(): UseAudioReturn {
   }, []);
 
   const crossfade = useCallback(
-    (fromTrackId: string | null, toTrackId: string, durationMs?: number) => {
-      audioManager.crossfade(fromTrackId, toTrackId, durationMs);
+    (
+      fromTrackId: string | null,
+      toTrackId: string,
+      durationMs?: number,
+      targetVolume?: number
+    ) => {
+      audioManager.crossfade(fromTrackId, toTrackId, durationMs, targetVolume);
       setState(audioManager.getState());
     },
     []

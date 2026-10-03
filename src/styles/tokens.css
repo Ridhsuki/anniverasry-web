@@ -322,6 +322,13 @@
   --blur-glass:  blur(16px) saturate(180%);
 
   /* Vignette / overlay gradients */
+  --gradient-scene-stage:
+    radial-gradient(ellipse at center,
+      #520f1c 0%,
+      #2b040a 52%,
+      #080808 100%
+    );
+
   --gradient-vignette:
     radial-gradient(ellipse at center,
       transparent 40%,
