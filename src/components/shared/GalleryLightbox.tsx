@@ -167,6 +167,7 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
           shadow="xl"
           hasTexture={true}
           padding="md"
+          data-paper="true"
           className="w-full bg-[#fdf8f0] border-[#c9904a]/50 text-[#1a1209] shadow-[0_25px_60px_rgba(0,0,0,0.85)]"
         >
           {/* Modal Close Button */}
@@ -200,7 +201,7 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
           </div>
 
           {/* Metadata & Narrative Content Inner Container with breathing room */}
-          <div className="paper-content-inner px-1.5 sm:px-3 pt-1">
+          <div className="paper-content-inner px-3 sm:px-6 pt-2 pb-1">
             {/* Title & Date */}
             <div className="lightbox-meta-item flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
               <h3 className="font-serif text-xl sm:text-2xl text-[#2a1708] font-bold">
@@ -213,7 +214,7 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
 
             {/* Story Narrative */}
             {photo.storySnippet && (
-              <p className="lightbox-meta-item font-serif text-sm text-[#3d2412] leading-[1.8] mb-3">
+              <p className="lightbox-meta-item font-serif text-sm text-[#3d2412] leading-[1.85] sm:leading-[2.0] text-left sm:text-justify mb-3">
                 {photo.storySnippet}
               </p>
             )}

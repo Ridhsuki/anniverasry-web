@@ -19,7 +19,7 @@ const frameVariantStyles: Record<
   gold:
     "p-3.5 bg-gradient-to-b from-[#2a1d12] via-[#1a1209] to-[#0d0d0d] border-2 border-[#d9a85f]/60 shadow-[0_4px_20px_rgba(0,0,0,0.6),0_0_15px_rgba(217,168,95,0.15)] ring-1 ring-[#fde68a]/30",
   polaroid:
-    "p-3.5 pb-7 bg-[#fdf8f0] text-[#1a1209] border border-[#e8c48a]/30 shadow-[0_4px_24px_rgba(26,18,9,0.35),0_1px_3px_rgba(0,0,0,0.2)]",
+    "p-4 pb-8 sm:p-5 sm:pb-9 bg-[#fdf8f0] text-[#1a1209] border border-[#e8c48a]/30 shadow-[0_4px_24px_rgba(26,18,9,0.35),0_1px_3px_rgba(0,0,0,0.2)]",
   classic:
     "p-2.5 bg-[#141414] border border-[#c9904a]/30 shadow-[0_4px_16px_rgba(0,0,0,0.5)]",
   filigree:
@@ -54,6 +54,7 @@ export const PhotoFrame = forwardRef<HTMLDivElement, PhotoFrameProps>(
     return (
       <div
         ref={ref}
+        data-paper={variant === "polaroid" ? "true" : undefined}
         style={{
           transform: transformStyle,
           ...style,
@@ -105,7 +106,7 @@ export const PhotoFrame = forwardRef<HTMLDivElement, PhotoFrameProps>(
 
         {/* Caption & date slot */}
         {(caption || date) && (
-          <div className="mt-2.5 text-center px-2 sm:px-3">
+          <div className="mt-3 text-center px-4 sm:px-6">
             {caption && (
               <p
                 className={cn(

@@ -1,7 +1,9 @@
 // ─────────────────────────────────────────────────────────────
 // CinematicCursor
-// Bespoke desktop custom cursor featuring a warm golden core point,
-// soft trailing ambient aura, reactive interactive-element scaling,
+// Bespoke desktop custom cursor featuring adaptive dual-tone contrast:
+// - Brilliant starlight gold aura over dark cinematic velvet backgrounds
+// - Rich royal crimson wax seal core over light aged parchment & paper cards
+// Reactive interactive-element scaling, multi-mote star dust trail,
 // and ripple burst on click.
 // Fully compliant with accessibility standards (disabled on touch
 // devices and for users with prefers-reduced-motion enabled).
@@ -15,6 +17,7 @@ export function CinematicCursor() {
   const [isEnabled, setIsEnabled] = useState(false);
 
   // Direct DOM refs to avoid React re-renders on every animation frame
+  const layerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const rippleRef = useRef<HTMLDivElement>(null);
@@ -29,6 +32,7 @@ export function CinematicCursor() {
   const mote2Pos = useRef({ x: -100, y: -100 });
   const mote3Pos = useRef({ x: -100, y: -100 });
   const isHovered = useRef(false);
+  const isOverPaper = useRef(false);
   const isClicking = useRef(false);
   const isVisible = useRef(false);
   const rafId = useRef<number | null>(null);
@@ -68,6 +72,27 @@ export function CinematicCursor() {
     // Toggle active class to hide native OS cursor exclusively on fine-pointer devices
     document.documentElement.classList.add("cinematic-cursor-active");
 
+    const checkSurface = (target: HTMLElement | null) => {
+      if (!target) return;
+
+      const interactive = target.closest(
+        'button, a, [role="button"], input, select, textarea, [data-interactive], .cursor-pointer, [tabindex="0"]'
+      );
+      isHovered.current = !!interactive;
+
+      const overPaper = target.closest(
+        '[data-paper], .paper-card, .letter-paper-sheet, .photo-frame, .paper-content-inner, [class*="bg-[#fdf"], [class*="bg-[#f9"], [class*="bg-[#f2"], [class*="bg-paper"]'
+      );
+      const nowOverPaper = !!overPaper;
+
+      if (nowOverPaper !== isOverPaper.current) {
+        isOverPaper.current = nowOverPaper;
+        if (layerRef.current) {
+          layerRef.current.classList.toggle("cursor-on-paper", nowOverPaper);
+        }
+      }
+    };
+
     // Movement handler
     const handleMouseMove = (e: MouseEvent) => {
       mousePos.current.x = e.clientX;
@@ -84,17 +109,13 @@ export function CinematicCursor() {
         mote3Pos.current.x = e.clientX;
         mote3Pos.current.y = e.clientY;
       }
+
+      checkSurface(e.target as HTMLElement | null);
     };
 
     // Hover detection on interactive elements
     const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-
-      const interactive = target.closest(
-        'button, a, [role="button"], input, select, textarea, [data-interactive], .cursor-pointer, [tabindex="0"]'
-      );
-      isHovered.current = !!interactive;
+      checkSurface(e.target as HTMLElement | null);
     };
 
     const handleMouseLeave = () => {
@@ -144,16 +165,20 @@ export function CinematicCursor() {
 
       const currentVisibility = isVisible.current ? "1" : "0";
 
-      // 1. Center Core Dot (tight tracking)
+      // 1. Center Core Dot (tight tracking with high-contrast contour)
       if (dotRef.current) {
-        const scale = isHovered.current ? (isClicking.current ? 1.1 : 1.5) : isClicking.current ? 0.8 : 1.0;
+        const scale = isHovered.current
+          ? (isClicking.current ? 1.2 : 1.45)
+          : (isClicking.current ? 0.75 : 1.0);
         dotRef.current.style.opacity = currentVisibility;
         dotRef.current.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%) scale(${scale})`;
       }
 
-      // 2. Outer Halo Ring (graceful trailing)
+      // 2. Outer Halo Ring (graceful trailing with organic interactive expansion)
       if (ringRef.current) {
-        const ringScale = isHovered.current ? (isClicking.current ? 1.3 : 1.6) : isClicking.current ? 0.85 : 1.0;
+        const ringScale = isHovered.current
+          ? (isClicking.current ? 1.25 : 1.55)
+          : (isClicking.current ? 0.85 : 1.0);
         ringRef.current.style.opacity = currentVisibility;
         ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%) scale(${ringScale})`;
       }
@@ -206,39 +231,40 @@ export function CinematicCursor() {
 
   return (
     <div
+      ref={layerRef}
       aria-hidden="true"
       className="cinematic-cursor-layer pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none"
     >
       {/* ── Multi-Mote Star Dust Trail ─────────────────────────── */}
       <div
         ref={mote3Ref}
-        className="pointer-events-none absolute top-0 left-0 w-2.5 h-2.5 rounded-full bg-[#fde047]/30 blur-[1px] will-change-transform"
+        className="cursor-mote-3 pointer-events-none absolute top-0 left-0 w-2.5 h-2.5 rounded-full blur-[1px] will-change-transform"
       />
       <div
         ref={mote2Ref}
-        className="pointer-events-none absolute top-0 left-0 w-2 h-2 rounded-full bg-[#fef08a]/45 blur-[0.7px] will-change-transform"
+        className="cursor-mote-2 pointer-events-none absolute top-0 left-0 w-2 h-2 rounded-full blur-[0.7px] will-change-transform"
       />
       <div
         ref={mote1Ref}
-        className="pointer-events-none absolute top-0 left-0 w-1.5 h-1.5 rounded-full bg-[#fffbeb]/65 blur-[0.4px] will-change-transform"
+        className="cursor-mote-1 pointer-events-none absolute top-0 left-0 w-1.5 h-1.5 rounded-full blur-[0.4px] will-change-transform"
       />
 
       {/* ── Outer Trailing Halo Ring ───────────────────────────── */}
       <div
         ref={ringRef}
-        className="pointer-events-none absolute top-0 left-0 w-8 h-8 rounded-full border border-[#f6c94e]/50 bg-[#f6c94e]/[0.06] shadow-[0_0_14px_rgba(246,201,78,0.25)] transition-[border-color,background-color] duration-200 will-change-transform"
+        className="cursor-ring pointer-events-none absolute top-0 left-0 w-8 h-8 rounded-full will-change-transform"
       />
 
-      {/* ── Core Golden Point ──────────────────────────────────── */}
+      {/* ── Core Precision Point (Adaptive Contrast) ───────────── */}
       <div
         ref={dotRef}
-        className="pointer-events-none absolute top-0 left-0 w-2 h-2 rounded-full bg-[#fde68a] shadow-[0_0_8px_rgba(246,201,78,0.95),0_0_16px_rgba(246,201,78,0.5)] transition-[background-color] duration-150 will-change-transform"
+        className="cursor-dot pointer-events-none absolute top-0 left-0 w-2.5 h-2.5 rounded-full will-change-transform"
       />
 
       {/* ── Click Ripple Ring ──────────────────────────────────── */}
       <div
         ref={rippleRef}
-        className="pointer-events-none absolute w-8 h-8 rounded-full border border-[#f6c94e]/70 opacity-0 will-change-transform"
+        className="cursor-ripple pointer-events-none absolute w-8 h-8 rounded-full border opacity-0 will-change-transform"
       />
     </div>
   );

@@ -40,9 +40,10 @@ export function GiftContentPanel({
         shadow="xl"
         hasTexture={true}
         padding="md"
+        data-paper="true"
         className="w-full bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/50 text-[#2d1f10] shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(246,201,78,0.3)]"
       >
-        <div className="paper-content-inner px-2.5 sm:px-5 md:px-6 py-1">
+        <div className="paper-content-inner px-3 sm:px-6 md:px-8 py-2">
           {/* Header Ribbon & Monogram Tag */}
           <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2.5 mb-4">
             <div className="flex items-center gap-2">
@@ -93,7 +94,7 @@ export function GiftContentPanel({
           )}
 
           {/* Body Dedication */}
-          <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-[1.85] sm:leading-[2.0] text-justify opacity-95">
+          <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-[1.9] sm:leading-[2.1] text-left sm:text-justify opacity-95">
             {GIFT_CONTENT.revealMessage.body}
           </p>
 

@@ -404,26 +404,29 @@ export function IntroScene(props: SceneProps) {
                 shadow="xl"
                 hasTexture={true}
                 padding="md"
+                data-paper="true"
                 className="w-full text-center border-[#c9904a]/40 bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] shadow-[0_16px_40px_rgba(26,18,9,0.45),0_2px_8px_rgba(0,0,0,0.2)]"
               >
-                {/* Headline: "Happy Anniversary" */}
-                <h1 className="intro-headline-text font-handwriting text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#3b1c0e] font-normal leading-tight tracking-wide drop-shadow-[0_1px_2px_rgba(201,144,74,0.3)]">
-                  {INTRO_CONTENT.headline}
-                </h1>
+                <div className="paper-content-inner px-3 sm:px-6 md:px-8 py-2 sm:py-4">
+                  {/* Headline: "Happy Anniversary" */}
+                  <h1 className="intro-headline-text font-handwriting text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-[#3b1c0e] font-normal leading-tight tracking-wide drop-shadow-[0_1px_2px_rgba(201,144,74,0.3)]">
+                    {INTRO_CONTENT.headline}
+                  </h1>
 
-                {/* Commemorative Date: 26-09-26 */}
-                <p className="intro-letter-body mt-3 font-serif text-xs sm:text-sm md:text-base tracking-[0.25em] text-[#6b3a1a] font-medium uppercase">
-                  {INTRO_CONTENT.date}
-                </p>
+                  {/* Commemorative Date: 26-09-26 */}
+                  <p className="intro-letter-body mt-2.5 sm:mt-3 font-serif text-xs sm:text-sm md:text-base tracking-[0.25em] text-[#6b3a1a] font-medium uppercase">
+                    {INTRO_CONTENT.date}
+                  </p>
 
-                {/* Dedication Text */}
-                <div className="intro-letter-body mt-4 flex flex-col items-center gap-0.5">
-                  <p className="font-handwriting text-base sm:text-lg text-[#5c3016] italic">
-                    {INTRO_CONTENT.salutation}
-                  </p>
-                  <p className="font-handwriting text-sm sm:text-base text-[#4a240f] tracking-wide">
-                    ({INTRO_CONTENT.coupleNames})
-                  </p>
+                  {/* Dedication Text */}
+                  <div className="intro-letter-body mt-3.5 sm:mt-4 flex flex-col items-center gap-0.5">
+                    <p className="font-handwriting text-base sm:text-lg text-[#5c3016] italic">
+                      {INTRO_CONTENT.salutation}
+                    </p>
+                    <p className="font-handwriting text-sm sm:text-base text-[#4a240f] tracking-wide">
+                      ({INTRO_CONTENT.coupleNames})
+                    </p>
+                  </div>
                 </div>
               </PaperCard>
             </div>

@@ -33,9 +33,9 @@ const variantClasses: Record<NonNullable<PaperCardProps["variant"]>, string> = {
 
 const paddingClasses: Record<NonNullable<PaperCardProps["padding"]>, string> = {
   none: "p-0",
-  sm: "px-4 py-3.5 sm:px-5 sm:py-4",
-  md: "px-6 py-6 sm:px-8 sm:py-7 md:px-10 md:py-8",
-  lg: "px-7 py-8 sm:px-10 sm:py-9 md:px-14 md:py-11",
+  sm: "px-5 py-4 sm:px-7 sm:py-5",
+  md: "px-6 py-6 sm:px-9 sm:py-8 md:px-12 md:py-10",
+  lg: "px-8 py-8 sm:px-12 sm:py-10 md:px-16 md:py-12",
 };
 
 export const PaperCard = forwardRef<HTMLDivElement, PaperCardProps>(
@@ -60,6 +60,7 @@ export const PaperCard = forwardRef<HTMLDivElement, PaperCardProps>(
     return (
       <div
         ref={ref}
+        data-paper="true"
         style={{
           transform: transformStyle,
           ...style,

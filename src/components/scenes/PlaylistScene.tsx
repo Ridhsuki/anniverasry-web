@@ -25,6 +25,7 @@ import {
   RoseIcon,
   RosePetalIcon,
 } from "@/components/ui";
+import { MAIN_BGM_TRACK_ID } from "@/constants/audio";
 import { useExperience } from "@/context/ExperienceContext";
 import { PLAYLIST_CONTENT, type PlaylistTrack } from "@/data/playlist";
 import { useAudio } from "@/hooks/useAudio";
@@ -172,13 +173,13 @@ export function PlaylistScene(props: SceneProps) {
     });
   }, []);
 
-  // Cleanup on unmount or scene deactivation: resume main BGM if playlist track was playing
+  // Cleanup on unmount or scene deactivation: resume main BGM if custom playlist track was playing
   useEffect(() => {
     return () => {
-      if (isPlaylistPlaying) {
-        const currentTrackId = getTrackSoundtrackId(activeTrack);
+      const currentTrackId = getTrackSoundtrackId(activeTrack);
+      if (isPlaylistPlaying && currentTrackId !== MAIN_BGM_TRACK_ID) {
         audio.stop(currentTrackId);
-        audio.resumeMainBgm(1000);
+        audio.resumeMainBgm(400);
       }
     };
   }, [isPlaylistPlaying, activeTrack, audio]);
@@ -226,17 +227,20 @@ export function PlaylistScene(props: SceneProps) {
     setIsPlaylistPlaying(next);
     const targetId = getTrackSoundtrackId(activeTrack);
     if (next) {
-      audio.pauseMainBgm(400);
       audio.play(targetId);
       audio.playSfx("sfx-needle-drop");
     } else {
-      audio.stop(targetId);
-      audio.resumeMainBgm(1000);
+      if (targetId === MAIN_BGM_TRACK_ID) {
+        audio.pause(targetId);
+      } else {
+        audio.stop(targetId);
+        audio.resumeMainBgm(400);
+      }
       audio.playSfx("sfx-card-flip");
     }
   }, [audio, activeTrack, isPlaylistPlaying]);
 
-  // Select Track with real crossfade audio
+  // Select Track with instant zero-stutter playback
   const handleSelectTrack = useCallback(
     (track: PlaylistTrack) => {
       audio.unlockAudio();
@@ -245,7 +249,6 @@ export function PlaylistScene(props: SceneProps) {
         setActiveTrackIndex(idx);
         setIsPlaylistPlaying(true);
         setProgress(0);
-        audio.pauseMainBgm(400);
         const targetId = getTrackSoundtrackId(track);
         audio.play(targetId);
         audio.playSfx("sfx-needle-drop");
@@ -263,7 +266,7 @@ export function PlaylistScene(props: SceneProps) {
     setProgress(0);
     if (isPlaylistPlaying) {
       const nextTrack = PLAYLIST_CONTENT.tracks[nextIdx];
-      audio.crossfade(audio.currentTrackId, getTrackSoundtrackId(nextTrack), 600);
+      audio.play(getTrackSoundtrackId(nextTrack));
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -277,7 +280,7 @@ export function PlaylistScene(props: SceneProps) {
     setProgress(0);
     if (isPlaylistPlaying) {
       const prevTrack = PLAYLIST_CONTENT.tracks[prevIdx];
-      audio.crossfade(audio.currentTrackId, getTrackSoundtrackId(prevTrack), 600);
+      audio.play(getTrackSoundtrackId(prevTrack));
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -295,10 +298,13 @@ export function PlaylistScene(props: SceneProps) {
 
   // Return to Selection Hub — restore main BGM if playlist was active
   const handleBack = useCallback(() => {
-    if (isPlaylistPlaying) {
+    const currentTrackId = getTrackSoundtrackId(activeTrack);
+    if (isPlaylistPlaying && currentTrackId !== MAIN_BGM_TRACK_ID) {
       setIsPlaylistPlaying(false);
-      audio.stop(getTrackSoundtrackId(activeTrack));
-      audio.resumeMainBgm(1000);
+      audio.stop(currentTrackId);
+      audio.resumeMainBgm(400);
+    } else {
+      audio.play(MAIN_BGM_TRACK_ID);
     }
     audio.playSfx("sfx-card-flip");
     if (onPrevious) {
@@ -310,10 +316,13 @@ export function PlaylistScene(props: SceneProps) {
 
   // Advance to Gift Scene — restore main BGM if playlist was active
   const handleAdvance = useCallback(() => {
-    if (isPlaylistPlaying) {
+    const currentTrackId = getTrackSoundtrackId(activeTrack);
+    if (isPlaylistPlaying && currentTrackId !== MAIN_BGM_TRACK_ID) {
       setIsPlaylistPlaying(false);
-      audio.stop(getTrackSoundtrackId(activeTrack));
-      audio.resumeMainBgm(1000);
+      audio.stop(currentTrackId);
+      audio.resumeMainBgm(400);
+    } else {
+      audio.play(MAIN_BGM_TRACK_ID);
     }
     audio.playSfx("sfx-card-flip");
     if (onNext) {
@@ -448,7 +457,7 @@ export function PlaylistScene(props: SceneProps) {
       <main className="relative z-10 w-full max-w-6xl mx-auto my-4 sm:my-6 md:my-10 px-2 sm:px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-8 items-start justify-items-center">
           {/* ── Left Feature: Love Letter with Rose Petal Border ─ */}
-          <div className="playlist-left-card lg:col-span-4 w-full max-w-md px-1 sm:px-0">
+          <div className="playlist-left-card lg:col-span-4 w-full max-w-md px-3 sm:px-0">
             <div className="relative">
               <RosePetalBorder />
               <PaperCard
@@ -456,10 +465,11 @@ export function PlaylistScene(props: SceneProps) {
                 shadow="xl"
                 hasTexture={true}
                 padding="md"
+                data-paper="true"
                 className="w-full bg-gradient-to-b from-[#fdf8f0] via-[#f9edd8] to-[#f2dbb4] border-[#c9904a]/40 text-[#2d1f10]"
               >
-                <div className="paper-content-inner px-2.5 sm:px-4 md:px-5 py-1">
-                  <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2 mb-3">
+                <div className="paper-content-inner px-3 sm:px-5 md:px-6 py-2">
+                  <div className="flex items-center justify-between border-b border-[#c9904a]/30 pb-2.5 mb-3.5">
                     <span className="font-serif text-xs tracking-widest text-[#783e15] uppercase font-semibold">
                       {PLAYLIST_CONTENT.letter.title}
                     </span>
@@ -470,11 +480,11 @@ export function PlaylistScene(props: SceneProps) {
                     &ldquo;{PLAYLIST_CONTENT.letter.salutation}&rdquo;
                   </p>
 
-                  <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-[1.85] sm:leading-[2.0] text-justify opacity-95">
+                  <p className="font-serif text-xs sm:text-sm text-[#3b1f10] leading-[1.9] sm:leading-[2.1] text-left sm:text-justify opacity-95">
                     {PLAYLIST_CONTENT.letter.body}
                   </p>
 
-                  <div className="mt-4 pt-3 border-t border-[#c9904a]/25 flex flex-col items-end text-right">
+                  <div className="mt-5 pt-3.5 border-t border-[#c9904a]/25 flex flex-col items-end text-right">
                     <span className="font-handwriting text-sm sm:text-base text-[#6b3512] italic">
                       {PLAYLIST_CONTENT.letter.closing}
                     </span>

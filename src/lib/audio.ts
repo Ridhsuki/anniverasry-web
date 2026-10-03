@@ -112,22 +112,29 @@ class AudioManager {
       return;
     }
 
+    const defaultVol = this.trackVolumes.get(trackId) ?? this._volume;
+
+    // If the requested track is already active and playing, simply ensure target volume and return
+    if (this.currentTrackId === trackId && howl.playing()) {
+      howl.off("fade");
+      howl.volume(defaultVol);
+      return;
+    }
+
     if (howl.state() === "unloaded") {
       howl.load();
     }
 
-    // Restore volume if track was previously faded out to 0
-    const defaultVol = this.trackVolumes.get(trackId) ?? this._volume;
-    const currentVol = howl.volume() as number;
-    if (typeof currentVol === "number" && currentVol <= 0.05) {
-      howl.volume(defaultVol);
-    }
-
-    // Switch tracks: if switching away from main BGM, pause it instead of stopping,
-    // preserving its exact seek position for later resumption.
+    // Switch tracks: if switching away from main BGM, pause it cleanly without lingering fades,
+    // preserving its exact seek position. If switching from any other track, stop it.
     if (this.currentTrackId && this.currentTrackId !== trackId) {
       if (this.currentTrackId === MAIN_BGM_TRACK_ID) {
-        this.pauseMainBgm(300);
+        const mainHowl = this.tracks.get(MAIN_BGM_TRACK_ID);
+        if (mainHowl) {
+          mainHowl.off("fade");
+          mainHowl.pause();
+        }
+        this.pausedMainBgmTrackId = MAIN_BGM_TRACK_ID;
       } else {
         this.stop(this.currentTrackId);
       }
@@ -139,6 +146,8 @@ class AudioManager {
     }
 
     howl.off("fade");
+    // Explicitly set target volume immediately, terminating any active Howler fade interval
+    howl.volume(defaultVol);
 
     if (howl.state() === "loading") {
       howl.once("load", () => {
@@ -176,19 +185,22 @@ class AudioManager {
   /**
    * Pause continuous main BGM without resetting seek position.
    */
-  pauseMainBgm(fadeDurationMs: number = 400): void {
+  pauseMainBgm(fadeDurationMs: number = 0): void {
     const mainTrackId = MAIN_BGM_TRACK_ID;
     const howl = this.tracks.get(mainTrackId);
     if (!howl) return;
 
     this.pausedMainBgmTrackId = mainTrackId;
+    howl.off("fade");
+
     if (howl.playing()) {
       if (fadeDurationMs > 0) {
-        howl.off("fade");
         const currentVol = (howl.volume() as number) || this._volume;
         howl.fade(currentVol, 0, fadeDurationMs);
         howl.once("fade", () => {
-          howl.pause();
+          if (this.pausedMainBgmTrackId === mainTrackId) {
+            howl.pause();
+          }
         });
       } else {
         howl.pause();
@@ -199,11 +211,11 @@ class AudioManager {
   /**
    * Resume continuous main BGM from its exact previous seek position.
    */
-  resumeMainBgm(fadeDurationMs: number = 1000): void {
+  resumeMainBgm(fadeDurationMs: number = 400): void {
     const mainTrackId = this.pausedMainBgmTrackId || MAIN_BGM_TRACK_ID;
-    // Fade out and stop any temporary track (e.g. playlist vinyl track)
+    // Stop any temporary track (e.g. playlist vinyl track) immediately to avoid audio clashes
     if (this.currentTrackId && this.currentTrackId !== mainTrackId) {
-      this.fadeOut(this.currentTrackId, 400);
+      this.stop(this.currentTrackId);
     }
     const howl = this.tracks.get(mainTrackId);
     if (!howl) return;
@@ -214,12 +226,20 @@ class AudioManager {
     if (howl.state() === "unloaded") {
       howl.load();
     }
-    if (!howl.playing()) {
-      howl.volume(0);
-      howl.play();
-      howl.fade(0, this._volume, fadeDurationMs);
+    const targetVol = this.trackVolumes.get(mainTrackId) ?? this._volume;
+    if (fadeDurationMs > 0) {
+      if (!howl.playing()) {
+        howl.volume(0);
+        howl.play();
+        howl.fade(0, targetVol, fadeDurationMs);
+      } else {
+        howl.fade(howl.volume() as number, targetVol, fadeDurationMs);
+      }
     } else {
-      howl.fade(howl.volume() as number, this._volume, fadeDurationMs);
+      howl.volume(targetVol);
+      if (!howl.playing()) {
+        howl.play();
+      }
     }
   }
 
@@ -259,19 +279,20 @@ class AudioManager {
   crossfade(
     fromTrackId: string | null,
     toTrackId: string,
-    durationMs: number = 1500,
+    durationMs: number = 1000,
     targetVolume?: number
   ): void {
     if (fromTrackId && fromTrackId !== toTrackId) {
       if (fromTrackId === MAIN_BGM_TRACK_ID) {
-        this.pauseMainBgm(Math.min(durationMs, 500));
+        this.pauseMainBgm(0);
       } else {
-        this.fadeOut(fromTrackId, durationMs);
+        this.fadeOut(fromTrackId, Math.min(durationMs, 400));
       }
     }
-    this.currentTrackId = toTrackId;
-    const targetVol = targetVolume ?? this.trackVolumes.get(toTrackId) ?? this._volume;
-    this.fadeIn(toTrackId, durationMs, targetVol);
+    this.play(toTrackId);
+    if (targetVolume !== undefined) {
+      this.tracks.get(toTrackId)?.volume(targetVolume);
+    }
   }
 
   playSfx(sfxId: string): void {

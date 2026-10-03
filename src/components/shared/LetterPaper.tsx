@@ -22,9 +22,9 @@ export interface LetterPaperProps {
 
 const letterPaddingClasses: Record<"none" | "sm" | "md" | "lg", string> = {
   none: "p-0",
-  sm: "px-5 py-5 sm:px-8 sm:py-7",
-  md: "px-7 py-7 sm:px-10 sm:py-10 md:px-14 md:py-12 lg:px-16",
-  lg: "px-8 py-9 sm:px-12 sm:py-12 md:px-16 md:py-14 lg:px-20",
+  sm: "px-6 py-6 sm:px-10 sm:py-8",
+  md: "px-6 py-8 sm:px-12 sm:py-12 md:px-16 md:py-14 lg:px-20",
+  lg: "px-8 py-10 sm:px-14 sm:py-14 md:px-20 md:py-16 lg:px-24",
 };
 
 export function LetterPaper({
@@ -37,6 +37,7 @@ export function LetterPaper({
 }: LetterPaperProps) {
   return (
     <article
+      data-paper="true"
       className={cn(
         "letter-paper-sheet relative w-full max-w-2xl mx-auto select-none",
         letterPaddingClasses[padding],
@@ -73,7 +74,7 @@ export function LetterPaper({
       />
 
       {/* ── 3. Inner Editorial Content Stage ─────────────────── */}
-      <div className="paper-content-inner px-1.5 sm:px-4 md:px-6">
+      <div className="paper-content-inner px-3 sm:px-6 md:px-8 py-2">
         {/* Embedded Corner Keepsake Polaroid Photo */}
         <div className="sm:float-right mx-auto sm:mx-0 sm:ml-6 mb-5 w-28 sm:w-36 md:w-40 shrink-0 drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] flex justify-center">
           <PhotoFrame
@@ -118,7 +119,7 @@ export function LetterPaper({
         </header>
 
         {/* Letter Paragraphs Flow */}
-        <section className="relative z-10 flex flex-col gap-4 sm:gap-6 font-serif text-sm sm:text-base leading-[1.9] sm:leading-[2.1] text-[#331c0e] text-justify tracking-wide opacity-95">
+        <section className="relative z-10 flex flex-col gap-4 sm:gap-6 font-serif text-sm sm:text-base leading-[1.95] sm:leading-[2.2] text-[#331c0e] text-left sm:text-justify tracking-wide opacity-95">
           {paragraphs.map((p, idx) => (
             <p key={idx} className="letter-paragraph indent-5 sm:indent-8">
               {p}

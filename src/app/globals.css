@@ -225,6 +225,66 @@ html:not(.lenis) {
   }
 }
 
+/* ── Cinematic Cursor Dual-Tone Surface Adaptations ─────────── */
+.cinematic-cursor-layer .cursor-dot {
+  background-color: #fde68a;
+  border: 1px solid rgba(26, 5, 9, 0.75);
+  box-shadow: 0 0 10px rgba(246, 201, 78, 0.95), 0 0 18px rgba(246, 201, 78, 0.5);
+  transition: background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.cinematic-cursor-layer .cursor-ring {
+  border-color: rgba(246, 201, 78, 0.7);
+  background-color: rgba(246, 201, 78, 0.08);
+  box-shadow: 0 0 16px rgba(246, 201, 78, 0.3);
+  transition: border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.cinematic-cursor-layer .cursor-mote-1 {
+  background-color: rgba(255, 251, 235, 0.75);
+  transition: background-color 0.22s ease;
+}
+.cinematic-cursor-layer .cursor-mote-2 {
+  background-color: rgba(254, 240, 138, 0.55);
+  transition: background-color 0.22s ease;
+}
+.cinematic-cursor-layer .cursor-mote-3 {
+  background-color: rgba(253, 224, 71, 0.4);
+  transition: background-color 0.22s ease;
+}
+
+.cinematic-cursor-layer .cursor-ripple {
+  border-color: rgba(246, 201, 78, 0.8);
+}
+
+/* Surface Adaptations: Over light paper / parchment / photos */
+.cinematic-cursor-layer.cursor-on-paper .cursor-dot {
+  background-color: #80141e;
+  border: 1px solid #d9a85f;
+  box-shadow: 0 0 10px rgba(128, 20, 30, 0.85), 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.cinematic-cursor-layer.cursor-on-paper .cursor-ring {
+  border-color: rgba(128, 20, 30, 0.85);
+  background-color: rgba(128, 20, 30, 0.09);
+  box-shadow: 0 0 14px rgba(128, 20, 30, 0.4);
+}
+
+.cinematic-cursor-layer.cursor-on-paper .cursor-mote-1 {
+  background-color: rgba(201, 59, 74, 0.75);
+}
+.cinematic-cursor-layer.cursor-on-paper .cursor-mote-2 {
+  background-color: rgba(168, 36, 50, 0.6);
+}
+.cinematic-cursor-layer.cursor-on-paper .cursor-mote-3 {
+  background-color: rgba(128, 20, 30, 0.5);
+}
+
+.cinematic-cursor-layer.cursor-on-paper .cursor-ripple {
+  border-color: rgba(128, 20, 30, 0.9);
+  box-shadow: 0 0 12px rgba(128, 20, 30, 0.5);
+}
+
 /* ── Cinematic Ambient Mote Drift ────────────────────────────── */
 @keyframes ambientMoteDrift {
   0% {
