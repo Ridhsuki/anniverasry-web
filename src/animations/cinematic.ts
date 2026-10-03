@@ -30,7 +30,7 @@ export function animateSceneEnter(
     duration = animation.duration.slow,
     ease = animation.ease.cinematic,
     delay = 0,
-    scaleStart = 1.04,
+    scaleStart = 1.02,
     yOffset = 0,
     onComplete,
     onStart,
@@ -73,7 +73,7 @@ export function animateSceneExit(
     duration = animation.duration.moderate,
     ease = "power2.inOut",
     delay = 0,
-    scaleEnd = 0.96,
+    scaleEnd = 0.98,
     yOffset = 0,
     onComplete,
     onStart,
@@ -119,9 +119,9 @@ export function createSceneTransitionTimeline(
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const exitDuration = prefersReduced ? 0.15 : duration * 0.55;
+  const exitDuration = prefersReduced ? 0.15 : duration * 0.6;
   const enterDuration = prefersReduced ? 0.15 : duration;
-  const overlap = prefersReduced ? 0 : (overlapOffset ?? duration * 0.25);
+  const overlap = prefersReduced ? 0 : (overlapOffset ?? duration * 0.2);
 
   const tl = gsap.timeline({
     delay,
@@ -134,7 +134,7 @@ export function createSceneTransitionTimeline(
       leavingTarget,
       {
         opacity: 0,
-        scale: prefersReduced ? 1 : 0.96,
+        scale: prefersReduced ? 1 : 0.98,
         duration: exitDuration,
         ease: prefersReduced ? "none" : "power2.inOut",
         force3D: true,
@@ -148,7 +148,7 @@ export function createSceneTransitionTimeline(
       enteringTarget,
       {
         opacity: 0,
-        scale: prefersReduced ? 1 : 1.04,
+        scale: prefersReduced ? 1 : 1.02,
         force3D: true,
         visibility: "visible",
       },

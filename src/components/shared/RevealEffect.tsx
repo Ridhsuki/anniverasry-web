@@ -29,99 +29,99 @@ export function RevealEffect({
 
       const tl = gsapInstance.timeline();
 
-      // 1. Instant flash: both halos appear rapidly from center
+      // 1. Warm organic ignition: halos blossom outward smoothly without harsh flash
       tl.fromTo(
         ".bloom-halo-outer",
-        { scale: 0.08, opacity: 0 },
+        { scale: 0.12, opacity: 0 },
         {
-          scale: 0.9,
-          opacity: 0.85,
-          duration: 0.28,
-          ease: "power4.out",
+          scale: 1.1,
+          opacity: 0.82,
+          duration: 0.38,
+          ease: "power2.out",
         }
       );
       tl.fromTo(
         ".bloom-halo-core",
-        { scale: 0.05, opacity: 0 },
+        { scale: 0.08, opacity: 0 },
         {
-          scale: 0.75,
-          opacity: 1,
-          duration: 0.22,
-          ease: "power4.out",
+          scale: 0.85,
+          opacity: 0.95,
+          duration: 0.32,
+          ease: "power2.out",
         },
         "<"
       );
 
-      // 2. Organic outward expansion with soft ease
+      // 2. Majestic outward expansion with soft lingering dissipation
       tl.to(
         ".bloom-halo-outer",
         {
-          scale: 3.2,
+          scale: 3.4,
           opacity: 0,
-          duration: 1.85,
+          duration: 1.75,
           ease: "power2.out",
         },
-        "+=0.05"
+        "+=0.08"
       );
       tl.to(
         ".bloom-halo-core",
         {
-          scale: 2.4,
+          scale: 2.6,
           opacity: 0,
-          duration: 1.55,
+          duration: 1.5,
           ease: "power3.out",
         },
         "<"
       );
 
-      // 3. Celestial rays sweep in, rotate, and fade
+      // 3. Celestial rays sweep in, rotate, and fade gracefully
       tl.fromTo(
         ".bloom-rays",
-        { scale: 0.15, opacity: 0, rotation: -15 },
+        { scale: 0.2, opacity: 0, rotation: -10 },
         {
-          scale: 1.6,
-          opacity: 0.65,
-          rotation: 30,
-          duration: 1.2,
-          ease: "power3.out",
+          scale: 1.7,
+          opacity: 0.7,
+          rotation: 35,
+          duration: 1.25,
+          ease: "power2.out",
         },
-        0.05
+        0.08
       );
       tl.to(
         ".bloom-rays",
         {
-          scale: 2.2,
+          scale: 2.4,
           opacity: 0,
-          rotation: 75,
-          duration: 0.75,
-          ease: "power1.in",
+          rotation: 80,
+          duration: 0.8,
+          ease: "power1.inOut",
         },
-        1.0
+        1.05
       );
 
-      // 4. Sparkle flares pop in with stagger then fade
+      // 4. Sparkle flares twinkle in with staggered charm then disperse
       tl.fromTo(
         ".bloom-sparkle",
         { scale: 0, opacity: 0 },
         {
-          scale: 1,
-          opacity: 1,
-          duration: 0.3,
-          ease: "back.out(2.5)",
-          stagger: 0.06,
+          scale: 1.1,
+          opacity: 0.95,
+          duration: 0.35,
+          ease: "back.out(2.2)",
+          stagger: 0.05,
         },
-        0.18
+        0.2
       );
       tl.to(
         ".bloom-sparkle",
         {
           opacity: 0,
-          scale: 1.4,
-          duration: 0.55,
+          scale: 1.35,
+          duration: 0.6,
           ease: "power1.in",
           stagger: 0.04,
         },
-        1.05
+        1.1
       );
     },
     [isActive],
@@ -144,18 +144,18 @@ export function RevealEffect({
         className="bloom-halo-outer absolute w-[820px] md:w-[1120px] h-[820px] md:h-[1120px] rounded-full gpu-accelerated"
         style={{
           background:
-            "radial-gradient(circle, rgba(254,240,138,0.42) 0%, rgba(246,201,78,0.20) 32%, rgba(201,144,74,0.07) 62%, transparent 75%)",
-          filter: "blur(40px)",
+            "radial-gradient(circle, rgba(254,240,138,0.40) 0%, rgba(246,201,78,0.18) 32%, rgba(201,144,74,0.06) 62%, transparent 75%)",
+          filter: "blur(45px)",
         }}
       />
 
-      {/* Layer 2: Radiant Supernova Core — brighter, tighter */}
+      {/* Layer 2: Radiant Warm Golden Core — luminous without harsh blinding flash */}
       <div
         className="bloom-halo-core absolute w-[340px] md:w-[480px] h-[340px] md:h-[480px] rounded-full gpu-accelerated"
         style={{
           background:
-            "radial-gradient(circle, #ffffff 0%, rgba(254,240,138,0.96) 22%, rgba(246,201,78,0.65) 52%, transparent 75%)",
-          filter: "blur(22px)",
+            "radial-gradient(circle, rgba(255,253,242,0.96) 0%, rgba(254,240,138,0.85) 25%, rgba(246,201,78,0.5) 55%, transparent 75%)",
+          filter: "blur(24px)",
         }}
       />
 

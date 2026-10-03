@@ -371,7 +371,7 @@ export function IntroScene(props: SceneProps) {
             {/* Physical body of the envelope - sits behind all other layers */}
             <div
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 bottom-0 z-0 rounded-sm bg-gradient-to-b from-[#f4e2c0] via-[#eace98] to-[#dbb568] border border-[#c9904a]/35 shadow-[0_20px_52px_rgba(0,0,0,0.5),0_4px_12px_rgba(45,28,16,0.3)]"
+              className="absolute inset-x-0 top-0 bottom-0 z-0 rounded-sm bg-gradient-to-b from-[#f4e2c0] via-[#eace98] to-[#dbb568] border border-[#c9904a]/35 shadow-[0_28px_60px_rgba(0,0,0,0.7),0_12px_24px_rgba(20,10,5,0.45),0_0_35px_rgba(201,144,74,0.18)]"
             />
 
             {/* Layer 1: Rear Triangular Flap (open upward, behind letter) */}
@@ -381,16 +381,18 @@ export function IntroScene(props: SceneProps) {
               className="absolute -top-16 sm:-top-20 left-0 right-0 h-24 sm:h-28 z-[1] overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-[#eedcb0] via-[#e5c88a] to-[#d9b468] [clip-path:polygon(1%_100%,50%_5%,99%_100%)]" />
+              {/* Paper crease bevel line at base */}
+              <div className="absolute bottom-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#8a421d]/45 to-transparent pointer-events-none" />
               {/* Fold crease shadow at base of flap */}
-              <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-[rgba(45,28,16,0.22)] to-transparent [clip-path:polygon(1%_100%,50%_5%,99%_100%)]" />
+              <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-[rgba(45,28,16,0.35)] to-transparent [clip-path:polygon(1%_100%,50%_5%,99%_100%)]" />
               {/* Subtle gold trim along flap edges */}
-              <div className="absolute inset-0 [clip-path:polygon(1%_100%,50%_5%,99%_100%)] border border-[#d9a85f]/25" />
+              <div className="absolute inset-0 [clip-path:polygon(1%_100%,50%_5%,99%_100%)] border border-[#d9a85f]/30" />
             </div>
 
-            {/* Layer 1b: Warm interior lining (warm honey, visible above letter) */}
+            {/* Layer 1b: Warm interior lining (deep amber & honey, visible above letter) */}
             <div
               aria-hidden="true"
-              className="absolute inset-x-1 top-1 h-20 sm:h-24 z-[2] rounded-t-xs bg-gradient-to-b from-[#c98e3a]/50 via-[#a87230]/35 to-transparent"
+              className="absolute inset-x-1 top-1 h-20 sm:h-24 z-[2] rounded-t-xs bg-gradient-to-b from-[#5c2411]/60 via-[#a87230]/40 to-transparent shadow-[inset_0_4px_12px_rgba(0,0,0,0.4)]"
             />
 
             {/* ── Layer 2: Protruding Deckle-Edged Letter ── */}
@@ -405,7 +407,7 @@ export function IntroScene(props: SceneProps) {
                 shadow="xl"
                 hasTexture={true}
                 padding="md"
-                className="w-full text-center border-[#c9904a]/40 bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] shadow-[0_12px_36px_rgba(26,18,9,0.35)]"
+                className="w-full text-center border-[#c9904a]/40 bg-gradient-to-b from-[#fdfbf7] via-[#f9edd8] to-[#f2dbb4] shadow-[0_16px_40px_rgba(26,18,9,0.45),0_2px_8px_rgba(0,0,0,0.2)]"
               >
                 {/* Headline: "Happy Anniversary" */}
                 <h1 className="intro-headline-text font-handwriting text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#3b1c0e] font-normal leading-tight tracking-wide drop-shadow-[0_1px_2px_rgba(201,144,74,0.3)]">
@@ -430,9 +432,12 @@ export function IntroScene(props: SceneProps) {
             </div>
 
             {/* ── Layer 3: Physical Front Pocket & Folded Triangular Flaps ── */}
-            <div className="relative z-20 w-full h-32 sm:h-40 rounded-b-sm shadow-[0_18px_48px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.15)] overflow-hidden bg-gradient-to-t from-[#c9904a] via-[#e2c280] to-[#f4dca8] border border-[#c9904a]/50">
+            <div className="relative z-20 w-full h-32 sm:h-40 rounded-b-sm shadow-[0_20px_52px_rgba(0,0,0,0.7),inset_0_1.5px_0_rgba(255,255,255,0.4),0_-4px_16px_rgba(26,14,7,0.35)] overflow-hidden bg-gradient-to-t from-[#c9904a] via-[#e2c280] to-[#f4dca8] border border-[#c9904a]/50">
               {/* Paper fiber grain */}
               <div className="absolute inset-0 bg-[radial-gradient(#c9904a_0.75px,transparent_0.75px)] [background-size:10px_10px] opacity-25 pointer-events-none" />
+
+              {/* Upper Pocket Lip Specular Reflection */}
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-[#eace98] via-[#fff9eb] to-[#eace98] pointer-events-none" />
 
               {/* Left Triangular Fold */}
               <div
@@ -449,12 +454,25 @@ export function IntroScene(props: SceneProps) {
               {/* Bottom Triangular Flap Meeting at Center Apex */}
               <div
                 aria-hidden="true"
-                className="absolute inset-x-0 bottom-0 h-full [clip-path:polygon(0%_100%,50%_30%,100%_100%)] bg-gradient-to-t from-[#b87030] via-[#d9a558] to-[#f0d090] shadow-[0_-4px_12px_rgba(45,28,16,0.35)]"
+                className="absolute inset-x-0 bottom-0 h-full [clip-path:polygon(0%_100%,50%_30%,100%_100%)] bg-gradient-to-t from-[#b87030] via-[#d9a558] to-[#f0d090] shadow-[0_-4px_14px_rgba(45,28,16,0.4)]"
               />
+
+              {/* Diagonal Fold Crease Shading & Highlight Lines */}
+              <svg viewBox="0 0 400 160" fill="none" className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                <path d="M0 0 L200 120" stroke="#783e15" strokeWidth="1" strokeOpacity="0.3" />
+                <path d="M0 1.5 L200 121.5" stroke="#ffffff" strokeWidth="0.8" strokeOpacity="0.45" />
+                <path d="M400 0 L200 120" stroke="#783e15" strokeWidth="1" strokeOpacity="0.3" />
+                <path d="M400 1.5 L200 121.5" stroke="#ffffff" strokeWidth="0.8" strokeOpacity="0.45" />
+              </svg>
             </div>
 
             {/* ── Layer 4: Central Dimensional Wax Seal Button at Pocket Apex ── */}
             <div className="absolute left-1/2 -translate-x-1/2 z-30" style={{bottom: "28%"}}>
+              {/* Wax Seal Ambient Contact Shadow onto paper folds */}
+              <div
+                aria-hidden="true"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 md:w-24 h-20 md:h-24 rounded-full bg-[radial-gradient(circle,_rgba(26,14,7,0.75)_0%,_transparent_72%)] blur-[3px] pointer-events-none"
+              />
               <VintageButton
                 variant="wax-seal"
                 aria-label="Open anniversary envelope"

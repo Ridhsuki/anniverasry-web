@@ -109,29 +109,41 @@ export function GiftBox({
           "shadow-[0_16px_40px_rgba(0,0,0,0.7),0_0_35px_rgba(254,230,138,0.35)]",
           "transition-all duration-500 ease-out",
           "hover:scale-[1.04] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_45px_rgba(254,230,138,0.5)]",
-          isOpening && "scale-105 brightness-125",
+          isOpening && "scale-[1.05] brightness-125 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_55px_rgba(254,230,138,0.65)]",
           isOpened && "opacity-20 pointer-events-none scale-95"
         )}
       >
         {/* Subtle Envelope Paper Fiber Grain */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#c9904a_0.75px,transparent_0.75px)] [background-size:10px_10px]" />
 
+        {/* Crease Seeping Light Glow on Opening */}
+        {isOpening && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-300"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(254,240,138,0.75)_0%,_rgba(246,201,78,0.35)_45%,_transparent_70%)] blur-md animate-pulse" />
+          </div>
+        )}
+
         {/* Envelope Flap Fold Lines */}
-        <svg viewBox="0 0 380 240" fill="none" className="absolute inset-0 w-full h-full pointer-events-none">
+        <svg viewBox="0 0 380 240" fill="none" className="absolute inset-0 w-full h-full pointer-events-none z-10">
           {/* Top Flap Triangular Fold */}
           <path
             d="M0 0 L190 125 L380 0"
-            stroke="#c9904a"
-            strokeWidth="1"
-            strokeOpacity="0.4"
+            stroke={isOpening ? "#fde68a" : "#c9904a"}
+            strokeWidth={isOpening ? 2 : 1}
+            strokeOpacity={isOpening ? 0.95 : 0.4}
+            className="transition-all duration-300"
             fill="none"
           />
           {/* Bottom Flap Side Lines */}
           <path
             d="M0 240 L150 105 M380 240 L230 105"
-            stroke="#c9904a"
-            strokeWidth="0.75"
-            strokeOpacity="0.25"
+            stroke={isOpening ? "#fde68a" : "#c9904a"}
+            strokeWidth={isOpening ? 1.5 : 0.75}
+            strokeOpacity={isOpening ? 0.8 : 0.25}
+            className="transition-all duration-300"
             fill="none"
           />
         </svg>
@@ -158,13 +170,19 @@ export function GiftBox({
 
         {/* ── Dimensional Burgundy Monogram Wax Seal ──────────── */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex items-center justify-center">
+          {isOpening && (
+            <div
+              aria-hidden="true"
+              className="absolute -inset-4 rounded-full bg-[radial-gradient(circle,_rgba(254,240,138,0.9)_0%,_rgba(246,201,78,0.5)_50%,_transparent_75%)] blur-md animate-ping pointer-events-none"
+            />
+          )}
           <div
             className={cn(
               "relative w-16 sm:w-18 md:w-20 aspect-square rounded-full flex items-center justify-center transition-transform duration-300",
               "bg-gradient-to-br from-[#c23b3b] via-[#991b1b] to-[#7f1d1d]",
               "border-2 border-[#fca5a5]/40 shadow-[0_6px_20px_rgba(0,0,0,0.7),0_0_24px_rgba(185,28,28,0.5)]",
               "group-hover:scale-110 active:scale-95",
-              isOpening && "scale-125 brightness-150 rotate-12"
+              isOpening && "scale-125 brightness-150 rotate-12 shadow-[0_0_35px_rgba(254,240,138,0.9)]"
             )}
           >
             {/* Embossed Ring */}

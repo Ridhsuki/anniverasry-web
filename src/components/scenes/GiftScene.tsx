@@ -103,11 +103,11 @@ export function GiftScene(props: SceneProps) {
     // Sound effect: cracking wax seal
     audio.playSfx("sfx-wax-crack");
 
-    // After brief luminous bloom, open keepsake panel
+    // After luminous bloom unfolds, transition to revealed keepsake panel
     setTimeout(() => {
       setIsOpening(false);
       setIsOpened(true);
-    }, 750);
+    }, 1150);
   }, [audio, isOpening, isOpened]);
 
   // Advance to Final Letter Scene

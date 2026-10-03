@@ -10,3 +10,5 @@ export * from "./FloatingDecoration";
 export * from "./Icons";
 export * from "./CinematicLayer";
 export * from "./CinematicImage";
+export * from "./CinematicCursor";
+export * from "./AmbientParticles";

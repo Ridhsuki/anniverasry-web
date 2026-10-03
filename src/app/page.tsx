@@ -5,7 +5,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { SceneManager } from "@/components/scenes";
-import { CinematicLayer } from "@/components/ui";
+import { CinematicLayer, CinematicCursor } from "@/components/ui";
 import { ExperienceProvider } from "@/context";
 
 export default function HomePage() {
@@ -17,8 +17,10 @@ export default function HomePage() {
     >
       <ExperienceProvider initialScene="intro">
         <SceneManager />
-        {/* Global cinematic polish: vignette + warm color grade + film grain */}
+        {/* Global cinematic polish: vignette + warm color grade + film grain + ambient particles */}
         <CinematicLayer />
+        {/* Bespoke golden aura cursor for desktop fine-pointer devices */}
+        <CinematicCursor />
       </ExperienceProvider>
     </main>
   );

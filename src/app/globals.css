@@ -213,6 +213,38 @@ html:not(.lenis) {
   animation: cinematicBloomExpand 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ── Cinematic Cursor Click Ripple ────────────────────────────── */
+@keyframes cursorRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* ── Cinematic Ambient Mote Drift ────────────────────────────── */
+@keyframes ambientMoteDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate3d(var(--drift-x, 15px), var(--drift-y, -25px), 0) scale(1.15);
+    opacity: var(--drift-opacity, 0.45);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.15;
+  }
+}
+
+.animate-ambient-mote {
+  animation: ambientMoteDrift var(--duration, 14s) ease-in-out infinite;
+}
+
 /* ── 7. GPU Acceleration & Performance Helpers ───────────────── */
 .gpu-accelerated {
   transform: translateZ(0);
