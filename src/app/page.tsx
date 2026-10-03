@@ -10,18 +10,18 @@ import { ExperienceProvider } from "@/context";
 
 export default function HomePage() {
   return (
-    <main
-      id="main-content"
-      tabIndex={-1}
-      className="w-full min-h-screen bg-bg-primary overflow-x-hidden outline-none"
-    >
-      <ExperienceProvider initialScene="intro">
+    <ExperienceProvider initialScene="intro">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="w-full min-h-screen bg-bg-primary overflow-x-clip outline-none"
+      >
         <SceneManager />
-        {/* Global cinematic polish: vignette + warm color grade + film grain + ambient particles */}
-        <CinematicLayer />
-        {/* Bespoke golden aura cursor for desktop fine-pointer devices */}
-        <CinematicCursor />
-      </ExperienceProvider>
-    </main>
+      </main>
+      {/* Global cinematic polish: vignette + warm color grade + film grain + ambient particles */}
+      <CinematicLayer />
+      {/* Bespoke golden aura cursor for desktop fine-pointer devices */}
+      <CinematicCursor />
+    </ExperienceProvider>
   );
 }

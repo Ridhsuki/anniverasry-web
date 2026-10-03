@@ -27,7 +27,7 @@ export function CinematicLayer({
       aria-hidden="true"
       style={{ opacity: intensity }}
       className={cn(
-        "cinematic-layer pointer-events-none fixed inset-0 z-40 select-none gpu-accelerated",
+        "cinematic-layer pointer-events-none fixed inset-0 z-40 select-none",
         className
       )}
     >
@@ -36,7 +36,7 @@ export function CinematicLayer({
           mix-blend-multiply preserves dark regions without washing out lights. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[rgba(55,18,3,0.07)] mix-blend-multiply pointer-events-none"
+        className="cinematic-color-grade absolute inset-0 bg-[rgba(55,18,3,0.07)] mix-blend-multiply pointer-events-none"
       />
 
       {/* ── Layer 2: Radial vignette border ───────────────────────
@@ -44,7 +44,7 @@ export function CinematicLayer({
           Radial gradient from transparent center to deep burgundy perimeter. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_48%,_rgba(4,0,2,0.62)_100%)] pointer-events-none"
+        className="cinematic-vignette absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_48%,_rgba(4,0,2,0.62)_100%)] pointer-events-none"
       />
 
       {/* ── Layer 3: Film grain noise texture ─────────────────────
@@ -54,7 +54,7 @@ export function CinematicLayer({
       <div
         aria-hidden="true"
         className={[
-          "absolute inset-0 pointer-events-none opacity-[0.032]",
+          "cinematic-grain absolute inset-0 pointer-events-none opacity-[0.032]",
           "bg-repeat bg-[length:180px_180px]",
         ].join(" ")}
         style={{
