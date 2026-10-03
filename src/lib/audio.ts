@@ -155,9 +155,7 @@ class AudioManager {
           howl.play();
         }
       });
-    }
-
-    if (!howl.playing()) {
+    } else if (!howl.playing()) {
       howl.play();
     }
   }

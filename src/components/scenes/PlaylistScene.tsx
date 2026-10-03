@@ -173,16 +173,21 @@ export function PlaylistScene(props: SceneProps) {
     });
   }, []);
 
-  // Cleanup on unmount or scene deactivation: resume main BGM if custom playlist track was playing
+  const isPlaylistPlayingRef = useRef(isPlaylistPlaying);
+  isPlaylistPlayingRef.current = isPlaylistPlaying;
+  const activeTrackRef = useRef(activeTrack);
+  activeTrackRef.current = activeTrack;
+
+  // Cleanup on unmount ONLY: resume main BGM if custom playlist track was playing
   useEffect(() => {
     return () => {
-      const currentTrackId = getTrackSoundtrackId(activeTrack);
-      if (isPlaylistPlaying && currentTrackId !== MAIN_BGM_TRACK_ID) {
-        audio.stop(currentTrackId);
-        audio.resumeMainBgm(400);
+      const currentTrackId = getTrackSoundtrackId(activeTrackRef.current);
+      if (isPlaylistPlayingRef.current && currentTrackId !== MAIN_BGM_TRACK_ID) {
+        audioManager.stop(currentTrackId);
+        audioManager.resumeMainBgm(400);
       }
     };
-  }, [isPlaylistPlaying, activeTrack, audio]);
+  }, []);
 
   // Sync progress with Howler track position when active
   useEffect(() => {

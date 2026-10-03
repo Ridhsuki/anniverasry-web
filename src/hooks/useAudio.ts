@@ -48,49 +48,62 @@ export function useAudio(): UseAudioReturn {
     audioManager.getState()
   );
 
+  const syncState = useCallback(() => {
+    const next = audioManager.getState();
+    setState((prev) => {
+      if (
+        prev.isPlaying === next.isPlaying &&
+        prev.isMuted === next.isMuted &&
+        prev.volume === next.volume &&
+        prev.currentTrackId === next.currentTrackId
+      ) {
+        return prev;
+      }
+      return next;
+    });
+  }, []);
+
   // Sync state with AudioManager every 500ms
   // (Howler does not expose a unified change event)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setState(audioManager.getState());
-    }, 500);
+    const interval = setInterval(syncState, 500);
     return () => clearInterval(interval);
-  }, []);
+  }, [syncState]);
 
   const play = useCallback((trackId: string) => {
     audioManager.play(trackId);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const pause = useCallback((trackId?: string) => {
     audioManager.pause(trackId);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const stop = useCallback((trackId?: string) => {
     audioManager.stop(trackId);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const pauseMainBgm = useCallback((fadeDurationMs?: number) => {
     audioManager.pauseMainBgm(fadeDurationMs);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const resumeMainBgm = useCallback((fadeDurationMs?: number) => {
     audioManager.resumeMainBgm(fadeDurationMs);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const fadeIn = useCallback((trackId: string, durationMs?: number, targetVolume?: number) => {
     audioManager.fadeIn(trackId, durationMs, targetVolume);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const fadeOut = useCallback((trackId: string, durationMs?: number) => {
     audioManager.fadeOut(trackId, durationMs);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const crossfade = useCallback(
     (
@@ -100,9 +113,9 @@ export function useAudio(): UseAudioReturn {
       targetVolume?: number
     ) => {
       audioManager.crossfade(fromTrackId, toTrackId, durationMs, targetVolume);
-      setState(audioManager.getState());
+      syncState();
     },
-    []
+    [syncState]
   );
 
   const playSfx = useCallback((sfxId: string) => {
@@ -111,13 +124,13 @@ export function useAudio(): UseAudioReturn {
 
   const toggleMute = useCallback(() => {
     audioManager.toggleMute();
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const setVolume = useCallback((volume: number) => {
     audioManager.setVolume(volume);
-    setState(audioManager.getState());
-  }, []);
+    syncState();
+  }, [syncState]);
 
   const registerTrack = useCallback((track: AudioTrack) => {
     audioManager.registerTrack(track);

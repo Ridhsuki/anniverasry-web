@@ -1,0 +1,22 @@
+## Error Type
+Console Error
+
+## Error Message
+Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.
+
+
+    at useAudio.useCallback[stop] [as stop] (src/hooks/useAudio.ts:72:5)
+    at PlaylistScene.useEffect (src/components/scenes/PlaylistScene.tsx:181:15)
+    at SceneManager (src/components/scenes/SceneManager.tsx:233:9)
+    at HomePage (src/app/page.tsx:19:9)
+
+## Code Frame
+  70 |   const stop = useCallback((trackId?: string) => {
+  71 |     audioManager.stop(trackId);
+> 72 |     setState(audioManager.getState());
+     |     ^
+  73 |   }, []);
+  74 |
+  75 |   const pauseMainBgm = useCallback((fadeDurationMs?: number) => {
+
+Next.js version: 16.3.6 (Turbopack)

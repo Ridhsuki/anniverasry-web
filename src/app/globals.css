@@ -13,7 +13,25 @@
    ──────────────────────────────────────────────────────────── */
 
 @import "tailwindcss";
+@source "../";
 @import "../styles/tokens.css";
+
+/* ── Guaranteed Paper Content Spacing & Breathing Room ─────── */
+.paper-content-inner {
+  padding-left: clamp(1.25rem, 4.5vw, 2.75rem) !important;
+  padding-right: clamp(1.25rem, 4.5vw, 2.75rem) !important;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+  box-sizing: border-box !important;
+}
+
+.letter-paper-sheet {
+  padding-left: clamp(1.5rem, 5vw, 3.5rem) !important;
+  padding-right: clamp(1.5rem, 5vw, 3.5rem) !important;
+  padding-top: clamp(1.75rem, 5vw, 3.5rem) !important;
+  padding-bottom: clamp(1.75rem, 5vw, 3.5rem) !important;
+  box-sizing: border-box !important;
+}
 
 /* ── 3. Tailwind Theme Mapping ──────────────────────────────── */
 @theme {
