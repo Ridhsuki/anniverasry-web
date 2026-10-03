@@ -255,14 +255,14 @@ export function PlaylistScene(props: SceneProps) {
       if (targetId !== MAIN_BGM_TRACK_ID) {
         audioManager.pauseMainBgm(300);
       }
-      audio.play(targetId);
+      audio.play(targetId, 600);
       audio.playSfx("sfx-needle-drop");
     } else {
       if (targetId === MAIN_BGM_TRACK_ID) {
-        audio.pause(targetId);
+        audio.pause(targetId, 300);
       } else {
         audio.stop(targetId);
-        audio.resumeMainBgm(400);
+        audio.resumeMainBgm(600);
       }
       audio.playSfx("sfx-card-flip");
     }
@@ -287,7 +287,7 @@ export function PlaylistScene(props: SceneProps) {
             audioManager.stop(state.currentTrackId);
           }
         }
-        audio.play(targetId);
+        audio.play(targetId, 600);
         audio.playSfx("sfx-needle-drop");
       }
     },

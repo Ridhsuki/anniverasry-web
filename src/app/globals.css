@@ -522,5 +522,20 @@ html.lenis body {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+
+  /* Reveal bloom performance on mobile: strip GPU-killing blur & heavy SVG blend modes */
+  .bloom-halo-outer,
+  .bloom-halo-core {
+    filter: none !important;
+  }
+
+  .bloom-rays {
+    display: none !important;
+  }
+
+  .bloom-sparkle {
+    filter: none !important;
+    text-shadow: 0 0 6px rgba(246, 201, 78, 0.8) !important;
+  }
 }
 

@@ -74,63 +74,99 @@ export function FinalLetterScene(props: SceneProps) {
 
   // GSAP animation lifecycle
   useGSAP(
-    () => {
+    (gsapInstance) => {
       if (!isActive) return;
 
-      // 1. Headline dramatic typographic expansion
-      dramaticReveal(".final-letter-title", {
-        duration: 1.4,
-        trackingStart: "0.18em",
-        trackingEnd: "0.02em",
-      });
+      const isMobile =
+        typeof window !== "undefined" &&
+        (window.matchMedia("(max-width: 768px)").matches ||
+          window.matchMedia("(pointer: coarse)").matches);
 
-      // 2. Unfold parchment paper sheet with physical tilt settling
-      paperReveal(".letter-paper-sheet", {
-        duration: 1.4,
-        direction: "unfold",
-        delay: 0.15,
-      });
+      if (isMobile) {
+        // High-performance 2D mobile entrance: single-pass fade & gentle rise without 3D unfold or staggered paragraph lag
+        gsapInstance.fromTo(
+          ".final-letter-title",
+          { opacity: 0, y: -8 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+        );
 
-      // 3. Staggered paragraphs fade-in
-      reveal(".letter-paragraph", {
-        direction: "up",
-        distance: 20,
-        stagger: 0.12,
-        duration: 1.0,
-        delay: 0.4,
-        ease: "power2.out",
-      });
+        gsapInstance.fromTo(
+          ".letter-paper-sheet",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.65, ease: "power2.out", delay: 0.1 }
+        );
 
-      // 4. Reveal signature block & closing section
-      reveal(".signature-block", {
-        direction: "up",
-        distance: 25,
-        duration: 1.1,
-        delay: 0.8,
-        ease: "power2.out",
-      });
+        // Keep all paragraphs visible immediately on paper without stuttering staggered pop-in
+        gsapInstance.set(".letter-paragraph", { opacity: 1, y: 0 });
 
-      reveal(".closing-scene-footer", {
-        direction: "up",
-        distance: 20,
-        duration: 1.0,
-        delay: 1.0,
-        ease: "power2.out",
-      });
+        gsapInstance.fromTo(
+          [".signature-block", ".closing-scene-footer"],
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.55, ease: "power2.out", delay: 0.25 }
+        );
 
-      // 5. Ambient falling rose petals drifting slowly downward
-      floatingMovement(".final-falling-petal", {
-        yDistance: 24,
-        xDistance: 8,
-        duration: 6.5,
-      });
+        // Lightweight drift for mobile petals
+        floatingMovement(".final-falling-petal", {
+          yDistance: 12,
+          xDistance: 4,
+          duration: 7.0,
+        });
+      } else {
+        // 1. Headline dramatic typographic expansion
+        dramaticReveal(".final-letter-title", {
+          duration: 1.4,
+          trackingStart: "0.18em",
+          trackingEnd: "0.02em",
+        });
 
-      // 6. Breathing glow on center warm spotlight
-      breathingAnimation(".final-ambient-glow", {
-        opacityFrom: 0.7,
-        opacityTo: 1.0,
-        duration: 3.5,
-      });
+        // 2. Unfold parchment paper sheet with physical tilt settling
+        paperReveal(".letter-paper-sheet", {
+          duration: 1.4,
+          direction: "unfold",
+          delay: 0.15,
+        });
+
+        // 3. Staggered paragraphs fade-in
+        reveal(".letter-paragraph", {
+          direction: "up",
+          distance: 20,
+          stagger: 0.12,
+          duration: 1.0,
+          delay: 0.4,
+          ease: "power2.out",
+        });
+
+        // 4. Reveal signature block & closing section
+        reveal(".signature-block", {
+          direction: "up",
+          distance: 25,
+          duration: 1.1,
+          delay: 0.8,
+          ease: "power2.out",
+        });
+
+        reveal(".closing-scene-footer", {
+          direction: "up",
+          distance: 20,
+          duration: 1.0,
+          delay: 1.0,
+          ease: "power2.out",
+        });
+
+        // 5. Ambient falling rose petals drifting slowly downward
+        floatingMovement(".final-falling-petal", {
+          yDistance: 24,
+          xDistance: 8,
+          duration: 6.5,
+        });
+
+        // 6. Breathing glow on center warm spotlight
+        breathingAnimation(".final-ambient-glow", {
+          opacityFrom: 0.7,
+          opacityTo: 1.0,
+          duration: 3.5,
+        });
+      }
     },
     [isActive],
     containerRef
@@ -158,7 +194,7 @@ export function FinalLetterScene(props: SceneProps) {
       <FloatingDecoration preset="drift-reverse" depth={3} className="final-falling-petal top-28 right-12 sm:right-24 w-10 h-10">
         <FallingRosePetal className="transform rotate-30" />
       </FloatingDecoration>
-      <FloatingDecoration preset="sway" depth={2} className="final-falling-petal bottom-36 left-12 sm:left-28 w-9 h-9">
+      <FloatingDecoration preset="sway" depth={2} className="hidden sm:block final-falling-petal bottom-36 left-12 sm:left-28 w-9 h-9">
         <FallingRosePetal className="transform rotate-12" />
       </FloatingDecoration>
       <FloatingDecoration preset="float" depth={3} className="final-falling-petal bottom-20 right-16 sm:right-32 w-11 h-11">

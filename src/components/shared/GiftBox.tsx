@@ -122,7 +122,7 @@ export function GiftBox({
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-300"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(254,240,138,0.75)_0%,_rgba(246,201,78,0.35)_45%,_transparent_70%)] blur-md animate-pulse" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(254,240,138,0.75)_0%,_rgba(246,201,78,0.35)_45%,_transparent_70%)] animate-pulse" />
           </div>
         )}
 
@@ -173,7 +173,7 @@ export function GiftBox({
           {isOpening && (
             <div
               aria-hidden="true"
-              className="absolute -inset-4 rounded-full bg-[radial-gradient(circle,_rgba(254,240,138,0.9)_0%,_rgba(246,201,78,0.5)_50%,_transparent_75%)] blur-md animate-ping pointer-events-none"
+              className="absolute -inset-4 rounded-full bg-[radial-gradient(circle,_rgba(254,240,138,0.9)_0%,_rgba(246,201,78,0.5)_50%,_transparent_75%)] animate-ping pointer-events-none"
             />
           )}
           <div

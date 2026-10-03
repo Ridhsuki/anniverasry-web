@@ -105,14 +105,17 @@ class AudioManager {
   }
 
   // ── Playback Controls ────────────────────────────────────────
-  play(trackId: string): void {
+  play(trackId: string, fadeDurationMs?: number): void {
     const howl = this.tracks.get(trackId);
     if (!howl) {
       console.warn(`[AudioManager] Track "${trackId}" not registered.`);
       return;
     }
 
+    const isSfx = trackId.startsWith("sfx-");
     const defaultVol = this.trackVolumes.get(trackId) ?? this._volume;
+    // SFX plays immediately without fading; musical tracks swell gently over 600ms by default
+    const effectiveFade = isSfx ? 0 : (fadeDurationMs ?? 600);
 
     // If the requested track is already active and playing, simply ensure target volume and return
     if (this.currentTrackId === trackId && howl.playing()) {
@@ -125,7 +128,7 @@ class AudioManager {
       howl.load();
     }
 
-    // Switch tracks: if switching away from main BGM, pause it cleanly without lingering fades,
+    // Switch tracks: if switching away from main BGM, pause it cleanly,
     // preserving its exact seek position. If switching from any other track, stop it.
     if (this.currentTrackId && this.currentTrackId !== trackId) {
       if (this.currentTrackId === MAIN_BGM_TRACK_ID) {
@@ -146,24 +149,66 @@ class AudioManager {
     }
 
     howl.off("fade");
-    // Explicitly set target volume immediately, terminating any active Howler fade interval
-    howl.volume(defaultVol);
+
+    const startPlayback = () => {
+      if (effectiveFade > 0 && !isSfx) {
+        const startVol = Math.min(0.04, defaultVol * 0.1);
+        howl.volume(startVol);
+        if (!howl.playing()) {
+          howl.play();
+        }
+        howl.fade(startVol, defaultVol, effectiveFade);
+
+        // Safety fallback: guarantee target volume is reached even if fade interval stutters
+        setTimeout(() => {
+          if (howl.playing() && !this._isMuted) {
+            howl.volume(defaultVol);
+          }
+        }, effectiveFade + 50);
+      } else {
+        howl.volume(defaultVol);
+        if (!howl.playing()) {
+          howl.play();
+        }
+      }
+    };
 
     if (howl.state() === "loading") {
       howl.once("load", () => {
-        if (this.currentTrackId === trackId && !howl.playing()) {
-          howl.play();
+        if (this.currentTrackId === trackId) {
+          startPlayback();
         }
       });
-    } else if (!howl.playing()) {
-      howl.play();
+    } else {
+      startPlayback();
     }
   }
 
-  pause(trackId?: string): void {
+  pause(trackId?: string, fadeDurationMs: number = 0): void {
     const id = trackId ?? this.currentTrackId;
     if (!id) return;
-    this.tracks.get(id)?.pause();
+    const howl = this.tracks.get(id);
+    if (!howl) return;
+
+    if (fadeDurationMs > 0 && howl.playing()) {
+      const currentVol = (howl.volume() as number) || this._volume;
+      howl.off("fade");
+      howl.fade(currentVol, 0, fadeDurationMs);
+      howl.once("fade", () => {
+        howl.pause();
+        const defaultVol = this.trackVolumes.get(id) ?? this._volume;
+        howl.volume(defaultVol);
+      });
+      setTimeout(() => {
+        if (howl.playing()) {
+          howl.pause();
+          const defaultVol = this.trackVolumes.get(id) ?? this._volume;
+          howl.volume(defaultVol);
+        }
+      }, fadeDurationMs + 50);
+    } else {
+      howl.pause();
+    }
   }
 
   stop(trackId?: string): void {
@@ -183,7 +228,7 @@ class AudioManager {
   /**
    * Pause continuous main BGM without resetting seek position.
    */
-  pauseMainBgm(fadeDurationMs: number = 0): void {
+  pauseMainBgm(fadeDurationMs: number = 300): void {
     const mainTrackId = MAIN_BGM_TRACK_ID;
     const howl = this.tracks.get(mainTrackId);
     if (!howl) return;
@@ -203,6 +248,13 @@ class AudioManager {
             howl.volume(defaultVol);
           }
         });
+        setTimeout(() => {
+          if (this.pausedMainBgmTrackId === mainTrackId && howl.playing()) {
+            howl.pause();
+            const defaultVol = this.trackVolumes.get(mainTrackId) ?? this._volume;
+            howl.volume(defaultVol);
+          }
+        }, fadeDurationMs + 50);
       } else {
         howl.pause();
       }
@@ -210,9 +262,9 @@ class AudioManager {
   }
 
   /**
-   * Resume continuous main BGM from its exact previous seek position.
+   * Resume continuous main BGM from its exact previous seek position with a gentle swell.
    */
-  resumeMainBgm(_fadeDurationMs: number = 0): void {
+  resumeMainBgm(fadeDurationMs: number = 600): void {
     const mainTrackId = this.pausedMainBgmTrackId || MAIN_BGM_TRACK_ID;
     // Stop any temporary track (e.g. playlist vinyl track) immediately to avoid audio clashes
     if (this.currentTrackId && this.currentTrackId !== mainTrackId) {
@@ -228,18 +280,39 @@ class AudioManager {
       howl.load();
     }
     const targetVol = this.trackVolumes.get(mainTrackId) ?? this._volume;
-    
-    // Always restore volume immediately so it is never trapped in silent 0 state
-    howl.volume(targetVol);
+
+    const startPlayback = () => {
+      if (fadeDurationMs > 0) {
+        // Start from soft quiet volume floor and gently swell to target volume
+        const startVol = Math.min(0.04, targetVol * 0.1);
+        howl.volume(startVol);
+        if (!howl.playing()) {
+          howl.play();
+        }
+        howl.fade(startVol, targetVol, fadeDurationMs);
+
+        // Safety fallback: guarantee target volume is reached even if fade interval stutters
+        setTimeout(() => {
+          if (howl.playing() && !this._isMuted) {
+            howl.volume(targetVol);
+          }
+        }, fadeDurationMs + 50);
+      } else {
+        howl.volume(targetVol);
+        if (!howl.playing()) {
+          howl.play();
+        }
+      }
+    };
 
     if (howl.state() === "loading") {
       howl.once("load", () => {
-        if (this.currentTrackId === mainTrackId && !howl.playing()) {
-          howl.play();
+        if (this.currentTrackId === mainTrackId) {
+          startPlayback();
         }
       });
-    } else if (!howl.playing()) {
-      howl.play();
+    } else {
+      startPlayback();
     }
   }
 

@@ -12,8 +12,8 @@ import { audioManager } from "@/lib/audio";
 import type { AudioManagerState, AudioTrack } from "@/lib/audio";
 
 interface UseAudioReturn extends AudioManagerState {
-  play: (trackId: string) => void;
-  pause: (trackId?: string) => void;
+  play: (trackId: string, fadeDurationMs?: number) => void;
+  pause: (trackId?: string, fadeDurationMs?: number) => void;
   stop: (trackId?: string) => void;
   pauseMainBgm: (fadeDurationMs?: number) => void;
   resumeMainBgm: (fadeDurationMs?: number) => void;
@@ -70,13 +70,13 @@ export function useAudio(): UseAudioReturn {
     return () => clearInterval(interval);
   }, [syncState]);
 
-  const play = useCallback((trackId: string) => {
-    audioManager.play(trackId);
+  const play = useCallback((trackId: string, fadeDurationMs?: number) => {
+    audioManager.play(trackId, fadeDurationMs);
     syncState();
   }, [syncState]);
 
-  const pause = useCallback((trackId?: string) => {
-    audioManager.pause(trackId);
+  const pause = useCallback((trackId?: string, fadeDurationMs?: number) => {
+    audioManager.pause(trackId, fadeDurationMs);
     syncState();
   }, [syncState]);
 

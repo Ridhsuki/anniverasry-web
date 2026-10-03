@@ -18,6 +18,7 @@ import { TimelineItem } from "@/components/shared";
 import {
   CinematicImage,
   FloatingDecoration,
+  PaperCard,
   PhotoFrame,
 } from "@/components/ui";
 import { useExperience } from "@/context/ExperienceContext";
@@ -426,14 +427,14 @@ export function JourneyScene(props: SceneProps) {
         </button>
       </header>
 
-      {/* ── Mobile Layout: Compact Single-Screen Milestone Deck ── */}
-      <div className="flex md:hidden flex-col items-center w-full max-w-sm mx-auto my-3 z-10">
-        {/* Compact Chapter Indicator */}
-        <div className="flex items-center justify-between w-full px-2 mb-3">
-          <span className="font-serif text-[0.65rem] text-gold/80 tracking-widest uppercase font-semibold">
-            Chapter {String(mobileMilestoneIndex + 1).padStart(2, "0")} / {String(JOURNEY_CONTENT.milestones.length).padStart(2, "0")}
+      {/* ── Mobile Layout: Luxurious Storybook Chapter & Memory Showcase ── */}
+      <div className="flex md:hidden flex-col items-center w-full max-w-lg mx-auto my-4 sm:my-6 px-1 z-10">
+        {/* Chapter Selection Pills */}
+        <div className="flex items-center justify-between w-full px-2 mb-4">
+          <span className="font-serif text-xs text-gold/90 tracking-widest uppercase font-semibold">
+            {activeMobileMilestone.chapter}
           </span>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
             {JOURNEY_CONTENT.milestones.map((m, idx) => (
               <button
                 key={m.id}
@@ -444,10 +445,10 @@ export function JourneyScene(props: SceneProps) {
                   setMobileMilestoneIndex(idx);
                 }}
                 className={cn(
-                  "w-6 h-6 rounded-full text-[0.65rem] font-serif transition-all duration-200 flex items-center justify-center cursor-pointer",
+                  "h-7 w-7 rounded-full text-xs font-serif transition-all duration-300 flex items-center justify-center cursor-pointer shrink-0",
                   mobileMilestoneIndex === idx
-                    ? "bg-[#380e18] text-gold border border-gold font-bold shadow-[0_0_8px_rgba(246,201,78,0.3)] scale-110"
-                    : "bg-[#1c080d]/60 text-white/50 border border-gold/20 hover:text-gold"
+                    ? "bg-[#380e18] text-gold border border-gold font-bold shadow-[0_0_12px_rgba(246,201,78,0.4)] scale-110"
+                    : "bg-[#1c080d]/70 text-white/50 border border-gold/20 hover:text-gold"
                 )}
               >
                 {idx + 1}
@@ -456,81 +457,111 @@ export function JourneyScene(props: SceneProps) {
           </div>
         </div>
 
-        {/* Milestone Card */}
-        <div className="relative w-full rounded-md bg-gradient-to-b from-[#240b12]/95 to-[#120306]/95 border border-[#c9904a]/40 p-4 shadow-xl flex flex-col items-center text-center">
-          {/* Milestone Photo if available */}
-          {activeMobileMilestone.photo?.src ? (
-            <div className="relative w-44 aspect-[4/3] rounded-xs overflow-hidden border border-gold/40 mb-3 shadow-md">
-              <CinematicImage
-                key={activeMobileMilestone.id}
-                src={activeMobileMilestone.photo.src}
-                alt={activeMobileMilestone.photo.alt ?? activeMobileMilestone.title}
-                fill
-                sizes="200px"
-                loading="lazy"
-                quality={85}
-                className="object-cover"
-              />
+        {/* Gilded Baroque Photo Frame Altar */}
+        <div className="relative w-60 sm:w-72 drop-shadow-[0_16px_36px_rgba(0,0,0,0.75)] mb-3">
+          <PhotoFrame
+            variant="filigree"
+            rotation={-1.5}
+            aspectRatio="portrait"
+            caption={activeMobileMilestone.title}
+            date={activeMobileMilestone.date}
+            className="w-full"
+          >
+            <div className="relative w-full h-full min-h-[200px] sm:min-h-[230px] bg-gradient-to-br from-[#2a1710] to-[#0a0503] flex items-center justify-center p-2 overflow-hidden">
+              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#d9a85f_1px,transparent_1px)] [background-size:8px_8px]" />
+              <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(201,144,74,0.35)] pointer-events-none z-20" />
+              {activeMobileMilestone.photo?.src ? (
+                <CinematicImage
+                  key={activeMobileMilestone.id}
+                  src={activeMobileMilestone.photo.src}
+                  alt={activeMobileMilestone.photo.alt ?? activeMobileMilestone.title}
+                  fill
+                  sizes="280px"
+                  loading="lazy"
+                  quality={85}
+                  className="relative z-10 w-full h-full object-cover rounded-xs transition-opacity duration-300"
+                />
+              ) : (
+                <span className="font-handwriting text-gold/80 text-base">✦ Cherished Memory</span>
+              )}
             </div>
-          ) : (
-            <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold text-lg mb-2">
-              ❦
-            </div>
-          )}
-
-          {/* Date & Tag */}
-          <div className="flex items-center gap-2 text-gold/80 text-[0.65rem] font-serif tracking-widest uppercase mb-1">
-            <span>{activeMobileMilestone.date}</span>
-            <span>•</span>
-            <span className="text-rose-300/80">
-              {activeMobileMilestone.tags?.[0] ?? activeMobileMilestone.chapter}
-            </span>
-          </div>
-
-          {/* Title */}
-          <h3 className="font-serif text-base font-bold text-[#fdf8f0] mb-2 drop-shadow-sm">
-            {activeMobileMilestone.title}
-          </h3>
-
-          {/* Story Narrative */}
-          <p className="font-serif text-xs text-[#f4e4cf]/90 leading-relaxed max-w-xs mb-2">
-            {activeMobileMilestone.description}
-          </p>
-
-          {/* Subtitle / Location */}
-          {activeMobileMilestone.subtitle && (
-            <span className="font-sans text-[0.65rem] text-gold/60 tracking-wider">
-              ✦ {activeMobileMilestone.subtitle}
-            </span>
-          )}
-
-          {/* Card Prev/Next Controls */}
-          <div className="flex items-center justify-between w-full mt-3 pt-2.5 border-t border-gold/20">
-            <button
-              type="button"
-              onClick={prevMobileMilestone}
-              className="px-3 py-1 rounded-xs bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
-            >
-              ‹ Prev
-            </button>
-            <span className="font-handwriting text-sm text-gold/80">
-              {activeMobileMilestone.title}
-            </span>
-            <button
-              type="button"
-              onClick={nextMobileMilestone}
-              className="px-3 py-1 rounded-xs bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
-            >
-              Next ›
-            </button>
-          </div>
+          </PhotoFrame>
         </div>
+
+        {/* Foreground Keepsake Music Box Accent */}
+        <div className="flex items-center justify-center -mt-4 mb-4 select-none pointer-events-none">
+          <MusicBoxProp className="scale-75 drop-shadow-md" />
+        </div>
+
+        {/* Tactile Aged Parchment Story Card */}
+        <PaperCard
+          variant="aged"
+          shadow="lg"
+          hasTexture={true}
+          padding="md"
+          className="w-full border-[#c9904a]/40 shadow-[0_16px_40px_rgba(0,0,0,0.65)]"
+        >
+          <div className="paper-content-inner px-2 py-1 text-center">
+            {/* Header: Date & Tag */}
+            <div className="flex items-center justify-between border-b border-[#c9904a]/25 pb-2 mb-3">
+              <span className="font-serif text-xs text-gold/90 font-semibold tracking-widest uppercase">
+                {activeMobileMilestone.chapter}
+              </span>
+              <span className="font-serif text-xs text-[#c9904a]/80">
+                {activeMobileMilestone.date}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#fdf8f0] mb-1 drop-shadow-sm">
+              {activeMobileMilestone.title}
+            </h3>
+
+            {/* Subtitle */}
+            {activeMobileMilestone.subtitle && (
+              <p className="font-handwriting text-sm sm:text-base text-gold/85 mb-3">
+                ❦ {activeMobileMilestone.subtitle}
+              </p>
+            )}
+
+            {/* Story description */}
+            <p className="font-serif text-xs sm:text-sm text-[#f4e4cf]/95 leading-relaxed mb-4 text-left sm:text-center">
+              {activeMobileMilestone.description}
+            </p>
+
+            {/* Romantic quote if present */}
+            {activeMobileMilestone.quote && (
+              <p className="italic font-serif text-[0.75rem] text-gold/75 border-t border-[#c9904a]/20 pt-2 mb-3">
+                &ldquo;{activeMobileMilestone.quote}&rdquo;
+              </p>
+            )}
+
+            {/* Card Prev/Next Controls */}
+            <div className="flex items-center justify-between w-full pt-3 border-t border-[#c9904a]/20">
+              <button
+                type="button"
+                onClick={prevMobileMilestone}
+                className="px-3 py-1.5 rounded-sm bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
+              >
+                ‹ Sebelumnya
+              </button>
+              <span className="font-serif text-xs text-gold/75 font-semibold">
+                {mobileMilestoneIndex + 1} / {JOURNEY_CONTENT.milestones.length}
+              </span>
+              <button
+                type="button"
+                onClick={nextMobileMilestone}
+                className="px-3 py-1.5 rounded-sm bg-[#1c080d] border border-gold/30 text-gold text-xs font-serif hover:bg-gold/10 active:scale-95 transition-all"
+              >
+                Selanjutnya ›
+              </button>
+            </div>
+          </div>
+        </PaperCard>
       </div>
 
-      {/* ── Desktop Layout: Full Hero Stage & Chronological Timeline ── */}
-      <div className="hidden md:flex flex-col w-full">
       {/* ── 3. Hero Feature Stage (Visual Benchmark) ─────────── */}
-      <section className="relative z-10 w-full max-w-6xl mx-auto my-8 md:my-12">
+      <section className="relative z-10 hidden md:block w-full max-w-6xl mx-auto my-8 md:my-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center justify-items-center">
           {/* Left Cluster: Baroque Gilded Frame + Camera + Treasure Chest */}
           <div className="journey-hero-left relative flex flex-col items-center text-center max-w-md w-full">
@@ -651,7 +682,7 @@ export function JourneyScene(props: SceneProps) {
       </section>
 
       {/* ── 4. Chronological Storytelling Timeline ────────────── */}
-      <section className="relative z-10 w-full max-w-5xl mx-auto mt-8 md:mt-16 mb-12">
+      <section className="relative z-10 hidden md:block w-full max-w-5xl mx-auto mt-8 md:mt-16 mb-12">
         {/* Timeline Header Section */}
         <div className="text-center mb-8 sm:mb-12">
           <div className="flex items-center justify-center gap-3 text-gold/60 text-sm select-none">
@@ -697,7 +728,6 @@ export function JourneyScene(props: SceneProps) {
           </div>
         </div>
       </section>
-      </div>
 
       {/* ── 5. Bottom Navigation Action Footer ────────────────── */}
       <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
