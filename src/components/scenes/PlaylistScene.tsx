@@ -251,14 +251,14 @@ export function PlaylistScene(props: SceneProps) {
     setIsPlaylistPlaying(next);
     const targetId = getTrackSoundtrackId(activeTrack);
     if (next) {
-      audio.play(targetId, 800);
+      audio.play(targetId, 300);
       audio.playSfx("sfx-needle-drop");
     } else {
       if (targetId === MAIN_BGM_TRACK_ID) {
-        audio.pause(targetId, 400);
+        audio.pause(targetId, 200);
       } else {
-        audio.fadeOut(targetId, 400);
-        audio.resumeMainBgm(800);
+        audio.stop(targetId);
+        audio.resumeMainBgm(0);
       }
       audio.playSfx("sfx-card-flip");
     }
@@ -274,8 +274,7 @@ export function PlaylistScene(props: SceneProps) {
         setIsPlaylistPlaying(true);
         setProgress(0);
         const targetId = getTrackSoundtrackId(track);
-        // Play automatically crossfades out the current track and fades in the target smoothly
-        audio.play(targetId, 800);
+        audio.play(targetId, 300);
         audio.playSfx("sfx-needle-drop");
       }
     },
@@ -292,7 +291,7 @@ export function PlaylistScene(props: SceneProps) {
     if (isPlaylistPlaying) {
       const nextTrack = PLAYLIST_CONTENT.tracks[nextIdx];
       const nextTrackId = getTrackSoundtrackId(nextTrack);
-      audio.play(nextTrackId, 800);
+      audio.play(nextTrackId, 300);
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 
@@ -307,7 +306,7 @@ export function PlaylistScene(props: SceneProps) {
     if (isPlaylistPlaying) {
       const prevTrack = PLAYLIST_CONTENT.tracks[prevIdx];
       const prevTrackId = getTrackSoundtrackId(prevTrack);
-      audio.play(prevTrackId, 800);
+      audio.play(prevTrackId, 300);
     }
   }, [audio, activeTrackIndex, isPlaylistPlaying]);
 

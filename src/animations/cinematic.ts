@@ -226,7 +226,10 @@ export function dramaticReveal(
       ease,
       delay,
       onStart,
-      onComplete,
+      onComplete: () => {
+        gsap.set(target, { letterSpacing: trackingEnd, scale: 1, y: 0, opacity: 1 });
+        if (onComplete) onComplete();
+      },
     }
   );
 }

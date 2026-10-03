@@ -213,7 +213,8 @@ export function SceneManager({
           className="z-20 pointer-events-none gpu-accelerated overflow-hidden"
         >
           <ExitingComponent
-            isActive={false}
+            isActive={true}
+            isExiting={true}
             onComplete={nextScene}
             onNext={nextScene}
             onPrevious={prevScene}

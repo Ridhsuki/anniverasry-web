@@ -47,6 +47,8 @@ export interface SceneMeta {
 export interface SceneProps {
   /** Whether this scene is currently active/visible */
   isActive?: boolean;
+  /** Whether this scene is currently playing its exit crossfade transition */
+  isExiting?: boolean;
   /** Triggered when the scene finishes its narrative or user confirms completion */
   onComplete?: () => void;
   /** Trigger navigation to the next sequential scene */
