@@ -64,7 +64,8 @@ Configure the following in your hosting provider's dashboard or in `.env.local` 
      package = "@netlify/plugin-nextjs"
    ```
 3. Set environment variables in **Site configuration > Environment variables**.
-4. Trigger deploy.
+4. Trigger deploy.[![Netlify Status](https://api.netlify.com/api/v1/badges/86cf6b4b-5348-443e-99c1-fe7f81c645da/deploy-status)](https://app.netlify.com/projects/anniverasry-web/deploys) [live demo](https://anniverasry-web.netlify.app/)
+
 
 ### Option C: Self-Hosted Docker / Node Server
 1. Clone the repository on the target server.

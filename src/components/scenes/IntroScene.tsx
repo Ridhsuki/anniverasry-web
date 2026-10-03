@@ -190,7 +190,7 @@ function IntroPhotoCard({ photo }: { photo: IntroPhotoItem }) {
   return (
     <div
       className={cn(
-        "intro-photo-card transition-transform duration-300 ease-out hover:scale-105 hover:z-30",
+        "intro-photo-card transition-all duration-300 ease-out hover:scale-105 hover:shadow-2xl",
         photo.positionClasses
       )}
     >
@@ -320,7 +320,7 @@ export function IntroScene(props: SceneProps) {
       data-scene="intro"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 py-8 md:py-12 select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -352,17 +352,21 @@ export function IntroScene(props: SceneProps) {
       <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
         {/* Floating Envelope Composition */}
         <div className="intro-floating-envelope relative w-full max-w-xs sm:max-w-sm md:max-w-xl flex items-center justify-center">
-          {/* Scrapbook Photos Layer (Positioned around envelope matching intro-scene.png) */}
-          {INTRO_CONTENT.photos.map((photo) => (
-            <IntroPhotoCard key={photo.id} photo={photo} />
-          ))}
+          {/* Background Scrapbook Photos Layer (Strictly behind envelope body) */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            {INTRO_CONTENT.photos.map((photo) => (
+              <div key={photo.id} className="pointer-events-auto">
+                <IntroPhotoCard photo={photo} />
+              </div>
+            ))}
+          </div>
 
           {/* Floral Bouquets Flanking Envelope */}
-          <RoseCluster className="absolute -top-10 -left-6 md:-left-12 w-28 md:w-36 z-20" />
-          <RoseCluster className="absolute -bottom-8 -right-6 md:-right-12 w-28 md:w-36 z-20" flip />
+          <RoseCluster className="absolute -top-10 -left-6 md:-left-12 w-28 md:w-36 z-20 pointer-events-none" />
+          <RoseCluster className="absolute -bottom-8 -right-6 md:-right-12 w-28 md:w-36 z-20 pointer-events-none" flip />
 
           {/* Skeuomorphic Physical Envelope Body */}
-          <div className="relative w-full max-w-md md:max-w-lg">
+          <div className="relative z-10 w-full max-w-md md:max-w-lg">
             {/* Layer 0: Full Ivory Envelope Backplate */}
             {/* Physical body of the envelope - sits behind all other layers */}
             <div
@@ -475,7 +479,7 @@ export function IntroScene(props: SceneProps) {
         </div>
 
         {/* ── 3. Bottom CTA Action Banner ────────────────────── */}
-        <div className="relative z-20 mt-14 md:mt-20 flex flex-col items-center gap-4">
+        <div className="relative z-20 mt-10 sm:mt-14 md:mt-20 mb-2 sm:mb-4 flex flex-col items-center gap-4">
           <VintageButton
             variant="secondary"
             size="lg"

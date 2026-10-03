@@ -33,9 +33,9 @@ const variantClasses: Record<NonNullable<PaperCardProps["variant"]>, string> = {
 
 const paddingClasses: Record<NonNullable<PaperCardProps["padding"]>, string> = {
   none: "p-0",
-  sm: "p-3 sm:p-4",
-  md: "p-6 md:p-8",
-  lg: "p-8 md:p-12",
+  sm: "px-3.5 py-3 sm:px-5 sm:py-4",
+  md: "px-5 py-5 sm:px-8 sm:py-6 md:px-9 md:py-8",
+  lg: "px-6 py-7 sm:px-10 sm:py-9 md:px-12 md:py-11",
 };
 
 export const PaperCard = forwardRef<HTMLDivElement, PaperCardProps>(

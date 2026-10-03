@@ -19,6 +19,7 @@ import { PlaylistScene } from "@/components/scenes/PlaylistScene";
 import { SelectionScene } from "@/components/scenes/SelectionScene";
 import { useExperience } from "@/context/ExperienceContext";
 import { useGSAP } from "@/hooks/useGSAP";
+import { getLenis, scrollTo } from "@/lib/lenis";
 import type { SceneTransitionOptions } from "@/types/animations";
 import type { CanonicalSceneName, SceneProps } from "@/types/scenes";
 import { cn } from "@/utils";
@@ -95,12 +96,18 @@ export function SceneManager({
     key: `scene-${currentScene}`,
   });
   const [exitingSlot, setExitingSlot] = useState<SceneSlot | null>(null);
+  const [exitingScrollY, setExitingScrollY] = useState(0);
 
   const [transitionCount, setTransitionCount] = useState(0);
 
   // Adjust state directly during rendering when currentScene changes (official React pattern)
   if (currentScene !== prevTrackedScene) {
     const nextCount = transitionCount + 1;
+    const currentScrollY =
+      typeof window !== "undefined"
+        ? (getLenis()?.scroll ?? window.scrollY ?? 0)
+        : 0;
+    setExitingScrollY(currentScrollY);
     setPrevTrackedScene(currentScene);
     setTransitionCount(nextCount);
     setExitingSlot(activeSlot);
@@ -126,6 +133,12 @@ export function SceneManager({
 
       if (!enteringElement) return;
 
+      // Reset scroll position cleanly under the pinned exiting element
+      scrollTo(0, { immediate: true });
+      if (typeof window !== "undefined") {
+        window.scrollTo(0, 0);
+      }
+
       const timeline = createSceneTransitionTimeline(
         leavingElement,
         enteringElement,
@@ -137,6 +150,11 @@ export function SceneManager({
           },
           onEnterStart: () => {
             setTransitionState("entering");
+            // Reinforce scroll position as entering scene begins
+            scrollTo(0, { immediate: true });
+            if (typeof window !== "undefined") {
+              window.scrollTo(0, 0);
+            }
           },
           onComplete: () => {
             setExitingSlot(null);
@@ -178,16 +196,23 @@ export function SceneManager({
         {SCENE_ANNOUNCEMENTS[currentScene] ?? `${currentScene} scene`}
       </div>
 
-      {/* Exiting Scene (Rendered during crossfade transition) */}
+      {/* Exiting Scene (Rendered during crossfade transition, pinned in-place) */}
       {exitingSlot && ExitingComponent && (
         <div
           ref={exitingSlotRef}
           key={exitingSlot.key}
           aria-hidden="true"
-          className="absolute inset-0 z-0 w-full h-full pointer-events-none gpu-accelerated"
+          style={{
+            position: "fixed",
+            top: exitingScrollY > 0 ? `-${exitingScrollY}px` : 0,
+            left: 0,
+            right: 0,
+            width: "100%",
+          }}
+          className="z-20 pointer-events-none gpu-accelerated overflow-hidden"
         >
           <ExitingComponent
-            isActive={true}
+            isActive={false}
             onComplete={nextScene}
             onNext={nextScene}
             onPrevious={prevScene}

@@ -352,7 +352,7 @@ export function JourneyScene(props: SceneProps) {
       data-scene="journey"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-start overflow-x-hidden px-4 py-8 md:py-12 select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-start overflow-x-hidden px-4 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -397,7 +397,7 @@ export function JourneyScene(props: SceneProps) {
           type="button"
           aria-label="Back to selection hub"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-2 min-h-[40px] rounded-full bg-[#87b07c] hover:bg-[#97c38b] text-[#162e15] shadow-[0_2px_10px_rgba(0,0,0,0.4)] border border-[#a8d39f]/50 transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.7rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3 py-1.5 sm:px-4 md:px-6 sm:py-2 min-h-[36px] md:min-h-[42px] rounded-full bg-[#87b07c] hover:bg-[#97c38b] text-[#162e15] shadow-[0_2px_10px_rgba(0,0,0,0.4)] border border-[#a8d39f]/50 transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {JOURNEY_CONTENT.backButtonLabel}
         </button>
@@ -573,7 +573,7 @@ export function JourneyScene(props: SceneProps) {
       </section>
 
       {/* ── 5. Bottom Navigation Action Footer ────────────────── */}
-      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-4 pb-4">
+      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           type="button"
           aria-label="Advance to the Moments photo gallery"

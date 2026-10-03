@@ -395,7 +395,7 @@ export function SelectionScene(props: SceneProps) {
       data-scene="selection"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-hidden px-4 py-8 md:py-14 select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-hidden px-4 py-8 md:py-14 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -480,7 +480,7 @@ export function SelectionScene(props: SceneProps) {
       </div>
 
       {/* ── 4. Bottom Advance CTA Button ─────────────────────── */}
-      <footer className="relative z-10 w-full flex flex-col items-center pb-2 md:pb-4">
+      <footer className="relative z-10 w-full flex flex-col items-center pt-4 md:pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           type="button"
           aria-label="Advance to the first chapter: Our Journey"

@@ -14,7 +14,7 @@ import type { SceneAudioController } from "@/constants/sceneAudio";
 import { useSceneAudio } from "@/hooks/useSceneAudio";
 import { useSceneController } from "@/hooks/useSceneController";
 import { audioManager } from "@/lib/audio";
-import { destroyLenis, initLenis, scrollTo } from "@/lib/lenis";
+import { destroyLenis, initLenis } from "@/lib/lenis";
 import type {
   SceneControllerReturn,
   SceneName,
@@ -85,10 +85,12 @@ export function ExperienceProvider({
     }
   }, [enableAudio]);
 
-  // Reset scroll position immediately when changing scenes
+  // Disable browser automatic scroll restoration to avoid jarring jumps on hash sync
   useEffect(() => {
-    scrollTo(0, { immediate: true });
-  }, [sceneController.currentScene]);
+    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
 
   const value = useMemo<ExperienceContextValue>(
     () => ({

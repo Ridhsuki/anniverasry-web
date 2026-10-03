@@ -24,9 +24,9 @@ export interface LetterPaperProps {
 
 const letterPaddingClasses: Record<"none" | "sm" | "md" | "lg", string> = {
   none: "p-0",
-  sm: "p-4 sm:p-6",
-  md: "p-6 sm:p-10 md:p-14",
-  lg: "p-8 sm:p-12 md:p-16",
+  sm: "px-4 py-4 sm:px-6 sm:py-6",
+  md: "px-5 py-6 sm:px-10 sm:py-10 md:px-14 md:py-12 lg:px-16",
+  lg: "px-6 py-8 sm:px-12 sm:py-12 md:px-16 md:py-14 lg:px-20",
 };
 
 export function LetterPaper({
@@ -67,11 +67,11 @@ export function LetterPaper({
       {/* ── 2. Delicate Gold Double-Line Inner Margin ─────────── */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-3 sm:inset-4 border border-[#c9904a]/30 rounded-xs"
+        className="pointer-events-none absolute inset-2.5 sm:inset-4 border border-[#c9904a]/30 rounded-xs"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-4 sm:inset-5 border border-[#d9a85f]/15 rounded-xs"
+        className="pointer-events-none absolute inset-3.5 sm:inset-5 border border-[#d9a85f]/15 rounded-xs"
       />
 
       {/* ── 3. Embedded Corner Keepsake Polaroid Photo ────────── */}

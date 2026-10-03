@@ -154,7 +154,7 @@ export function GalleryLightbox({ photo, onClose, className }: GalleryLightboxPr
       aria-label={`Enlarged view: ${photo.caption}`}
       onClick={handleClose}
       className={cn(
-        "gallery-lightbox-overlay fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md select-none",
+        "gallery-lightbox-overlay fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md select-none",
         className
       )}
     >

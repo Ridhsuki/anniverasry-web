@@ -43,7 +43,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
       variant: "gold",
       aspectRatio: "portrait",
       positionClasses:
-        "hidden md:block absolute -top-8 -left-20 lg:-left-28 w-44 lg:w-52 z-10",
+        "hidden md:block absolute -top-8 -left-20 lg:-left-28 w-44 lg:w-52 z-[1]",
     },
     {
       id: "intro-photo-2",
@@ -53,7 +53,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
       variant: "polaroid",
       aspectRatio: "square",
       positionClasses:
-        "hidden md:block absolute -bottom-6 -left-16 lg:-left-24 w-40 lg:w-48 z-20",
+        "hidden md:block absolute -bottom-6 -left-16 lg:-left-24 w-40 lg:w-48 z-[2]",
       hasButterfly: true,
     },
     {
@@ -64,7 +64,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
       variant: "gold",
       aspectRatio: "portrait",
       positionClasses:
-        "hidden md:block absolute -top-10 -right-20 lg:-right-28 w-40 lg:w-48 z-10",
+        "hidden md:block absolute -top-10 -right-20 lg:-right-28 w-40 lg:w-48 z-[1]",
     },
     {
       id: "intro-photo-4",
@@ -74,7 +74,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
       variant: "polaroid",
       aspectRatio: "portrait",
       positionClasses:
-        "hidden lg:block absolute top-28 -right-28 xl:-right-36 w-36 lg:w-44 z-20",
+        "hidden lg:block absolute top-28 -right-28 xl:-right-36 w-36 lg:w-44 z-[2]",
     },
     {
       id: "intro-photo-5",
@@ -84,7 +84,7 @@ export const INTRO_CONTENT: IntroSceneContent = {
       variant: "gold",
       aspectRatio: "square",
       positionClasses:
-        "hidden md:block absolute -bottom-8 -right-16 lg:-right-24 w-40 lg:w-48 z-20",
+        "hidden md:block absolute -bottom-8 -right-16 lg:-right-24 w-40 lg:w-48 z-[2]",
     },
   ],
 };

@@ -298,7 +298,7 @@ export function GalleryScene(props: SceneProps) {
       data-scene="gallery"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-12 select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-12 pb-[max(2rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -337,7 +337,7 @@ export function GalleryScene(props: SceneProps) {
           type="button"
           aria-label="Back to selection hub"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-2 min-h-[40px] rounded-full bg-[#87b07c] hover:bg-[#97c38b] text-[#162e15] shadow-[0_2px_10px_rgba(0,0,0,0.4)] border border-[#a8d39f]/50 transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.7rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3 py-1.5 sm:px-4 md:px-6 sm:py-2 min-h-[36px] md:min-h-[42px] rounded-full bg-[#87b07c] hover:bg-[#97c38b] text-[#162e15] shadow-[0_2px_10px_rgba(0,0,0,0.4)] border border-[#a8d39f]/50 transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {GALLERY_CONTENT.backButtonLabel}
         </button>
@@ -378,7 +378,7 @@ export function GalleryScene(props: SceneProps) {
       </main>
 
       {/* ── 4. Footer: Commemorative Date & Advance CTA ──────── */}
-      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-2 pb-2 md:pb-4 gap-4">
+      <footer className="relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-6 mb-2 sm:mb-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] gap-4">
         {/* Date "26-09-26" */}
         <div className="flex items-center justify-center gap-3">
           <span className="h-[1px] w-8 sm:w-12 bg-gold/40" />

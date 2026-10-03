@@ -143,7 +143,7 @@ export function FinalLetterScene(props: SceneProps) {
       data-scene="final"
       aria-hidden={!isActive}
       className={cn(
-        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-14 select-none",
+        "relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden px-4 py-8 md:py-14 pb-[max(2.5rem,env(safe-area-inset-bottom))] select-none",
         "bg-scene-stage",
         className
       )}
@@ -187,14 +187,14 @@ export function FinalLetterScene(props: SceneProps) {
           type="button"
           aria-label="Back to gift keepsake"
           onClick={handleBack}
-          className="shrink-0 inline-flex items-center justify-center font-serif text-xs sm:text-sm font-bold tracking-widest uppercase px-4 sm:px-5 py-2 min-h-[40px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
+          className="shrink-0 inline-flex items-center justify-center font-serif text-[0.7rem] sm:text-xs md:text-sm font-bold tracking-wider md:tracking-widest uppercase px-3 py-1.5 sm:px-4 md:px-6 sm:py-2 min-h-[36px] md:min-h-[42px] rounded-full bg-[#380e18] hover:bg-[#520f1c] text-gold shadow-[0_2px_10px_rgba(0,0,0,0.5)] border-2 border-gold/70 transition-all duration-300 active:scale-95 cursor-pointer ring-1 ring-gold/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a0509]"
         >
           {FINAL_LETTER_CONTENT.backButtonLabel}
         </button>
       </header>
 
       {/* ── 3. Main Center Stage: Full Unfolded Love Letter ───── */}
-      <main className="relative z-10 w-full max-w-3xl mx-auto my-6 md:my-10">
+      <main className="relative z-10 w-full max-w-3xl mx-auto my-6 md:my-10 px-1 sm:px-3">
         <LetterPaper
           greeting={FINAL_LETTER_CONTENT.greeting}
           paragraphs={FINAL_LETTER_CONTENT.paragraphs}

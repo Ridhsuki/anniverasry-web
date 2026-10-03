@@ -22,7 +22,7 @@ export function ClosingScene({
   return (
     <footer
       className={cn(
-        "closing-scene-footer relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-8 pb-6 gap-4 select-none",
+        "closing-scene-footer relative z-20 w-full max-w-md mx-auto flex flex-col items-center text-center mt-8 pb-[max(2rem,env(safe-area-inset-bottom))] gap-4 select-none",
         className
       )}
     >
