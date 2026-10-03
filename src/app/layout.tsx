@@ -19,8 +19,15 @@ export const metadata: Metadata = {
   },
   description: SITE_METADATA.description,
   metadataBase: new URL(SITE_METADATA.url),
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: SITE_METADATA.title,
   },
   openGraph: {
     type: "website",
@@ -29,11 +36,20 @@ export const metadata: Metadata = {
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
     siteName: SITE_METADATA.title,
+    images: [
+      {
+        url: "/images/photos/photo-intro-couple-standing.webp",
+        width: 800,
+        height: 1067,
+        alt: "Nayyy & Keillaa Anniversary Keepsake",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
+    images: ["/images/photos/photo-intro-couple-standing.webp"],
   },
   robots: {
     index: true,
@@ -43,7 +59,7 @@ export const metadata: Metadata = {
 
 // ── Viewport ────────────────────────────────────────────────────
 export const viewport: Viewport = {
-  themeColor: "#0d0d0d",
+  themeColor: "#080808",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
